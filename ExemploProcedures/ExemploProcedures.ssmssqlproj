@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="ExemploProcedures">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-09-10T12:15:40.2853181-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>13-implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="1.SpExecuteSQLDemo.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>1.SpExecuteSQLDemo.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2.Sp_ExecuteSqlComPUtput.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>2.Sp_ExecuteSqlComPUtput.sql</FullPath>
+        </FileNode>
+		 <FileNode Name="3.uspCalculaAreaCircuferencia.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>3.uspCalculaAreaCircuferencia.sql</FullPath>
+        </FileNode>
+		 <FileNode Name="4.uspCalculaAreaTriangulo.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>4.uspCalculaAreaTriangulo.sql</FullPath>
+        </FileNode>
+		<FileNode Name="5.uspCalculaSalarioPessoa.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>5.uspCalculaSalarioPessoa.sql</FullPath>
+        </FileNode>
+		<FileNode Name="6.uspCalculaSoma2Numeros.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>6.uspCalculaSoma2Numeros.sql</FullPath>
+        </FileNode>
+		<FileNode Name="7.uspCalculaTemperaturaCelsius.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>7.uspCalculaTemperaturaCelsius.sql</FullPath>
+        </FileNode>
+		<FileNode Name="8.uspCalculaTemperaturaFahrenheit.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>8.uspCalculaTemperaturaFahrenheit.sql</FullPath>
+        </FileNode>
+		<FileNode Name="9.uspCalculaVolumeLataOleo.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>9.uspCalculaVolumeLataOleo.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

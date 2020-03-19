@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Scripts">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="DESKTOP-1UKTSNR\MSSQLSERVER2017:DESKTOP-L1V3C6K\wesle">
+          <Created>2018-04-15T20:01:14.1374844-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DESKTOP-1UKTSNR\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:DESKTOP-L1V3C6K\wesle">
+          <Created>2018-02-22T16:23:22.3799021-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DS11\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>Demostracao</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="localhost\MSSQLSERVER2017:DESKTOP-L1V3C6K\wesle">
+          <Created>2018-08-26T09:31:06.919401-03:00</Created>
+          <Type>SQL</Type>
+          <Server>localhost\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-03-29T15:51:36.2477168-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>15-implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="BuscaPlanoContasIdPLanoContaPai.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>BuscaPlanoContasIdPLanoContaPai.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Cria OrdersBig.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Cria OrdersBig.sql</FullPath>
+        </FileNode>
+        <FileNode Name="CriaBancoDemoTabelaLancamentos.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>CriaBancoDemoTabelaLancamentos.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Dem Lancamentos Tunning.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Dem Lancamentos Tunning.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Demo 2 Lancamentos Indice Filtrados.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-1UKTSNR\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-1UKTSNR\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Demo 2 Lancamentos Indice Filtrados.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Demo Tunning sql Muar Operadores Pesados.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-1UKTSNR\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-1UKTSNR\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Demo Tunning sql Muar Operadores Pesados.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Script70464">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\wesley.neves">
+          <Created>2018-03-28T07:59:03.6449324-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DS11\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="DESKTOP-1UKTSNR\MSSQLSERVER2017:IMPLANTA\wesley.neves">
+          <Created>2018-03-27T21:05:15.2718253-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DESKTOP-1UKTSNR\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>TSQL2017</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-03-27T11:51:11.2271568-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>15-implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgprd-sqlsrv-prd01.database.windows.net:implanta">
+          <Created>2019-10-22T15:25:24.8933923-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgprd-sqlsrv-prd01.database.windows.net</Server>
+          <UserName>implanta</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="1 - Implement Table Design.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>1 - Implement Table Design.sql</FullPath>
+        </FileNode>
+        <FileNode Name="10 - Maintaining Indexes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>10 - Maintaining Indexes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="11 - Stored Procedures.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>11 - Stored Procedures.sql</FullPath>
+        </FileNode>
+        <FileNode Name="12 - SP Params.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>12 - SP Params.sql</FullPath>
+        </FileNode>
+        <FileNode Name="13 - ParameterSniffingDemo.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>13 - ParameterSniffingDemo.sql</FullPath>
+        </FileNode>
+        <FileNode Name="14 - Scalar Function.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>14 - Scalar Function.sql</FullPath>
+        </FileNode>
+        <FileNode Name="15 - TVF.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>15 - TVF.sql</FullPath>
+        </FileNode>
+        <FileNode Name="16 - Transactions.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>16 - Transactions.sql</FullPath>
+        </FileNode>
+        <FileNode Name="17 - Locking.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>17 - Locking.sql</FullPath>
+        </FileNode>
+        <FileNode Name="18 - BPE.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>18 - BPE.sql</FullPath>
+        </FileNode>
+        <FileNode Name="19 - Columstore indexes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>19 - Columstore indexes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2 - Working with schemas.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>2 - Working with schemas.sql</FullPath>
+        </FileNode>
+        <FileNode Name="20 - Memory-Optimized Tables.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-1UKTSNR\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-1UKTSNR\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>20 - Memory-Optimized Tables.sql</FullPath>
+        </FileNode>
+        <FileNode Name="21 - Memory-optimized SPs.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>21 - Memory-optimized SPs.sql</FullPath>
+        </FileNode>
+        <FileNode Name="22 - Waits.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>22 - Waits.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3 - Introduction to Views.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>3 - Introduction to Views.sql</FullPath>
+        </FileNode>
+        <FileNode Name="4 - TempTableVTableVar.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>4 - TempTableVTableVar.sql</FullPath>
+        </FileNode>
+        <FileNode Name="5 - CTE.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>5 - CTE.sql</FullPath>
+        </FileNode>
+        <FileNode Name="6 - Partitioning.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>6 - Partitioning.sql</FullPath>
+        </FileNode>
+        <FileNode Name="7 - Clustered Indexes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>7 - Clustered Indexes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="8 - nonclustered indexes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>8 - nonclustered indexes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="9 - Index Information.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>9 - Index Information.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

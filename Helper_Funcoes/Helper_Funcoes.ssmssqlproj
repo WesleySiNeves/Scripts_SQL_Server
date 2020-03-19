@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Helper_Funcoes">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-01-31T08:53:57.4489137-02:00</Created>
+          <Type>SQL</Type>
+          <Server>DS11\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-01-31T09:13:22.9283017-02:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>15-implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="1.ufnCalculaIdade.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>1.ufnCalculaIdade.sql</FullPath>
+        </FileNode>
+        <FileNode Name="1.ufnMesPorExtenso.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>1.ufnMesPorExtenso.sql</FullPath>
+        </FileNode>
+        <FileNode Name="11.ufnFormataCep.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>11.ufnFormataCep.sql</FullPath>
+        </FileNode>
+        <FileNode Name="12.ufnGetSemanaMes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>12.ufnGetSemanaMes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2.ufnAllMes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>2.ufnAllMes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3.ufnFormataCasasDecimais.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>3.ufnFormataCasasDecimais.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3.UfnPaginacao.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>3.UfnPaginacao.sql</FullPath>
+        </FileNode>
+        <FileNode Name="4.UfnRemoveAllSpacesOfString.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>4.UfnRemoveAllSpacesOfString.sql</FullPath>
+        </FileNode>
+        <FileNode Name="5.ufnCapitalize.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>5.ufnCapitalize.sql</FullPath>
+        </FileNode>
+        <FileNode Name="5.ufnNomeIndice.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>5.ufnNomeIndice.sql</FullPath>
+        </FileNode>
+        <FileNode Name="7.ufnRetornaSomenteInciaisDoNome.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>7.ufnRetornaSomenteInciaisDoNome.sql</FullPath>
+        </FileNode>
+        <FileNode Name="8.ufnSplitValues.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>8.ufnSplitValues.sql</FullPath>
+        </FileNode>
+        <FileNode Name="9.ufnUpperCaseFirstLetter.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>9.ufnUpperCaseFirstLetter.sql</FullPath>
+        </FileNode>
+        <FileNode Name="FuncaoDiaUtil.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>FuncaoDiaUtil.sql</FullPath>
+        </FileNode>
+        <FileNode Name="FuncaoIsGUID.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>FuncaoIsGUID.sql</FullPath>
+        </FileNode>
+        <FileNode Name="FuncaoRetornaSomenteLetrasMaiusculas.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>FuncaoRetornaSomenteLetrasMaiusculas.sql</FullPath>
+        </FileNode>
+        <FileNode Name="FuncaoSomenteNumeros.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>FuncaoSomenteNumeros.sql</FullPath>
+        </FileNode>
+        <FileNode Name="SomenteNumeros.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>SomenteNumeros.sql</FullPath>
+        </FileNode>
+        <FileNode Name="String_SplitDemo.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>String_SplitDemo.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ufnRemoveEspacosEntrePalavras.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>ufnRemoveEspacosEntrePalavras.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

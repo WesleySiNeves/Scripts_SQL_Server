@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="CTESRecursivas">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-09-10T12:17:42.9623898-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>13-implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="1.GeraGranTotaisNosPais.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>1.GeraGranTotaisNosPais.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2.GeraSequencialCEPV1.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>2.GeraSequencialCEPV1.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3.GeraSequencialCEPV2.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>3.GeraSequencialCEPV2.sql</FullPath>
+        </FileNode>
+        <FileNode Name="4.CTERecursividadeChar.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>4.CTERecursividadeChar.sql</FullPath>
+        </FileNode>
+        <FileNode Name="5.GeraNumerosRecursivos.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>5.GeraNumerosRecursivos.sql</FullPath>
+        </FileNode>
+        <FileNode Name="6.CTERecursividadeCargosGerentes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>6.CTERecursividadeCargosGerentes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="7.RecursividadeCaracteres.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>7.RecursividadeCaracteres.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

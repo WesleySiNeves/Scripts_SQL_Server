@@ -1,0 +1,3 @@
+
+
+--ALTER TABLE YourTable ADD CONSTRAINT DF_YourTable DEFAULT GETDATE() FOR YourColumn

@@ -1,0 +1,22 @@
+
+IF ( OBJECT_ID('TEMPDB..#TempTable') IS NOT NULL )
+    DROP TABLE #TempTable;	
+
+
+CREATE TABLE #TempTable 
+(
+ Numero INT  NOT NULL IDENTITY(1,1),
+ DATA datetime2(2),
+ Valor numeric(18,2)
+)
+
+
+INSERT INTO #TempTable(DATA,Valor)
+VALUES( DATEADD(DAY,-2,GETDATE()),100), ( DATEADD(DAY,-1,GETDATE()),90),(GETDATE(),80)
+
+
+SELECT TT.Numero,
+       TT.DATA,
+       TT.Valor,
+	   Media = AVG(TT.Valor) OVER(ORDER BY TT.DATA ROWS BETWEEN 3 PRECEDING AND CURRENT ROW),
+	  

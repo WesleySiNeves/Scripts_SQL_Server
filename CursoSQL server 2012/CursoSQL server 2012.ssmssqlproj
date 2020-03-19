@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="CursoSQL server 2012">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-07-03T10:22:34.0020307-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DS11\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>Implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="Chapter 01 - Code.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Chapter 01 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 01 - Exercises.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Chapter 01 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 02 - Code.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Chapter 02 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 02 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 02 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 03 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 03 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 03 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 03 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 04 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 04 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 04 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 04 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 05 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 05 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 05 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 05 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 06 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 06 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 06 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 06 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 07 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 07 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 07 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 07 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 08 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 08 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 08 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 08 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 09 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 09 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 09 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 09 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 10 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 10 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 10 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 10 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 11 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 11 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 11 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 11 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 12 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 12 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 12 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 12 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 13 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 13 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 13 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 13 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 14 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 14 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 14 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 14 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 15 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 15 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 15 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 15 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 16 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 16 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 16 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 16 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 17 - Code.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 17 - Code.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 17 - Exercises.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Chapter 17 - Exercises.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Cria Banco  TSQL2012.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Cria Banco  TSQL2012.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

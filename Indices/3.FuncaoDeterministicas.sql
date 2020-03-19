@@ -1,0 +1,1 @@
+SELECT OBJECTPROPERTY(OBJECT_ID('[Schema].[NomeDaSuaFuncao]'), 'IsDeterministic')

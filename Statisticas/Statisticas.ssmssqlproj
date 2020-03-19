@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Statisticas">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="DESKTOP-1UKTSNR\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-04-01T15:47:48.0067581-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DESKTOP-1UKTSNR\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>WideWorldImporters</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-04-04T08:06:20.0517691-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DS11\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="localhost\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-08-26T11:01:11.853366-03:00</Created>
+          <Type>SQL</Type>
+          <Server>localhost\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>Demostracao</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-11-21T14:14:59.5423349-02:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="Cria Statisticas de todos os Campos POssiveis.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Cria Statisticas de todos os Campos POssiveis.sql</FullPath>
+        </FileNode>
+        <FileNode Name="4.Statisticas Desatualiadas.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>4.Statisticas Desatualiadas.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Mostra Statisticas Criadas Automaticamente e Gera Script de Delecao.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Mostra Statisticas Criadas Automaticamente e Gera Script de Delecao.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Statisticas Criadas Automaticamente.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Statisticas Criadas Automaticamente.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Statisticas da Tabela.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Statisticas da Tabela.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Tabelas Campos e suas Statisticas.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Tabelas Campos e suas Statisticas.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

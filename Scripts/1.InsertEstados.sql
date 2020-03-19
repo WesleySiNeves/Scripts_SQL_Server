@@ -1,0 +1,30 @@
+insert into Corporativo.Estados values('--','Não informado');
+insert into Corporativo.Estados values('AC','Acre');
+insert into Corporativo.Estados values('AL','Alagoas');
+insert into Corporativo.Estados values('AP','Amapá');
+insert into Corporativo.Estados values('AM','Amazonas');
+insert into Corporativo.Estados values('BA','Bahia');
+insert into Corporativo.Estados values('CE','Ceará');
+insert into Corporativo.Estados values('DF','Distrito Federal');
+insert into Corporativo.Estados values('ES','Espírito Santo');
+insert into Corporativo.Estados values('GO','Goiás');
+insert into Corporativo.Estados values('MA','Maranhão');
+insert into Corporativo.Estados values('MT','Mato Grosso');
+insert into Corporativo.Estados values('MS','Mato Grosso do Sul');
+insert into Corporativo.Estados values('MG','Minas Gerais');
+insert into Corporativo.Estados values('PA','Pará');
+insert into Corporativo.Estados values('PB','Paraíba');
+insert into Corporativo.Estados values('PR','Paraná');
+insert into Corporativo.Estados values('PE','Pernambuco');
+insert into Corporativo.Estados values('PI','Piauí');
+insert into Corporativo.Estados values('RJ','Rio de Janeiro');
+insert into Corporativo.Estados values('RN','Rio Grande do Norte');
+insert into Corporativo.Estados values('RS','Rio Grande do Sul');
+insert into Corporativo.Estados values('RO','Rondônia');
+insert into Corporativo.Estados values('RR','Rorâima');
+insert into Corporativo.Estados values('SC','Santa Catarina');
+insert into Corporativo.Estados values('SP','São Paulo');
+insert into Corporativo.Estados values('SE','Sergipe');
+insert into Corporativo.Estados values('TO','Tocantins');
+
+

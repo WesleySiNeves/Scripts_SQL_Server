@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="MonitoramentoIndices">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-09-17T10:39:27.7484765-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DS11\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="localhost\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-10-05T10:02:38.5317261-03:00</Created>
+          <Type>SQL</Type>
+          <Server>localhost\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-09-14T11:37:55.6152902-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rghml-sqlsrv-hm01.database.windows.net:implanta">
+          <Created>2018-09-10T14:19:05.3606737-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rghml-sqlsrv-hm01.database.windows.net</Server>
+          <UserName>implanta</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>piloto-10.implantadev.net.br</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgprd-sqlsrv-prd01.database.windows.net:implanta">
+          <Created>2018-12-20T18:06:20.8811425-02:00</Created>
+          <Type>SQL</Type>
+          <Server>rgprd-sqlsrv-prd01.database.windows.net</Server>
+          <UserName>implanta</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="9.BuscaFillFactorDosInicesNaoCluster.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>9.BuscaFillFactorDosInicesNaoCluster.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2.ColunaIsIndexable.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>2.ColunaIsIndexable.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3.FksSemIndices.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>3.FksSemIndices.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3.FksSemIndicesV2.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>3.FksSemIndicesV2.sql</FullPath>
+        </FileNode>
+        <FileNode Name="1.MissingIndexAdaptive.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>1.MissingIndexAdaptive.sql</FullPath>
+        </FileNode>
+        <FileNode Name="5.MonitoraFragmentacaoIndice.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>5.MonitoraFragmentacaoIndice.sql</FullPath>
+        </FileNode>
+        <FileNode Name="6.MonitoraIndicesDuplicados.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>6.MonitoraIndicesDuplicados.sql</FullPath>
+        </FileNode>
+        <FileNode Name="7.MonitoraQuantidadeScanSeekLookupsIndex.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>7.MonitoraQuantidadeScanSeekLookupsIndex.sql</FullPath>
+        </FileNode>
+        <FileNode Name="8.OverHeadIndex-IndicesDuplicados.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>8.OverHeadIndex-IndicesDuplicados.sql</FullPath>
+        </FileNode>
+        <FileNode Name="9.FragmentacaoIndices.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>9.FragmentacaoIndices.sql</FullPath>
+        </FileNode>
+        <FileNode Name="9.MonitoraPercentualDadosDentroDasPaginas.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>9.MonitoraPercentualDadosDentroDasPaginas.sql</FullPath>
+        </FileNode>
+        <FileNode Name="9.MonitoraQuantoIndiceOcupandoMemória.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>9.MonitoraQuantoIndiceOcupandoMemória.sql</FullPath>
+        </FileNode>
+        <FileNode Name="9.QuantidadeDeDadosPorIndice.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>9.QuantidadeDeDadosPorIndice.sql</FullPath>
+        </FileNode>
+        <FileNode Name="BuscaTodosIndices.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>BuscaTodosIndices.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Determinar padrões de uso de índices atuais.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Determinar padrões de uso de índices atuais.sql</FullPath>
+        </FileNode>
+        <FileNode Name="InsersDeletesParaIndicesNaoUtilizados.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>InsersDeletesParaIndicesNaoUtilizados.sql</FullPath>
+        </FileNode>
+        <FileNode Name="MonitoraIndicesComAltoIndiceDeBloqueio.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>MonitoraIndicesComAltoIndiceDeBloqueio.sql</FullPath>
+        </FileNode>
+        <FileNode Name="1.MissingIndexMaisExecutionPlainSqlPerformace.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>1.MissingIndexMaisExecutionPlainSqlPerformace.sql</FullPath>
+        </FileNode>
+        <FileNode Name="MonitoraIndicesCriadosQueSaoAtualizadosMasNuncaUtilizadosEmPlanos.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>MonitoraIndicesCriadosQueSaoAtualizadosMasNuncaUtilizadosEmPlanos.sql</FullPath>
+        </FileNode>
+        <FileNode Name="MonitoraIndicesIneficientes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>MonitoraIndicesIneficientes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="MonitoraIndicesNaoUsado.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>MonitoraIndicesNaoUsado.sql</FullPath>
+        </FileNode>
+        <FileNode Name="MonitoraIndicesNuncaAcessados.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>MonitoraIndicesNuncaAcessados.sql</FullPath>
+        </FileNode>
+        <FileNode Name="MonitoraTotalDeIndicesPorTabela.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>MonitoraTotalDeIndicesPorTabela.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

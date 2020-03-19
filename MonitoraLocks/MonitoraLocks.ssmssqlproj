@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="MonitoraLocks">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\wesley.neves">
+          <Created>2018-09-10T14:26:15.8636877-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DS11\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>Implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-08-31T12:37:14.4937801-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>15-1.Implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgprd-sqlsrv-prd01.database.windows.net:implanta">
+          <Created>2019-05-22T16:37:33.2486403-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgprd-sqlsrv-prd01.database.windows.net</Server>
+          <UserName>implanta</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="1.MonitoraQuerysBloqueadas.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>1.MonitoraQuerysBloqueadas.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2.ufnActiveLock.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>2.ufnActiveLock.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3.MonitoraDeadLocks.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>3.MonitoraDeadLocks.sql</FullPath>
+        </FileNode>
+        <FileNode Name="4.MonitoraQuerysBloqueadasV2.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>4.MonitoraQuerysBloqueadasV2.sql</FullPath>
+        </FileNode>
+        <FileNode Name="IdentificaLocksOficial.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>IdentificaLocksOficial.sql</FullPath>
+        </FileNode>
+        <FileNode Name="UfnDeadLock.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>UfnDeadLock.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

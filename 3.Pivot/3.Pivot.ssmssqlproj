@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="3.Pivot">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="localhost\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-10-25T11:47:35.5814992-03:00</Created>
+          <Type>SQL</Type>
+          <Server>localhost\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-02-21T15:11:05.7557103-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>15-implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rghml-sqlsrv-hm01.database.windows.net:implanta">
+          <Created>2018-09-10T14:33:20.0926713-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rghml-sqlsrv-hm01.database.windows.net</Server>
+          <UserName>implanta</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>master</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="1.PivotBatidaPontoHorarioSaida.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>1.PivotBatidaPontoHorarioSaida.sql</FullPath>
+        </FileNode>
+        <FileNode Name="10.PivotComSoma_Media_Maior-Menor.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>10.PivotComSoma_Media_Maior-Menor.sql</FullPath>
+        </FileNode>
+        <FileNode Name="11.PivotAvancadoComMediaETotalJunto.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>11.PivotAvancadoComMediaETotalJunto.sql</FullPath>
+        </FileNode>
+        <FileNode Name="12.PivotTotalVendidoAnual.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>12.PivotTotalVendidoAnual.sql</FullPath>
+        </FileNode>
+        <FileNode Name="13.TotalPagamentoMensal.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>13.TotalPagamentoMensal.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2.PivotComDoisAgrupamentos.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>2.PivotComDoisAgrupamentos.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3.PivotComMediaCalculada.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>3.PivotComMediaCalculada.sql</FullPath>
+        </FileNode>
+        <FileNode Name="5.PivotDinamicoComTempTable.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>5.PivotDinamicoComTempTable.sql</FullPath>
+        </FileNode>
+        <FileNode Name="6.Pivot Projetos.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>6.Pivot Projetos.sql</FullPath>
+        </FileNode>
+        <FileNode Name="7.ExemploPivotSimples.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>7.ExemploPivotSimples.sql</FullPath>
+        </FileNode>
+        <FileNode Name="8.ExemploPivotSimples.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>8.ExemploPivotSimples.sql</FullPath>
+        </FileNode>
+        <FileNode Name="9.PivotSimplesEmpresas.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>9.PivotSimplesEmpresas.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Exemplo Pivot e Umpivot.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>Exemplo Pivot e Umpivot.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

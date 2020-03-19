@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="ResolveLocks">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="DESKTOP-1UKTSNR\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-03-25T10:39:12.8231689-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DESKTOP-1UKTSNR\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="DS11:IMPLANTA\Wesley.Neves">
+          <Created>2018-03-07T13:45:27.6983512-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DS11</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>TSQL2016</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-03-09T13:34:34.0593635-03:00</Created>
+          <Type>SQL</Type>
+          <Server>DS11\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="localhost\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
+          <Created>2018-08-25T11:43:32.1534994-03:00</Created>
+          <Type>SQL</Type>
+          <Server>localhost\MSSQLSERVER2017</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2018-04-05T16:06:43.7408341-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rghml-sqlsrv-hm01.database.windows.net:implanta">
+          <Created>2018-04-05T16:10:33.3655383-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rghml-sqlsrv-hm01.database.windows.net</Server>
+          <UserName>implanta</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="rgprd-sqlsrv-prd01.database.windows.net:implanta">
+          <Created>2019-02-12T08:43:41.3715408-02:00</Created>
+          <Type>SQL</Type>
+          <Server>rgprd-sqlsrv-prd01.database.windows.net</Server>
+          <UserName>implanta</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="1.Active_locks.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>1.Active_locks.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2.Busca resumo dos Locks.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>2.Busca resumo dos Locks.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3.ConfiguracoesTimeOut.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>3.ConfiguracoesTimeOut.sql</FullPath>
+        </FileNode>
+        <FileNode Name="4.HabilitaColetaDeDeadLockParaOLogDoSql.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>4.HabilitaColetaDeDeadLockParaOLogDoSql.sql</FullPath>
+        </FileNode>
+        <FileNode Name="5.Identifica Nivel De Isolamento do Banco.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>5.Identifica Nivel De Isolamento do Banco.sql</FullPath>
+        </FileNode>
+        <FileNode Name="6.Identifica Tempo de Watis.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>6.Identifica Tempo de Watis.sql</FullPath>
+        </FileNode>
+        <FileNode Name="7.QuerysBloqueadas.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>7.QuerysBloqueadas.sql</FullPath>
+        </FileNode>
+        <FileNode Name="8.Sessoes Bloqueadas.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>8.Sessoes Bloqueadas.sql</FullPath>
+        </FileNode>
+        <FileNode Name="9.UfnActiveLocks.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DS11\MSSQLSERVER2017:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DS11\MSSQLSERVER2017</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>9.UfnActiveLocks.sql</FullPath>
+        </FileNode>
+        <FileNode Name="FindLocks.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>FindLocks.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

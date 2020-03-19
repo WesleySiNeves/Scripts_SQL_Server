@@ -1,0 +1,9 @@
+
+DECLARE @totalRow INT = 357005;
+
+DECLARE @tipoAntigo DATETIME = GETDATE();
+
+DECLARE @TipoNovo DATETIME2(3) = GETDATE();
+
+
+SELECT   @totalRow / 8000 * (DATALENGTH(@tipoAntigo)-DATALENGTH(@TipoNovo))

@@ -1,0 +1,729 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 14.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Canivete", "1.Canivete", "{45273CCD-31B0-483E-B72F-669843AFBB83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificacao 70 762", "Certificacao 70 762", "{11451895-F4C2-4CD0-B422-B312EB3B3780}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapter1_Design and implement database objects", "Chapter1_Design and implement database objects\Chapter1_Design and implement database objects.ssmssqlproj", "{D7404EAD-6F0A-4873-A6D6-5FA0DEB75689}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsVoltadosARotinaDeIndice", "ScriptsVoltadosARotinaDeIndice\ScriptsVoltadosARotinaDeIndice.ssmssqlproj", "{FBA654F0-4827-4E52-A36A-FE45AD8B0750}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9.Meus Scritps", "9.Meus Scritps", "{9491E4DA-872C-4E9F-855D-ABDF21A31CC0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Certificações", "3.Certificações", "{0FB569E1-782A-4735-9A32-ACD147B16635}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Scripts do Curso", "Scripts do Curso\Scripts do Curso.ssmssqlproj", "{5B5CE53D-311D-4281-A6C4-B15523BB16F4}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Helper_Funcoes", "Helper_Funcoes\Helper_Funcoes.ssmssqlproj", "{A15B910C-4306-477F-87C1-62CDD63AE9F8}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Minhas Demos", "Minhas Demos\Minhas Demos.ssmssqlproj", "{615C2D5F-6474-4579-8CA4-1739BE6DFB1F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsVoltadosATamanhoBancoETabelas", "ScriptsVoltadosATamanhoBancoETabelas\ScriptsVoltadosATamanhoBancoETabelas.ssmssqlproj", "{E5D1D377-067F-460B-A995-19CA875CF94D}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapter2_Implement programmability objects", "Chapter2_Implement programmability objects\Chapter2_Implement programmability objects.ssmssqlproj", "{81A68DDF-4370-4657-AF42-93AF88B20269}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "EstruturaFisicaIndices", "EstruturaFisicaIndices\EstruturaFisicaIndices.ssmssqlproj", "{70391ED9-52C8-476F-A4D1-B4D69CB56F5B}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsParaCamposEDependenciasDeObjetos", "ScriptsParaCamposEDependenciasDeObjetos\ScriptsParaCamposEDependenciasDeObjetos.ssmssqlproj", "{45E0E649-B4D6-43F0-AC72-0985B157E83F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsValtadosAManutencaoDeBancoEEmergencia", "ScriptsValtadosAManutencaoDeBancoEEmergencia\ScriptsValtadosAManutencaoDeBancoEEmergencia.ssmssqlproj", "{C4B10192-8D40-4C6E-9813-E296911818B7}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "TrabalhandoComDDl", "TrabalhandoComDDl\TrabalhandoComDDl.ssmssqlproj", "{E51C3E5C-6E3E-4763-A92A-19BAE36183B5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Labs", "Labs", "{F7F28853-CA65-4388-AB56-BD87AC77C0E4}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "AlocaçãoDadosPaginas", "AlocaçãoDadosPaginas\AlocaçãoDadosPaginas.ssmssqlproj", "{D0DFA357-F5B6-41B7-8EF3-FFF8E3940201}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsVoltadosParaView", "ScriptsVoltadosParaView\ScriptsVoltadosParaView.ssmssqlproj", "{46C9B187-30B6-44AA-A100-3FAEC52183DF}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "1.Views", "1.Views\1.Views.ssmssqlproj", "{2D759124-4162-4194-BAF0-D75827982FB7}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "2.Indices", "2.Indices\2.Indices.ssmssqlproj", "{BE598EFF-6E3D-414C-BF16-BA9CA10E6ACE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Administração", "1.Administração", "{F067A036-5E8A-4AD2-A111-2C2482E76895}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9.Tunning", "9.Tunning", "{10749CFB-4E78-4513-979B-2AA2F0001DDC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8.Soluções de Problemas", "8.Soluções de Problemas", "{79D03FF3-4912-45B6-A14C-A22C6D111E74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Dependencias de objetos", "4.Dependencias de objetos", "{BA46AAEF-312E-4903-AC86-FAC10B12B1F0}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "IntegridadeReferencial", "IntegridadeReferencial\IntegridadeReferencial.ssmssqlproj", "{9690F7CC-590B-4100-862F-781647687361}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "T-SQL", "T-SQL", "{73E24ABD-366C-40FF-B0B0-6B553B3694D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Funções", "4.Funções", "{AC9BBF87-163C-4A4B-AA2A-DF1B15DEB470}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "RaiseError", "RaiseError\RaiseError.ssmssqlproj", "{5C58F3BA-01C7-4BB0-AC40-C86637FAB8FC}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "2.THROW", "2.THROW\2.THROW.ssmssqlproj", "{166925EA-2558-4601-AF6E-E83DD25A50DA}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "1.ROLLUP", "1.ROLLUP\1.ROLLUP.ssmssqlproj", "{B9C222B6-5787-49BB-B0D0-4A7756064205}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "3.Pivot", "3.Pivot\3.Pivot.ssmssqlproj", "{6FB7DFF6-9761-4872-9B80-26528F7EBBBB}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "1.CriaTabelaERelacionamentosLancamentos", "1.CriaTabelaERelacionamentosLancamentos\1.CriaTabelaERelacionamentosLancamentos.ssmssqlproj", "{F03AC61C-E14F-4135-B4DE-5FCE1F0C5904}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Clean Trace", "2.Clean Trace", "{0344AE71-89D9-4E3C-A1DB-0FFC18A37A62}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "CleanTrace", "CleanTrace\CleanTrace.ssmssqlproj", "{2B288F26-FC06-406F-90DC-B99329027ACB}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Cache", "Cache\Cache.ssmssqlproj", "{8C5B6BD9-EDA1-4598-9432-30903D426D5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dicas", "Dicas", "{5025B0EF-CC91-46BE-8219-7506F80AC1E7}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Dicas T-SQL", "Dicas T-SQL\Dicas T-SQL.ssmssqlproj", "{8C19AE79-6BBC-48A9-BF2B-170301E71C78}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "2.Isnull Coalesce", "2.Isnull Coalesce\2.Isnull Coalesce.ssmssqlproj", "{98B412A6-59A2-4312-BA98-5AB217F50DDD}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "OrdenacaoDados", "OrdenacaoDados\OrdenacaoDados.ssmssqlproj", "{F0DBA623-0C74-4397-A607-9B19A89D4042}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Collates", "3.Collates", "{FAF3E813-16E6-4D5F-9212-2EBBFBEA144D}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "TrabalhandoCollates", "TrabalhandoCollates\TrabalhandoCollates.ssmssqlproj", "{51EB96DB-EE74-4423-9046-ACC2466C31ED}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Formatacoes", "Formatacoes\Formatacoes.ssmssqlproj", "{BD467376-9FD9-404F-835B-238D5AB7A061}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "XMLQuery", "XMLQuery\XMLQuery.ssmssqlproj", "{FE836BF5-8891-415C-908F-5209274B0B04}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "4.OUTPUT", "4.OUTPUT\4.OUTPUT.ssmssqlproj", "{5D601581-5F88-4551-B471-FBC0846F52C0}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Scripts", "Scripts\Scripts.ssmssqlproj", "{19DCCE51-9F63-4C75-9818-29D49524CABA}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "WindowsFunctions", "WindowsFunctions\WindowsFunctions.ssmssqlproj", "{EB7CAB6E-17A1-474B-967B-9FC0773746C3}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsInstanciasSql", "ScriptsInstanciasSql\ScriptsInstanciasSql.ssmssqlproj", "{AE7854C5-EA1F-4404-9952-5BE14AC358C2}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Triggers", "Triggers\Triggers.ssmssqlproj", "{9F550168-C7C5-49C2-B503-B7221CF5C0E5}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Datas", "Datas\Datas.ssmssqlproj", "{A676F542-7AB3-4F82-88CE-8C0F779A8F21}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "UsoCPU", "UsoCPU\UsoCPU.ssmssqlproj", "{2FA73F1B-42EE-4935-8DD8-F66813C016CC}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BestPratiscs", "BestPratiscs\BestPratiscs.ssmssqlproj", "{12C9DBD7-DD89-4BFE-A41A-426B8E1D686F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Sistema Operacional", "Sistema Operacional\Sistema Operacional.ssmssqlproj", "{C480E759-4363-49BC-B8EB-ED9B01332969}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Locks", "Locks\Locks.ssmssqlproj", "{9FAE0A85-717E-44A7-BF20-DEC9934597BF}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapter3_Implement transactions", "Chapter3_Implement transactions\Chapter3_Implement transactions.ssmssqlproj", "{B3AA24BC-EF6E-459B-A4AB-DF5A0FAC6FB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.Memoria Buffer Pool", "5.Memoria Buffer Pool", "{7DFE3BF1-1179-44D1-A9F8-666C418EA866}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsParaMemoria", "ScriptsParaMemoria\ScriptsParaMemoria.ssmssqlproj", "{4A74F200-9591-47F7-BA54-2DD0E68EE158}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6.Locks", "6.Locks", "{FA140319-6439-4C1D-8612-3294C873A1B8}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ResolveLocks", "ResolveLocks\ResolveLocks.ssmssqlproj", "{9E64F850-FC4E-4DE9-9644-5A7BAA813D86}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "FragmentacaoIndices", "FragmentacaoIndices\FragmentacaoIndices.ssmssqlproj", "{61FFF7D2-6A98-4218-9AA6-D6709AAA0F53}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "InMemory", "InMemory\InMemory.ssmssqlproj", "{0237AD19-2B21-4DDD-8395-845AD84A8FE1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Normalizacao Refatoracao Types", "1.Normalizacao Refatoracao Types", "{CC92AAC2-99E6-4EC0-B74C-7944AB6C656A}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "NormalizacaoDocumentacaoBanco", "NormalizacaoDocumentacaoBanco\NormalizacaoDocumentacaoBanco.ssmssqlproj", "{331B08CA-60FB-4789-92C5-B1DF1A065109}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7.Geracao de arquivos", "7.Geracao de arquivos", "{61BE437D-212E-4237-AF24-655AD21B2BF7}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "QuerysParaGeracaoArquivos", "QuerysParaGeracaoArquivos\QuerysParaGeracaoArquivos.ssmssqlproj", "{F2B24912-5F3F-4E66-B211-8CB93965DAE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuracoes", "Configuracoes", "{31E81202-FA29-4A23-BC6D-906F15AD8BB3}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "CTEs", "CTEs\CTEs.ssmssqlproj", "{C8B795E7-481C-4C55-9E11-BB74CC0F9DC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Curso SQL Server 2012", "2.Curso SQL Server 2012", "{EFA26234-656F-4BD1-AE20-5A4B8DD2A3F6}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "CursoSQL server 2012", "CursoSQL server 2012\CursoSQL server 2012.ssmssqlproj", "{476C630E-EEA2-45C2-9F0A-8290932AB649}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Conexões", "1.Conexões", "{F6A9CC1A-CC76-438F-B8A6-9BF9E265ED9F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ConexoesComBanco", "ConexoesComBanco\ConexoesComBanco.ssmssqlproj", "{4C4C1E72-F24A-4B16-9A91-AB7703AAA8EC}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Script70464", "Script70464\Script70464.ssmssqlproj", "{5BBF893D-3F1B-424B-A7DE-2FA3B91E8973}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "11.Query Store", "11.Query Store", "{0C0E8E4B-3555-4100-9AFC-0A678861DF80}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "QueryStore", "QueryStore\QueryStore.ssmssqlproj", "{6263698B-406C-401D-A3FE-F7433578A12A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8.Tabelas Particionadas", "8.Tabelas Particionadas", "{1BE96448-C426-4A08-B416-CCBDFA58BB7F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "TabelasParticionadas", "TabelasParticionadas\TabelasParticionadas.ssmssqlproj", "{73B3F2D2-7BD2-4ADA-AFBE-FB78A565F17F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapter4_Optimize database objects and SQL", "Chapter4_Optimize database objects and SQL\Chapter4_Optimize database objects and SQL.ssmssqlproj", "{07B01684-1AAE-4BEE-9CF3-6F0F7F9E0F9F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Statisticas", "Statisticas\Statisticas.ssmssqlproj", "{0A655CF6-3A8B-4D35-8C21-21FDC468AA7C}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Trace Side events", "Trace Side events\Trace Side events.ssmssqlproj", "{5A1B864C-ECCE-4020-95D6-6BBA105C4974}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tabela", "Tabela", "{1261412E-909A-432A-8FCA-274C36DCCB90}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsDeAdministracaoTabelas", "ScriptsDeAdministracaoTabelas\ScriptsDeAdministracaoTabelas.ssmssqlproj", "{B406C71A-9868-4FB3-93FE-88A8F7371BA8}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Indices", "Indices\Indices.ssmssqlproj", "{06844439-DD56-4E5C-8659-11B1D89D0B1B}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ForenKeys", "ForenKeys\ForenKeys.ssmssqlproj", "{42215077-5532-45E3-8020-BA4397D3670C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Buffer Cache", "Buffer Cache", "{AA17BEBE-3A25-41CA-AA65-B02ED77AAA72}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BPE", "BPE\BPE.ssmssqlproj", "{449EB13E-E2C6-4865-9445-57B6AF579F71}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9.Treinamentos", "9.Treinamentos", "{DC411CC1-6B36-44E5-BCEF-2331F602386D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.SQL Server Execution Plains", "1.SQL Server Execution Plains", "{23652EC9-2223-4576-A238-C83E1C6C264E}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "LeituraLivroExecutionPlainsByGrantFritchey", "LeituraLivroExecutionPlainsByGrantFritchey\LeituraLivroExecutionPlainsByGrantFritchey.ssmssqlproj", "{D05F90B1-F6C4-41E9-A67D-BF244EC8D4F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificacao 70 761", "Certificacao 70 761", "{9A4E32A9-4F12-4D81-A2C7-CC36CDD2E352}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapter1_manege data with TSQL", "Chapter1_manege data with TSQL\Chapter1_manege data with TSQL.ssmssqlproj", "{5FAE58D1-A6AC-4A18-B871-9CE5DB03107A}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsDoCurso", "ScriptsDoCurso\ScriptsDoCurso.ssmssqlproj", "{6AAB83DF-7DAB-4F4B-A271-F4A4C82992D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Indices", "Indices", "{3BD1EC43-70AF-4ECC-991E-68A8DE95358D}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Treinamento de Indices", "Treinamento de Indices\Treinamento de Indices.ssmssqlproj", "{0167F981-5E4B-43B8-AA9C-76779D4D5679}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Idiomas", "Idiomas\Idiomas.ssmssqlproj", "{E648A08C-3369-4FB1-BE70-79F53D5D6BD7}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "TimeZone", "TimeZone\TimeZone.ssmssqlproj", "{8A73343C-3335-455A-8482-F4BDA0A60DB6}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "RefatoracaoTypesBanco", "RefatoracaoTypesBanco\RefatoracaoTypesBanco.ssmssqlproj", "{E24CF413-628E-4337-A881-5C0E33DD4541}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Dicas de Tunning", "Dicas de Tunning\Dicas de Tunning.ssmssqlproj", "{BACB943A-DC70-4A58-AB60-7D41B61374AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Best Praticas", "2.Best Praticas", "{B6B7894A-EAD2-4E12-A2FA-39690569AB7B}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Manutencao arquitetura DB", "Manutencao arquitetura DB\Manutencao arquitetura DB.ssmssqlproj", "{3DEC0D5E-2E2B-4FEB-A437-E11B713CCC8A}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapter_2DemoTemporalTable", "Chapter_2DemoTemporalTable\Chapter_2DemoTemporalTable.ssmssqlproj", "{02027C36-3AC6-4132-8368-EAE5D45C3F8C}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapter_3Programing_Objects", "Chapter_3Programing_Objects\Chapter_3Programing_Objects.ssmssqlproj", "{8D50FE63-87D2-4740-A61F-927F2F978E06}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Joins", "Joins\Joins.ssmssqlproj", "{4DE275E6-6D76-4F23-AD85-48787228DB31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9.1.Projeto Log Auditoria", "9.1.Projeto Log Auditoria", "{D5891A09-0DBA-4A67-AC1E-C7E3C081DE4E}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "1.CriaBancoDados", "1.CriaBancoDados\1.CriaBancoDados.ssmssqlproj", "{61401A56-4201-4F75-B405-57A42D2CEF42}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "CriacaoEstruturaLogEmJSON", "CriacaoEstruturaLogEmJSON\CriacaoEstruturaLogEmJSON.ssmssqlproj", "{0A80C98D-5E36-4E7C-ABDF-EACA18FBDEA9}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "JSON", "JSON\JSON.ssmssqlproj", "{4763C22A-D305-497E-B147-1174C29B10EB}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ConfiguracoesSQLServer", "ConfiguracoesSQLServer\ConfiguracoesSQLServer.ssmssqlproj", "{4F4278A6-B6D8-4B93-A57B-FE7A6B066E82}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paralelismo", "Paralelismo", "{B5590A57-7753-4B7B-B2D6-C13EDDA34A5A}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "QuerysParalelas", "QuerysParalelas\QuerysParalelas.ssmssqlproj", "{D5B0EC63-E8E7-4F30-808F-726C020EA25C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8.Monitoramento", "8.Monitoramento", "{10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}"
+	ProjectSection(SolutionItems) = preProject
+		Grafo.dgml = Grafo.dgml
+	EndProjectSection
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Monitoramento_Transacoes", "Monitoramento_Transacoes\Monitoramento_Transacoes.ssmssqlproj", "{D5F0645D-6DA3-4A99-A277-00710B5C5251}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "LeituraSentryOneQueryOptmization", "LeituraSentryOneQueryOptmization\LeituraSentryOneQueryOptmization.ssmssqlproj", "{1F443377-EA2A-433E-8ADB-8D4FF35DF6C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FilesGroups", "FilesGroups", "{56F69349-0DAB-4531-8245-971ECC579C6E}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "FilesGroups", "FilesGroups\FilesGroups.ssmssqlproj", "{1E351F78-85D1-437A-8038-EBFA83E096A9}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoraCollates", "MonitoraCollates\MonitoraCollates.ssmssqlproj", "{FA18049B-8544-426F-9C1D-827215CF9595}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoramentoPlanoExecucao", "MonitoramentoPlanoExecucao\MonitoramentoPlanoExecucao.ssmssqlproj", "{5E6F8D84-31DC-4954-8AFD-A327781078CE}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoraCacheSQLServer", "MonitoraCacheSQLServer\MonitoraCacheSQLServer.ssmssqlproj", "{547D2B2E-B3DC-4B31-88EF-154BE045A7B8}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoraLocks", "MonitoraLocks\MonitoraLocks.ssmssqlproj", "{32E67C7F-EE2B-4ABF-B793-948B3AD20E76}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoraConexoesBanco", "MonitoraConexoesBanco\MonitoraConexoesBanco.ssmssqlproj", "{66C5242A-3664-4549-92A1-FE6160086B57}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoraNivelAcesso", "MonitoraNivelAcesso\MonitoraNivelAcesso.ssmssqlproj", "{15E14866-5B69-46B0-84A7-97E04BEEBCBD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificacao 70 764", "Certificacao 70 764", "{0BEEB5BF-A29D-4631-AC9F-08051B680504}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapher1_ConfigurarCriptografia", "Chapher1_ConfigurarCriptografia\Chapher1_ConfigurarCriptografia.ssmssqlproj", "{A31E7386-2B80-45D3-8FB5-3B865E923001}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Exemplos de Procedures", "1.Exemplos de Procedures", "{2072425A-43AF-4AAC-86F1-9817465484B8}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ExemploProcedures", "ExemploProcedures\ExemploProcedures.ssmssqlproj", "{D24E959E-91FE-4AAC-BEBF-924AE3548E5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Arquivos Logs", "Arquivos Logs", "{BF3F26EC-30A5-4855-BAFE-95F668407FDD}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ArquivosLogs", "ArquivosLogs\ArquivosLogs.ssmssqlproj", "{078B7CDD-3AF9-4542-8E9A-4EFD43B09803}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transacoes", "Transacoes", "{B91DF2F3-42E8-4CA4-B187-1799FB57207A}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoramentoBackups", "MonitoramentoBackups\MonitoramentoBackups.ssmssqlproj", "{E8AB13EA-BB3B-467D-9AFC-C915A338CD9F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoramentoQuerys", "MonitoramentoQuerys\MonitoramentoQuerys.ssmssqlproj", "{D2AD188B-E9F1-4F5C-8D27-F7B12AD7D721}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoramentoIndices", "MonitoramentoIndices\MonitoramentoIndices.ssmssqlproj", "{BE2B0225-0103-40EA-82C3-F880841B7BCD}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoramentoProcedures", "MonitoramentoProcedures\MonitoramentoProcedures.ssmssqlproj", "{931FAFE2-57D9-48C6-8DF1-3E41E5928F3E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Operacoes com Conjuntos", "3.Operacoes com Conjuntos", "{8DE44939-DAED-44CD-AD9B-C86DE1D939EB}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "OperacoesConjuntos", "OperacoesConjuntos\OperacoesConjuntos.ssmssqlproj", "{C5CED4E5-4226-4BA4-9BD4-FE16F3025409}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Forum", "4.Forum", "{B91C6ED5-D8EB-4EAA-A57D-48695EC5D615}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsForum", "ScriptsForum\ScriptsForum.ssmssqlproj", "{2001403C-E8E6-450C-B0A3-C6C330668FAD}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoraNomeErradosObjetos", "MonitoraNomeErradosObjetos\MonitoraNomeErradosObjetos.ssmssqlproj", "{25FBD9CA-2855-47BC-802E-B8BF94A271DF}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoraMemoriaAlocadaPorQuery", "MonitoraMemoriaAlocadaPorQuery\MonitoraMemoriaAlocadaPorQuery.ssmssqlproj", "{6AD1A81C-758B-4F14-A888-A927FE70D884}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Operacoes com Recursao", "Operacoes com Recursao", "{2AC8B413-E1A0-4FA9-BDFB-1D0427ECFF7B}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "CTESRecursivas", "CTESRecursivas\CTESRecursivas.ssmssqlproj", "{DDBF9D7B-6821-432D-B694-4BD9E81CA138}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitoraWaits", "MonitoraWaits\MonitoraWaits.ssmssqlproj", "{F6132247-E870-4C0F-8A29-AB87B88B2D1D}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MonitorDB", "MonitorDB\MonitorDB.ssmssqlproj", "{5C43B66A-93D9-4CD6-B9B2-78DEF820A0C9}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ReorGanizartable", "ReorGanizartable\ReorGanizartable.ssmssqlproj", "{71E4D8B5-DE8F-4C8D-A9CD-B162FF58CFF2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paginas", "Paginas", "{5A128ADD-694C-40F6-945A-98E9D07FC31D}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsPaginasDados", "ScriptsPaginasDados\ScriptsPaginasDados.ssmssqlproj", "{8D78AB10-CFB0-493E-BEE0-B8BC3C19EF27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Acoes", "Acoes", "{73BB895C-7F9A-4013-8591-7CB41CCFE5CD}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "AcoesParaProblemasEmcontrados", "AcoesParaProblemasEmcontrados\AcoesParaProblemasEmcontrados.ssmssqlproj", "{5465C1AB-39A8-4F54-90E3-B820587941C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9.Trace", "9.Trace", "{3211CA2A-4FCA-4EDF-A486-7D56EFECB5C2}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsTrace", "ScriptsTrace\ScriptsTrace.ssmssqlproj", "{2DA9E12D-8B5E-45D7-9073-BAF93267C1C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BulkInsert", "BulkInsert", "{00A42063-C1F0-436B-BD28-08BD94817F1C}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ScriptsBulkInsert", "ScriptsBulkInsert\ScriptsBulkInsert.ssmssqlproj", "{307C90E1-0BD2-4482-A73C-7164F3BE670F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuracoes Gerais", "Configuracoes Gerais", "{F4B9F139-4E7E-4312-866B-064931DCB644}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ConfiguracoesGerais", "ConfiguracoesGerais\ConfiguracoesGerais.ssmssqlproj", "{3C358775-0F24-4BFF-BE79-5DF1034A370B}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "DataBaseCompression", "DataBaseCompression\DataBaseCompression.ssmssqlproj", "{78E5AADE-97EC-4801-8DC2-A60987ECB905}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Demo_ConfiguracoesSet", "Demo_ConfiguracoesSet\Demo_ConfiguracoesSet.ssmssqlproj", "{929D3513-4EF5-462C-AE5B-2496EF295B22}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Treinamento 10987 performance de SQL Databases", "Treinamento 10987 performance de SQL Databases", "{88B2AC97-3CA4-4F23-B7BA-2F0C6615D621}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.DMVS", "2.DMVS", "{A766452B-7156-4F1C-B842-FFF1CCEE3C7C}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Treinamento DMVS", "Treinamento DMVS\Treinamento DMVS.ssmssqlproj", "{7D24BC0A-B671-45F0-9A0B-8E11DB3B5CC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mod01(SQL Server Architecture, Scheduling, and Waits)", "Mod01(SQL Server Architecture, Scheduling, and Waits)", "{87C3D7BA-A689-4E54-BF17-E5FDDB455B9D}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Mod01", "Mod01\Mod01.ssmssqlproj", "{3C09147C-C8B9-4290-9A15-9D29D9169E31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setupfiles", "Setupfiles", "{93C7DA8C-0C50-41C6-B1C8-FF46C105C79F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Setupfiles", "Setupfiles\Setupfiles.ssmssqlproj", "{1DEF1E61-7BF9-4040-9901-A9FDA20E4CC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mod02(SQL Server I O)", "Mod02(SQL Server I O)", "{C7AA1411-E58F-4143-81BB-E3F7C80A26FF}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Mod02", "Mod02\Mod02.ssmssqlproj", "{00694391-91C0-461A-B4FA-5A1E3733A429}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mod03(Analyzing Database Structures)", "Mod03(Analyzing Database Structures)", "{574055A6-DD74-4973-A29C-0D43A52B9F95}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Analyzing Database Structures", "Analyzing Database Structures\Analyzing Database Structures.ssmssqlproj", "{311EEC03-D83E-4AFA-B481-2460988240A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Demo", "1.Demo", "{1D08A43F-3CF5-4ECF-BA9C-541EDB0674D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Lab", "2.Lab", "{4726F04F-75F5-4456-A664-FEEFC56848B1}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Lab1", "Lab1\Lab1.ssmssqlproj", "{0B9D5049-4F68-447F-A8D7-BBBB4A58F040}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Medidas de tendencias central", "Medidas de tendencias central", "{BB4360CC-32B2-4C16-84FE-74AF99B9E6AE}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MedidasDeStatisticas", "MedidasDeStatisticas\MedidasDeStatisticas.ssmssqlproj", "{5EEDCFD0-62A4-4596-857F-09BEC19B5ED4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BaseLine", "BaseLine", "{C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaseLineIndexacao", "BaseLineIndexacao\BaseLineIndexacao.ssmssqlproj", "{BFB747B3-5594-4737-93CF-3FCFDBDF4BC0}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaseLineTipoDados", "BaseLineTipoDados\BaseLineTipoDados.ssmssqlproj", "{2BCBBE5F-5F57-4D21-9256-E24CF4E7749B}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaseLineQueryStore", "BaseLineQueryStore\BaseLineQueryStore.ssmssqlproj", "{2F6EBE21-487C-4365-A4E2-92F59AC17C9C}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaseLinePlanoExecucao", "BaseLinePlanoExecucao\BaseLinePlanoExecucao.ssmssqlproj", "{99FD0B22-B96C-48EE-A858-E5169AF7AA74}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaseLineLogs", "BaseLineLogs\BaseLineLogs.ssmssqlproj", "{0C35BF4C-0617-465B-A2D6-A1B6D52F6A30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9.Backups", "9.Backups", "{F6B37E97-6239-434C-BFD1-EF62D3FE8580}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "RotinaBackups", "RotinaBackups\RotinaBackups.ssmssqlproj", "{226CA6F0-97A7-4C66-9153-264E8D3A2A41}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapher1_ConfigurarAcesso", "Chapher1_ConfigurarAcesso\Chapher1_ConfigurarAcesso.ssmssqlproj", "{CA6CE026-0C44-43A3-B688-87502AD23231}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapher1_ConfigurarMascaramentoDinamico", "Chapher1_ConfigurarMascaramentoDinamico\Chapher1_ConfigurarMascaramentoDinamico.ssmssqlproj", "{874B43A2-1206-43D7-9DF3-35F22E110B46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chapher1", "Chapher1", "{3623AC8B-526A-4ABA-852D-13B415EA7405}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Chapher1_ConfigurarAuditoria", "Chapher1_ConfigurarAuditoria\Chapher1_ConfigurarAuditoria.ssmssqlproj", "{D53A29DA-0F43-472A-AF39-9C2BDA7BD8D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chapher2", "Chapher2", "{41D23D97-693D-41FC-8664-DFC183E2BBD2}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Backups", "Backups\Backups.ssmssqlproj", "{591AF9E4-5542-422A-BF06-2D8DECCE5B29}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaseLineMigracaoTipoTabela", "BaseLineMigracaoTipoTabela\BaseLineMigracaoTipoTabela.ssmssqlproj", "{B769AD3C-A908-432B-9F4A-0B953E0EE1AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.Calculos Financeiros", "5.Calculos Financeiros", "{41A0A9C7-3DA5-4E41-A378-B3A12675FB21}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "CalculosFinanceiros", "CalculosFinanceiros\CalculosFinanceiros.ssmssqlproj", "{E9D23117-B8E9-4D99-9A0A-418D74322131}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "ExtendsEvents", "ExtendsEvents\ExtendsEvents.ssmssqlproj", "{2746F399-1AF2-4C84-BA22-1224264E9E7C}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Waits", "Waits\Waits.ssmssqlproj", "{7FD50B63-D69B-474B-B05B-CD294D0F3D46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hangfire", "Hangfire", "{06DC2F39-77C7-4938-8D0B-41B482DF568C}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Hangfire", "Hangfire\Hangfire.ssmssqlproj", "{C3BD26E0-FD9D-47F8-970E-08789ABD682D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server Local", "Server Local", "{1EDA77AE-4B6F-4319-8801-C995024293DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sistema Operacional", "Sistema Operacional", "{A0F8745D-1156-41B2-BF0F-7BBDEA08B9BD}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "DocumentacaoBanco", "DocumentacaoBanco\DocumentacaoBanco.ssmssqlproj", "{70511E00-A11C-49BC-9B3D-5C30E3C53CA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TraceFlags", "TraceFlags", "{9E6532E6-D2F0-46BA-9AA2-FB1539F43D5C}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "traceFlags", "traceFlags\traceFlags.ssmssqlproj", "{38A4F749-6A38-45D7-8205-27D72D64A14B}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Restores", "Restores\Restores.ssmssqlproj", "{D95B6D6A-AEE2-424C-984F-258A53A59F20}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7404EAD-6F0A-4873-A6D6-5FA0DEB75689}.Default|Default.ActiveCfg = Default
+		{FBA654F0-4827-4E52-A36A-FE45AD8B0750}.Default|Default.ActiveCfg = Default
+		{5B5CE53D-311D-4281-A6C4-B15523BB16F4}.Default|Default.ActiveCfg = Default
+		{A15B910C-4306-477F-87C1-62CDD63AE9F8}.Default|Default.ActiveCfg = Default
+		{615C2D5F-6474-4579-8CA4-1739BE6DFB1F}.Default|Default.ActiveCfg = Default
+		{E5D1D377-067F-460B-A995-19CA875CF94D}.Default|Default.ActiveCfg = Default
+		{81A68DDF-4370-4657-AF42-93AF88B20269}.Default|Default.ActiveCfg = Default
+		{70391ED9-52C8-476F-A4D1-B4D69CB56F5B}.Default|Default.ActiveCfg = Default
+		{45E0E649-B4D6-43F0-AC72-0985B157E83F}.Default|Default.ActiveCfg = Default
+		{C4B10192-8D40-4C6E-9813-E296911818B7}.Default|Default.ActiveCfg = Default
+		{E51C3E5C-6E3E-4763-A92A-19BAE36183B5}.Default|Default.ActiveCfg = Default
+		{D0DFA357-F5B6-41B7-8EF3-FFF8E3940201}.Default|Default.ActiveCfg = Default
+		{46C9B187-30B6-44AA-A100-3FAEC52183DF}.Default|Default.ActiveCfg = Default
+		{2D759124-4162-4194-BAF0-D75827982FB7}.Default|Default.ActiveCfg = Default
+		{BE598EFF-6E3D-414C-BF16-BA9CA10E6ACE}.Default|Default.ActiveCfg = Default
+		{9690F7CC-590B-4100-862F-781647687361}.Default|Default.ActiveCfg = Default
+		{5C58F3BA-01C7-4BB0-AC40-C86637FAB8FC}.Default|Default.ActiveCfg = Default
+		{166925EA-2558-4601-AF6E-E83DD25A50DA}.Default|Default.ActiveCfg = Default
+		{B9C222B6-5787-49BB-B0D0-4A7756064205}.Default|Default.ActiveCfg = Default
+		{6FB7DFF6-9761-4872-9B80-26528F7EBBBB}.Default|Default.ActiveCfg = Default
+		{F03AC61C-E14F-4135-B4DE-5FCE1F0C5904}.Default|Default.ActiveCfg = Default
+		{2B288F26-FC06-406F-90DC-B99329027ACB}.Default|Default.ActiveCfg = Default
+		{8C5B6BD9-EDA1-4598-9432-30903D426D5A}.Default|Default.ActiveCfg = Default
+		{8C19AE79-6BBC-48A9-BF2B-170301E71C78}.Default|Default.ActiveCfg = Default
+		{98B412A6-59A2-4312-BA98-5AB217F50DDD}.Default|Default.ActiveCfg = Default
+		{F0DBA623-0C74-4397-A607-9B19A89D4042}.Default|Default.ActiveCfg = Default
+		{51EB96DB-EE74-4423-9046-ACC2466C31ED}.Default|Default.ActiveCfg = Default
+		{BD467376-9FD9-404F-835B-238D5AB7A061}.Default|Default.ActiveCfg = Default
+		{FE836BF5-8891-415C-908F-5209274B0B04}.Default|Default.ActiveCfg = Default
+		{5D601581-5F88-4551-B471-FBC0846F52C0}.Default|Default.ActiveCfg = Default
+		{19DCCE51-9F63-4C75-9818-29D49524CABA}.Default|Default.ActiveCfg = Default
+		{EB7CAB6E-17A1-474B-967B-9FC0773746C3}.Default|Default.ActiveCfg = Default
+		{AE7854C5-EA1F-4404-9952-5BE14AC358C2}.Default|Default.ActiveCfg = Default
+		{9F550168-C7C5-49C2-B503-B7221CF5C0E5}.Default|Default.ActiveCfg = Default
+		{A676F542-7AB3-4F82-88CE-8C0F779A8F21}.Default|Default.ActiveCfg = Default
+		{2FA73F1B-42EE-4935-8DD8-F66813C016CC}.Default|Default.ActiveCfg = Default
+		{12C9DBD7-DD89-4BFE-A41A-426B8E1D686F}.Default|Default.ActiveCfg = Default
+		{C480E759-4363-49BC-B8EB-ED9B01332969}.Default|Default.ActiveCfg = Default
+		{9FAE0A85-717E-44A7-BF20-DEC9934597BF}.Default|Default.ActiveCfg = Default
+		{B3AA24BC-EF6E-459B-A4AB-DF5A0FAC6FB4}.Default|Default.ActiveCfg = Default
+		{4A74F200-9591-47F7-BA54-2DD0E68EE158}.Default|Default.ActiveCfg = Default
+		{9E64F850-FC4E-4DE9-9644-5A7BAA813D86}.Default|Default.ActiveCfg = Default
+		{61FFF7D2-6A98-4218-9AA6-D6709AAA0F53}.Default|Default.ActiveCfg = Default
+		{0237AD19-2B21-4DDD-8395-845AD84A8FE1}.Default|Default.ActiveCfg = Default
+		{331B08CA-60FB-4789-92C5-B1DF1A065109}.Default|Default.ActiveCfg = Default
+		{F2B24912-5F3F-4E66-B211-8CB93965DAE6}.Default|Default.ActiveCfg = Default
+		{C8B795E7-481C-4C55-9E11-BB74CC0F9DC1}.Default|Default.ActiveCfg = Default
+		{476C630E-EEA2-45C2-9F0A-8290932AB649}.Default|Default.ActiveCfg = Default
+		{4C4C1E72-F24A-4B16-9A91-AB7703AAA8EC}.Default|Default.ActiveCfg = Default
+		{5BBF893D-3F1B-424B-A7DE-2FA3B91E8973}.Default|Default.ActiveCfg = Default
+		{6263698B-406C-401D-A3FE-F7433578A12A}.Default|Default.ActiveCfg = Default
+		{73B3F2D2-7BD2-4ADA-AFBE-FB78A565F17F}.Default|Default.ActiveCfg = Default
+		{07B01684-1AAE-4BEE-9CF3-6F0F7F9E0F9F}.Default|Default.ActiveCfg = Default
+		{0A655CF6-3A8B-4D35-8C21-21FDC468AA7C}.Default|Default.ActiveCfg = Default
+		{5A1B864C-ECCE-4020-95D6-6BBA105C4974}.Default|Default.ActiveCfg = Default
+		{B406C71A-9868-4FB3-93FE-88A8F7371BA8}.Default|Default.ActiveCfg = Default
+		{06844439-DD56-4E5C-8659-11B1D89D0B1B}.Default|Default.ActiveCfg = Default
+		{42215077-5532-45E3-8020-BA4397D3670C}.Default|Default.ActiveCfg = Default
+		{449EB13E-E2C6-4865-9445-57B6AF579F71}.Default|Default.ActiveCfg = Default
+		{D05F90B1-F6C4-41E9-A67D-BF244EC8D4F9}.Default|Default.ActiveCfg = Default
+		{5FAE58D1-A6AC-4A18-B871-9CE5DB03107A}.Default|Default.ActiveCfg = Default
+		{6AAB83DF-7DAB-4F4B-A271-F4A4C82992D8}.Default|Default.ActiveCfg = Default
+		{0167F981-5E4B-43B8-AA9C-76779D4D5679}.Default|Default.ActiveCfg = Default
+		{E648A08C-3369-4FB1-BE70-79F53D5D6BD7}.Default|Default.ActiveCfg = Default
+		{8A73343C-3335-455A-8482-F4BDA0A60DB6}.Default|Default.ActiveCfg = Default
+		{E24CF413-628E-4337-A881-5C0E33DD4541}.Default|Default.ActiveCfg = Default
+		{BACB943A-DC70-4A58-AB60-7D41B61374AF}.Default|Default.ActiveCfg = Default
+		{3DEC0D5E-2E2B-4FEB-A437-E11B713CCC8A}.Default|Default.ActiveCfg = Default
+		{02027C36-3AC6-4132-8368-EAE5D45C3F8C}.Default|Default.ActiveCfg = Default
+		{8D50FE63-87D2-4740-A61F-927F2F978E06}.Default|Default.ActiveCfg = Default
+		{4DE275E6-6D76-4F23-AD85-48787228DB31}.Default|Default.ActiveCfg = Default
+		{61401A56-4201-4F75-B405-57A42D2CEF42}.Default|Default.ActiveCfg = Default
+		{0A80C98D-5E36-4E7C-ABDF-EACA18FBDEA9}.Default|Default.ActiveCfg = Default
+		{4763C22A-D305-497E-B147-1174C29B10EB}.Default|Default.ActiveCfg = Default
+		{4F4278A6-B6D8-4B93-A57B-FE7A6B066E82}.Default|Default.ActiveCfg = Default
+		{D5B0EC63-E8E7-4F30-808F-726C020EA25C}.Default|Default.ActiveCfg = Default
+		{D5F0645D-6DA3-4A99-A277-00710B5C5251}.Default|Default.ActiveCfg = Default
+		{1F443377-EA2A-433E-8ADB-8D4FF35DF6C6}.Default|Default.ActiveCfg = Default
+		{1E351F78-85D1-437A-8038-EBFA83E096A9}.Default|Default.ActiveCfg = Default
+		{FA18049B-8544-426F-9C1D-827215CF9595}.Default|Default.ActiveCfg = Default
+		{5E6F8D84-31DC-4954-8AFD-A327781078CE}.Default|Default.ActiveCfg = Default
+		{547D2B2E-B3DC-4B31-88EF-154BE045A7B8}.Default|Default.ActiveCfg = Default
+		{32E67C7F-EE2B-4ABF-B793-948B3AD20E76}.Default|Default.ActiveCfg = Default
+		{66C5242A-3664-4549-92A1-FE6160086B57}.Default|Default.ActiveCfg = Default
+		{15E14866-5B69-46B0-84A7-97E04BEEBCBD}.Default|Default.ActiveCfg = Default
+		{A31E7386-2B80-45D3-8FB5-3B865E923001}.Default|Default.ActiveCfg = Default
+		{D24E959E-91FE-4AAC-BEBF-924AE3548E5B}.Default|Default.ActiveCfg = Default
+		{078B7CDD-3AF9-4542-8E9A-4EFD43B09803}.Default|Default.ActiveCfg = Default
+		{E8AB13EA-BB3B-467D-9AFC-C915A338CD9F}.Default|Default.ActiveCfg = Default
+		{D2AD188B-E9F1-4F5C-8D27-F7B12AD7D721}.Default|Default.ActiveCfg = Default
+		{BE2B0225-0103-40EA-82C3-F880841B7BCD}.Default|Default.ActiveCfg = Default
+		{931FAFE2-57D9-48C6-8DF1-3E41E5928F3E}.Default|Default.ActiveCfg = Default
+		{C5CED4E5-4226-4BA4-9BD4-FE16F3025409}.Default|Default.ActiveCfg = Default
+		{2001403C-E8E6-450C-B0A3-C6C330668FAD}.Default|Default.ActiveCfg = Default
+		{25FBD9CA-2855-47BC-802E-B8BF94A271DF}.Default|Default.ActiveCfg = Default
+		{6AD1A81C-758B-4F14-A888-A927FE70D884}.Default|Default.ActiveCfg = Default
+		{DDBF9D7B-6821-432D-B694-4BD9E81CA138}.Default|Default.ActiveCfg = Default
+		{F6132247-E870-4C0F-8A29-AB87B88B2D1D}.Default|Default.ActiveCfg = Default
+		{5C43B66A-93D9-4CD6-B9B2-78DEF820A0C9}.Default|Default.ActiveCfg = Default
+		{71E4D8B5-DE8F-4C8D-A9CD-B162FF58CFF2}.Default|Default.ActiveCfg = Default
+		{8D78AB10-CFB0-493E-BEE0-B8BC3C19EF27}.Default|Default.ActiveCfg = Default
+		{5465C1AB-39A8-4F54-90E3-B820587941C5}.Default|Default.ActiveCfg = Default
+		{2DA9E12D-8B5E-45D7-9073-BAF93267C1C6}.Default|Default.ActiveCfg = Default
+		{307C90E1-0BD2-4482-A73C-7164F3BE670F}.Default|Default.ActiveCfg = Default
+		{3C358775-0F24-4BFF-BE79-5DF1034A370B}.Default|Default.ActiveCfg = Default
+		{78E5AADE-97EC-4801-8DC2-A60987ECB905}.Default|Default.ActiveCfg = Default
+		{929D3513-4EF5-462C-AE5B-2496EF295B22}.Default|Default.ActiveCfg = Default
+		{7D24BC0A-B671-45F0-9A0B-8E11DB3B5CC8}.Default|Default.ActiveCfg = Default
+		{3C09147C-C8B9-4290-9A15-9D29D9169E31}.Default|Default.ActiveCfg = Default
+		{1DEF1E61-7BF9-4040-9901-A9FDA20E4CC8}.Default|Default.ActiveCfg = Default
+		{00694391-91C0-461A-B4FA-5A1E3733A429}.Default|Default.ActiveCfg = Default
+		{311EEC03-D83E-4AFA-B481-2460988240A3}.Default|Default.ActiveCfg = Default
+		{0B9D5049-4F68-447F-A8D7-BBBB4A58F040}.Default|Default.ActiveCfg = Default
+		{5EEDCFD0-62A4-4596-857F-09BEC19B5ED4}.Default|Default.ActiveCfg = Default
+		{BFB747B3-5594-4737-93CF-3FCFDBDF4BC0}.Default|Default.ActiveCfg = Default
+		{2BCBBE5F-5F57-4D21-9256-E24CF4E7749B}.Default|Default.ActiveCfg = Default
+		{2F6EBE21-487C-4365-A4E2-92F59AC17C9C}.Default|Default.ActiveCfg = Default
+		{99FD0B22-B96C-48EE-A858-E5169AF7AA74}.Default|Default.ActiveCfg = Default
+		{0C35BF4C-0617-465B-A2D6-A1B6D52F6A30}.Default|Default.ActiveCfg = Default
+		{226CA6F0-97A7-4C66-9153-264E8D3A2A41}.Default|Default.ActiveCfg = Default
+		{CA6CE026-0C44-43A3-B688-87502AD23231}.Default|Default.ActiveCfg = Default
+		{874B43A2-1206-43D7-9DF3-35F22E110B46}.Default|Default.ActiveCfg = Default
+		{D53A29DA-0F43-472A-AF39-9C2BDA7BD8D9}.Default|Default.ActiveCfg = Default
+		{591AF9E4-5542-422A-BF06-2D8DECCE5B29}.Default|Default.ActiveCfg = Default
+		{B769AD3C-A908-432B-9F4A-0B953E0EE1AD}.Default|Default.ActiveCfg = Default
+		{E9D23117-B8E9-4D99-9A0A-418D74322131}.Default|Default.ActiveCfg = Default
+		{2746F399-1AF2-4C84-BA22-1224264E9E7C}.Default|Default.ActiveCfg = Default
+		{7FD50B63-D69B-474B-B05B-CD294D0F3D46}.Default|Default.ActiveCfg = Default
+		{C3BD26E0-FD9D-47F8-970E-08789ABD682D}.Default|Default.ActiveCfg = Default
+		{70511E00-A11C-49BC-9B3D-5C30E3C53CA5}.Default|Default.ActiveCfg = Default
+		{38A4F749-6A38-45D7-8205-27D72D64A14B}.Default|Default.ActiveCfg = Default
+		{C8C75B28-F130-4FDB-A985-57FFC891A988}.Default|Default.ActiveCfg = Default
+		{D95B6D6A-AEE2-424C-984F-258A53A59F20}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11451895-F4C2-4CD0-B422-B312EB3B3780} = {0FB569E1-782A-4735-9A32-ACD147B16635}
+		{D7404EAD-6F0A-4873-A6D6-5FA0DEB75689} = {11451895-F4C2-4CD0-B422-B312EB3B3780}
+		{FBA654F0-4827-4E52-A36A-FE45AD8B0750} = {10749CFB-4E78-4513-979B-2AA2F0001DDC}
+		{5B5CE53D-311D-4281-A6C4-B15523BB16F4} = {11451895-F4C2-4CD0-B422-B312EB3B3780}
+		{A15B910C-4306-477F-87C1-62CDD63AE9F8} = {AC9BBF87-163C-4A4B-AA2A-DF1B15DEB470}
+		{615C2D5F-6474-4579-8CA4-1739BE6DFB1F} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{E5D1D377-067F-460B-A995-19CA875CF94D} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{81A68DDF-4370-4657-AF42-93AF88B20269} = {11451895-F4C2-4CD0-B422-B312EB3B3780}
+		{70391ED9-52C8-476F-A4D1-B4D69CB56F5B} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{45E0E649-B4D6-43F0-AC72-0985B157E83F} = {BA46AAEF-312E-4903-AC86-FAC10B12B1F0}
+		{C4B10192-8D40-4C6E-9813-E296911818B7} = {79D03FF3-4912-45B6-A14C-A22C6D111E74}
+		{E51C3E5C-6E3E-4763-A92A-19BAE36183B5} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{D0DFA357-F5B6-41B7-8EF3-FFF8E3940201} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{46C9B187-30B6-44AA-A100-3FAEC52183DF} = {BA46AAEF-312E-4903-AC86-FAC10B12B1F0}
+		{2D759124-4162-4194-BAF0-D75827982FB7} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{BE598EFF-6E3D-414C-BF16-BA9CA10E6ACE} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{F067A036-5E8A-4AD2-A111-2C2482E76895} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{10749CFB-4E78-4513-979B-2AA2F0001DDC} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{79D03FF3-4912-45B6-A14C-A22C6D111E74} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{BA46AAEF-312E-4903-AC86-FAC10B12B1F0} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{9690F7CC-590B-4100-862F-781647687361} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{5C58F3BA-01C7-4BB0-AC40-C86637FAB8FC} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{166925EA-2558-4601-AF6E-E83DD25A50DA} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{B9C222B6-5787-49BB-B0D0-4A7756064205} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{6FB7DFF6-9761-4872-9B80-26528F7EBBBB} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{F03AC61C-E14F-4135-B4DE-5FCE1F0C5904} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{2B288F26-FC06-406F-90DC-B99329027ACB} = {0344AE71-89D9-4E3C-A1DB-0FFC18A37A62}
+		{8C5B6BD9-EDA1-4598-9432-30903D426D5A} = {AA17BEBE-3A25-41CA-AA65-B02ED77AAA72}
+		{5025B0EF-CC91-46BE-8219-7506F80AC1E7} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{8C19AE79-6BBC-48A9-BF2B-170301E71C78} = {5025B0EF-CC91-46BE-8219-7506F80AC1E7}
+		{98B412A6-59A2-4312-BA98-5AB217F50DDD} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{F0DBA623-0C74-4397-A607-9B19A89D4042} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{FAF3E813-16E6-4D5F-9212-2EBBFBEA144D} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{51EB96DB-EE74-4423-9046-ACC2466C31ED} = {FAF3E813-16E6-4D5F-9212-2EBBFBEA144D}
+		{BD467376-9FD9-404F-835B-238D5AB7A061} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{FE836BF5-8891-415C-908F-5209274B0B04} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{5D601581-5F88-4551-B471-FBC0846F52C0} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{19DCCE51-9F63-4C75-9818-29D49524CABA} = {9491E4DA-872C-4E9F-855D-ABDF21A31CC0}
+		{EB7CAB6E-17A1-474B-967B-9FC0773746C3} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{AE7854C5-EA1F-4404-9952-5BE14AC358C2} = {F067A036-5E8A-4AD2-A111-2C2482E76895}
+		{9F550168-C7C5-49C2-B503-B7221CF5C0E5} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{A676F542-7AB3-4F82-88CE-8C0F779A8F21} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{2FA73F1B-42EE-4935-8DD8-F66813C016CC} = {10749CFB-4E78-4513-979B-2AA2F0001DDC}
+		{12C9DBD7-DD89-4BFE-A41A-426B8E1D686F} = {B6B7894A-EAD2-4E12-A2FA-39690569AB7B}
+		{C480E759-4363-49BC-B8EB-ED9B01332969} = {A0F8745D-1156-41B2-BF0F-7BBDEA08B9BD}
+		{9FAE0A85-717E-44A7-BF20-DEC9934597BF} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{B3AA24BC-EF6E-459B-A4AB-DF5A0FAC6FB4} = {11451895-F4C2-4CD0-B422-B312EB3B3780}
+		{7DFE3BF1-1179-44D1-A9F8-666C418EA866} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{4A74F200-9591-47F7-BA54-2DD0E68EE158} = {7DFE3BF1-1179-44D1-A9F8-666C418EA866}
+		{FA140319-6439-4C1D-8612-3294C873A1B8} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{9E64F850-FC4E-4DE9-9644-5A7BAA813D86} = {FA140319-6439-4C1D-8612-3294C873A1B8}
+		{61FFF7D2-6A98-4218-9AA6-D6709AAA0F53} = {10749CFB-4E78-4513-979B-2AA2F0001DDC}
+		{0237AD19-2B21-4DDD-8395-845AD84A8FE1} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{CC92AAC2-99E6-4EC0-B74C-7944AB6C656A} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{331B08CA-60FB-4789-92C5-B1DF1A065109} = {CC92AAC2-99E6-4EC0-B74C-7944AB6C656A}
+		{61BE437D-212E-4237-AF24-655AD21B2BF7} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{F2B24912-5F3F-4E66-B211-8CB93965DAE6} = {61BE437D-212E-4237-AF24-655AD21B2BF7}
+		{31E81202-FA29-4A23-BC6D-906F15AD8BB3} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{C8B795E7-481C-4C55-9E11-BB74CC0F9DC1} = {2AC8B413-E1A0-4FA9-BDFB-1D0427ECFF7B}
+		{EFA26234-656F-4BD1-AE20-5A4B8DD2A3F6} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{476C630E-EEA2-45C2-9F0A-8290932AB649} = {EFA26234-656F-4BD1-AE20-5A4B8DD2A3F6}
+		{F6A9CC1A-CC76-438F-B8A6-9BF9E265ED9F} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{4C4C1E72-F24A-4B16-9A91-AB7703AAA8EC} = {F6A9CC1A-CC76-438F-B8A6-9BF9E265ED9F}
+		{5BBF893D-3F1B-424B-A7DE-2FA3B91E8973} = {0BEEB5BF-A29D-4631-AC9F-08051B680504}
+		{0C0E8E4B-3555-4100-9AFC-0A678861DF80} = {10749CFB-4E78-4513-979B-2AA2F0001DDC}
+		{6263698B-406C-401D-A3FE-F7433578A12A} = {0C0E8E4B-3555-4100-9AFC-0A678861DF80}
+		{1BE96448-C426-4A08-B416-CCBDFA58BB7F} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{73B3F2D2-7BD2-4ADA-AFBE-FB78A565F17F} = {1BE96448-C426-4A08-B416-CCBDFA58BB7F}
+		{07B01684-1AAE-4BEE-9CF3-6F0F7F9E0F9F} = {11451895-F4C2-4CD0-B422-B312EB3B3780}
+		{0A655CF6-3A8B-4D35-8C21-21FDC468AA7C} = {10749CFB-4E78-4513-979B-2AA2F0001DDC}
+		{5A1B864C-ECCE-4020-95D6-6BBA105C4974} = {10749CFB-4E78-4513-979B-2AA2F0001DDC}
+		{1261412E-909A-432A-8FCA-274C36DCCB90} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{B406C71A-9868-4FB3-93FE-88A8F7371BA8} = {1261412E-909A-432A-8FCA-274C36DCCB90}
+		{06844439-DD56-4E5C-8659-11B1D89D0B1B} = {10749CFB-4E78-4513-979B-2AA2F0001DDC}
+		{42215077-5532-45E3-8020-BA4397D3670C} = {BA46AAEF-312E-4903-AC86-FAC10B12B1F0}
+		{AA17BEBE-3A25-41CA-AA65-B02ED77AAA72} = {10749CFB-4E78-4513-979B-2AA2F0001DDC}
+		{449EB13E-E2C6-4865-9445-57B6AF579F71} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{23652EC9-2223-4576-A238-C83E1C6C264E} = {DC411CC1-6B36-44E5-BCEF-2331F602386D}
+		{D05F90B1-F6C4-41E9-A67D-BF244EC8D4F9} = {23652EC9-2223-4576-A238-C83E1C6C264E}
+		{9A4E32A9-4F12-4D81-A2C7-CC36CDD2E352} = {0FB569E1-782A-4735-9A32-ACD147B16635}
+		{5FAE58D1-A6AC-4A18-B871-9CE5DB03107A} = {9A4E32A9-4F12-4D81-A2C7-CC36CDD2E352}
+		{6AAB83DF-7DAB-4F4B-A271-F4A4C82992D8} = {9A4E32A9-4F12-4D81-A2C7-CC36CDD2E352}
+		{3BD1EC43-70AF-4ECC-991E-68A8DE95358D} = {DC411CC1-6B36-44E5-BCEF-2331F602386D}
+		{0167F981-5E4B-43B8-AA9C-76779D4D5679} = {3BD1EC43-70AF-4ECC-991E-68A8DE95358D}
+		{E648A08C-3369-4FB1-BE70-79F53D5D6BD7} = {31E81202-FA29-4A23-BC6D-906F15AD8BB3}
+		{8A73343C-3335-455A-8482-F4BDA0A60DB6} = {31E81202-FA29-4A23-BC6D-906F15AD8BB3}
+		{E24CF413-628E-4337-A881-5C0E33DD4541} = {CC92AAC2-99E6-4EC0-B74C-7944AB6C656A}
+		{BACB943A-DC70-4A58-AB60-7D41B61374AF} = {10749CFB-4E78-4513-979B-2AA2F0001DDC}
+		{B6B7894A-EAD2-4E12-A2FA-39690569AB7B} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{3DEC0D5E-2E2B-4FEB-A437-E11B713CCC8A} = {CC92AAC2-99E6-4EC0-B74C-7944AB6C656A}
+		{02027C36-3AC6-4132-8368-EAE5D45C3F8C} = {9A4E32A9-4F12-4D81-A2C7-CC36CDD2E352}
+		{8D50FE63-87D2-4740-A61F-927F2F978E06} = {9A4E32A9-4F12-4D81-A2C7-CC36CDD2E352}
+		{4DE275E6-6D76-4F23-AD85-48787228DB31} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{D5891A09-0DBA-4A67-AC1E-C7E3C081DE4E} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{61401A56-4201-4F75-B405-57A42D2CEF42} = {D5891A09-0DBA-4A67-AC1E-C7E3C081DE4E}
+		{0A80C98D-5E36-4E7C-ABDF-EACA18FBDEA9} = {D5891A09-0DBA-4A67-AC1E-C7E3C081DE4E}
+		{4763C22A-D305-497E-B147-1174C29B10EB} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{4F4278A6-B6D8-4B93-A57B-FE7A6B066E82} = {31E81202-FA29-4A23-BC6D-906F15AD8BB3}
+		{B5590A57-7753-4B7B-B2D6-C13EDDA34A5A} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{D5B0EC63-E8E7-4F30-808F-726C020EA25C} = {B5590A57-7753-4B7B-B2D6-C13EDDA34A5A}
+		{D5F0645D-6DA3-4A99-A277-00710B5C5251} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{1F443377-EA2A-433E-8ADB-8D4FF35DF6C6} = {23652EC9-2223-4576-A238-C83E1C6C264E}
+		{56F69349-0DAB-4531-8245-971ECC579C6E} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{1E351F78-85D1-437A-8038-EBFA83E096A9} = {56F69349-0DAB-4531-8245-971ECC579C6E}
+		{FA18049B-8544-426F-9C1D-827215CF9595} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{5E6F8D84-31DC-4954-8AFD-A327781078CE} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{547D2B2E-B3DC-4B31-88EF-154BE045A7B8} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{32E67C7F-EE2B-4ABF-B793-948B3AD20E76} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{66C5242A-3664-4549-92A1-FE6160086B57} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{15E14866-5B69-46B0-84A7-97E04BEEBCBD} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{0BEEB5BF-A29D-4631-AC9F-08051B680504} = {0FB569E1-782A-4735-9A32-ACD147B16635}
+		{A31E7386-2B80-45D3-8FB5-3B865E923001} = {3623AC8B-526A-4ABA-852D-13B415EA7405}
+		{2072425A-43AF-4AAC-86F1-9817465484B8} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{D24E959E-91FE-4AAC-BEBF-924AE3548E5B} = {2072425A-43AF-4AAC-86F1-9817465484B8}
+		{BF3F26EC-30A5-4855-BAFE-95F668407FDD} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{078B7CDD-3AF9-4542-8E9A-4EFD43B09803} = {BF3F26EC-30A5-4855-BAFE-95F668407FDD}
+		{B91DF2F3-42E8-4CA4-B187-1799FB57207A} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{E8AB13EA-BB3B-467D-9AFC-C915A338CD9F} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{D2AD188B-E9F1-4F5C-8D27-F7B12AD7D721} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{BE2B0225-0103-40EA-82C3-F880841B7BCD} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{931FAFE2-57D9-48C6-8DF1-3E41E5928F3E} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{8DE44939-DAED-44CD-AD9B-C86DE1D939EB} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{C5CED4E5-4226-4BA4-9BD4-FE16F3025409} = {8DE44939-DAED-44CD-AD9B-C86DE1D939EB}
+		{B91C6ED5-D8EB-4EAA-A57D-48695EC5D615} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{2001403C-E8E6-450C-B0A3-C6C330668FAD} = {B91C6ED5-D8EB-4EAA-A57D-48695EC5D615}
+		{25FBD9CA-2855-47BC-802E-B8BF94A271DF} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{6AD1A81C-758B-4F14-A888-A927FE70D884} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{2AC8B413-E1A0-4FA9-BDFB-1D0427ECFF7B} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{DDBF9D7B-6821-432D-B694-4BD9E81CA138} = {2AC8B413-E1A0-4FA9-BDFB-1D0427ECFF7B}
+		{F6132247-E870-4C0F-8A29-AB87B88B2D1D} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{5C43B66A-93D9-4CD6-B9B2-78DEF820A0C9} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{71E4D8B5-DE8F-4C8D-A9CD-B162FF58CFF2} = {F7F28853-CA65-4388-AB56-BD87AC77C0E4}
+		{5A128ADD-694C-40F6-945A-98E9D07FC31D} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{8D78AB10-CFB0-493E-BEE0-B8BC3C19EF27} = {5A128ADD-694C-40F6-945A-98E9D07FC31D}
+		{73BB895C-7F9A-4013-8591-7CB41CCFE5CD} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{5465C1AB-39A8-4F54-90E3-B820587941C5} = {73BB895C-7F9A-4013-8591-7CB41CCFE5CD}
+		{3211CA2A-4FCA-4EDF-A486-7D56EFECB5C2} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{2DA9E12D-8B5E-45D7-9073-BAF93267C1C6} = {3211CA2A-4FCA-4EDF-A486-7D56EFECB5C2}
+		{00A42063-C1F0-436B-BD28-08BD94817F1C} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{307C90E1-0BD2-4482-A73C-7164F3BE670F} = {00A42063-C1F0-436B-BD28-08BD94817F1C}
+		{F4B9F139-4E7E-4312-866B-064931DCB644} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{3C358775-0F24-4BFF-BE79-5DF1034A370B} = {F4B9F139-4E7E-4312-866B-064931DCB644}
+		{78E5AADE-97EC-4801-8DC2-A60987ECB905} = {0BEEB5BF-A29D-4631-AC9F-08051B680504}
+		{929D3513-4EF5-462C-AE5B-2496EF295B22} = {0BEEB5BF-A29D-4631-AC9F-08051B680504}
+		{A766452B-7156-4F1C-B842-FFF1CCEE3C7C} = {DC411CC1-6B36-44E5-BCEF-2331F602386D}
+		{7D24BC0A-B671-45F0-9A0B-8E11DB3B5CC8} = {A766452B-7156-4F1C-B842-FFF1CCEE3C7C}
+		{87C3D7BA-A689-4E54-BF17-E5FDDB455B9D} = {88B2AC97-3CA4-4F23-B7BA-2F0C6615D621}
+		{3C09147C-C8B9-4290-9A15-9D29D9169E31} = {1D08A43F-3CF5-4ECF-BA9C-541EDB0674D2}
+		{93C7DA8C-0C50-41C6-B1C8-FF46C105C79F} = {1D08A43F-3CF5-4ECF-BA9C-541EDB0674D2}
+		{1DEF1E61-7BF9-4040-9901-A9FDA20E4CC8} = {93C7DA8C-0C50-41C6-B1C8-FF46C105C79F}
+		{C7AA1411-E58F-4143-81BB-E3F7C80A26FF} = {88B2AC97-3CA4-4F23-B7BA-2F0C6615D621}
+		{00694391-91C0-461A-B4FA-5A1E3733A429} = {C7AA1411-E58F-4143-81BB-E3F7C80A26FF}
+		{574055A6-DD74-4973-A29C-0D43A52B9F95} = {88B2AC97-3CA4-4F23-B7BA-2F0C6615D621}
+		{311EEC03-D83E-4AFA-B481-2460988240A3} = {574055A6-DD74-4973-A29C-0D43A52B9F95}
+		{1D08A43F-3CF5-4ECF-BA9C-541EDB0674D2} = {87C3D7BA-A689-4E54-BF17-E5FDDB455B9D}
+		{4726F04F-75F5-4456-A664-FEEFC56848B1} = {87C3D7BA-A689-4E54-BF17-E5FDDB455B9D}
+		{0B9D5049-4F68-447F-A8D7-BBBB4A58F040} = {4726F04F-75F5-4456-A664-FEEFC56848B1}
+		{BB4360CC-32B2-4C16-84FE-74AF99B9E6AE} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{5EEDCFD0-62A4-4596-857F-09BEC19B5ED4} = {BB4360CC-32B2-4C16-84FE-74AF99B9E6AE}
+		{C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636} = {10BE69A8-D221-4FB0-8A16-E7E1BE7E3462}
+		{BFB747B3-5594-4737-93CF-3FCFDBDF4BC0} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{2BCBBE5F-5F57-4D21-9256-E24CF4E7749B} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{2F6EBE21-487C-4365-A4E2-92F59AC17C9C} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{99FD0B22-B96C-48EE-A858-E5169AF7AA74} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{0C35BF4C-0617-465B-A2D6-A1B6D52F6A30} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{F6B37E97-6239-434C-BFD1-EF62D3FE8580} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{226CA6F0-97A7-4C66-9153-264E8D3A2A41} = {F6B37E97-6239-434C-BFD1-EF62D3FE8580}
+		{CA6CE026-0C44-43A3-B688-87502AD23231} = {3623AC8B-526A-4ABA-852D-13B415EA7405}
+		{874B43A2-1206-43D7-9DF3-35F22E110B46} = {3623AC8B-526A-4ABA-852D-13B415EA7405}
+		{3623AC8B-526A-4ABA-852D-13B415EA7405} = {0BEEB5BF-A29D-4631-AC9F-08051B680504}
+		{D53A29DA-0F43-472A-AF39-9C2BDA7BD8D9} = {3623AC8B-526A-4ABA-852D-13B415EA7405}
+		{41D23D97-693D-41FC-8664-DFC183E2BBD2} = {0BEEB5BF-A29D-4631-AC9F-08051B680504}
+		{591AF9E4-5542-422A-BF06-2D8DECCE5B29} = {41D23D97-693D-41FC-8664-DFC183E2BBD2}
+		{B769AD3C-A908-432B-9F4A-0B953E0EE1AD} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{41A0A9C7-3DA5-4E41-A378-B3A12675FB21} = {73E24ABD-366C-40FF-B0B0-6B553B3694D5}
+		{E9D23117-B8E9-4D99-9A0A-418D74322131} = {41A0A9C7-3DA5-4E41-A378-B3A12675FB21}
+		{2746F399-1AF2-4C84-BA22-1224264E9E7C} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{7FD50B63-D69B-474B-B05B-CD294D0F3D46} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{C3BD26E0-FD9D-47F8-970E-08789ABD682D} = {06DC2F39-77C7-4938-8D0B-41B482DF568C}
+		{A0F8745D-1156-41B2-BF0F-7BBDEA08B9BD} = {1EDA77AE-4B6F-4319-8801-C995024293DB}
+		{70511E00-A11C-49BC-9B3D-5C30E3C53CA5} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{9E6532E6-D2F0-46BA-9AA2-FB1539F43D5C} = {45273CCD-31B0-483E-B72F-669843AFBB83}
+		{38A4F749-6A38-45D7-8205-27D72D64A14B} = {9E6532E6-D2F0-46BA-9AA2-FB1539F43D5C}
+		{D95B6D6A-AEE2-424C-984F-258A53A59F20} = {41D23D97-693D-41FC-8664-DFC183E2BBD2}
+	EndGlobalSection
+EndGlobal

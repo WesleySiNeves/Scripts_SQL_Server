@@ -1,0 +1,1 @@
+RAISERROR ('Sua mensagem aqui!', 0, 1) WITH NOWAIT

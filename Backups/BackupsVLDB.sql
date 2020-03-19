@@ -1,0 +1,13 @@
+CREATE DATABASE [VLDB]
+  ON [PRIMARY]
+    (NAME = N'VLDB_System'' FILENAME = N'D:\SQLData\VLDB_System.mdf'' SIZE = 100MB)'
+  FILEGROUP [DATA]
+    (NAME = N'VLDB_Data1'' FILENAME = N'E:\SQLData\VLDB_Data1.ndf'' SIZE = 1TB)'
+    (NAME = N'VLDB_Data2'' FILENAME = N'F:\SQLData\VLDB_Data2.ndf'' SIZE = 1TB)'
+    (NAME = N'VLDB_Data3'' FILENAME = N'G:\SQLData\VLDB_Data3.ndf'' SIZE = 1TB)'
+    (NAME = N'VLDB_Data4'' FILENAME = N'H:\SQLData\VLDB_Data4.ndf'' SIZE = 1TB)'
+    (NAME = N'VLDB_Data5'' FILENAME = N'I:\SQLData\VLDB_Data5.ndf'' SIZE = 1TB)
+  LOG ON
+    (NAME = N'VLDB_log'' FILENAME = N'L:\SQLLog\VLDB_Log.ldf' ' SIZE = 100GB) ;
+GO
+ALTER DATABASE [VLDB] MODIFY FILEGROUP [DATA] DEFAULT;
