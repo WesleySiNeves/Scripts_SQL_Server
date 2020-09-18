@@ -3,7 +3,7 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="localhost\MSSQLSERVER2017:IMPLANTA\wesley.neves">
+        <ConnectionNode Name="localhost\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
           <Created>2018-11-27T12:02:47.9428572-02:00</Created>
           <Type>SQL</Type>
           <Server>localhost\MSSQLSERVER2017</Server>
@@ -186,6 +186,12 @@
           <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
           <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
           <FullPath>uspGetSizeOfObjets.sql</FullPath>
+        </FileNode>
+        <FileNode Name="uspModifierAllCollunsDatetimeToDateTime2.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>uspModifierAllCollunsDatetimeToDateTime2.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

@@ -112,38 +112,38 @@ AS
             [Total] DECIMAL(18, 2)
         );
 
-        INSERT INTO #QuantidadeRegistrosParaInserirExpurgo(
-                                                              Ano,
-                                                              Mes,
-                                                              Total
-                                                          )
-        SELECT YEAR(LJ.Data) Ano,
-               MONTH(LJ.Data) Mes,
-               COUNT(*) Total
-          FROM Log.LogsJson AS LJ
-         WHERE
-           CAST(LJ.Data AS DATE) < @DiaSubtraidoConfiguracaoExpurgarLogs
-         GROUP BY
-            YEAR(LJ.Data),
-            MONTH(LJ.Data);
-
-        INSERT INTO #QuantidadeRegistrosParaExclusao(
-                                                        Ano,
-                                                        Mes,
-                                                        Total
-                                                    )
-        SELECT YEAR(LJ.Data) Ano,
-               MONTH(LJ.Data) Mes,
-               COUNT(*) Total
-          FROM Expurgo.LogsJson AS LJ
-         WHERE
-           CAST(LJ.Data AS DATE) < @DiaSubtraidoConfiguracaoDeletarExpurgo
-         GROUP BY
-            YEAR(LJ.Data),
-            MONTH(LJ.Data);
-
         IF(@hoje >= @DataExecucaoExpurgo)
             BEGIN
+                INSERT INTO #QuantidadeRegistrosParaInserirExpurgo(
+                                                                      Ano,
+                                                                      Mes,
+                                                                      Total
+                                                                  )
+                SELECT YEAR(LJ.Data) Ano,
+                       MONTH(LJ.Data) Mes,
+                       COUNT(*) Total
+                  FROM Log.LogsJson AS LJ
+                 WHERE
+                    CAST(LJ.Data AS DATE) < @DiaSubtraidoConfiguracaoExpurgarLogs
+                 GROUP BY
+                    YEAR(LJ.Data),
+                    MONTH(LJ.Data);
+
+                INSERT INTO #QuantidadeRegistrosParaExclusao(
+                                                                Ano,
+                                                                Mes,
+                                                                Total
+                                                            )
+                SELECT YEAR(LJ.Data) Ano,
+                       MONTH(LJ.Data) Mes,
+                       COUNT(*) Total
+                  FROM Expurgo.LogsJson AS LJ
+                 WHERE
+                    CAST(LJ.Data AS DATE) < @DiaSubtraidoConfiguracaoDeletarExpurgo
+                 GROUP BY
+                    YEAR(LJ.Data),
+                    MONTH(LJ.Data);
+
                 BEGIN TRY
                     IF(EXISTS (SELECT 1 FROM #QuantidadeRegistrosParaExclusao AS QRPE))
                         BEGIN
@@ -305,7 +305,14 @@ AS
         ELSE
             BEGIN
                 SELECT * FROM #Configuracoes AS C;
-                SELECT 'DeleteExpurgo' AS Rotina, * FROM #QuantidadeRegistrosParaExclusao AS QRPE
-                SELECT 'InsertExpurgo' AS Rotina,* FROM #QuantidadeRegistrosParaInserirExpurgo AS QRPIE;
+
+                SELECT 'DeleteExpurgo' AS Rotina,
+                       *
+                  FROM #QuantidadeRegistrosParaExclusao AS QRPE;
+
+                SELECT 'InsertExpurgo' AS Rotina,
+                       *
+                  FROM #QuantidadeRegistrosParaInserirExpurgo AS QRPIE;
             END;
     END;
+GO

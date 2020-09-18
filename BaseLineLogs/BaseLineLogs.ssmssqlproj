@@ -15,7 +15,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\wesley.neves">
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
           <Created>2019-08-26T12:52:12.4532095-03:00</Created>
           <Type>SQL</Type>
           <Server>DS11\MSSQLSERVER2017</Server>
@@ -116,9 +116,9 @@
           <FullPath>ScriptCorrecaoLogs.sql</FullPath>
         </FileNode>
         <FileNode Name="SpExpurgoLogs.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
           <FullPath>SpExpurgoLogs.sql</FullPath>
         </FileNode>
         <FileNode Name="CriacaoTabelaJSON.sql">

@@ -1,4 +1,5 @@
 
+
 /* ==================================================================
 --Data: 12/12/2018 
 --Autor :Wesley Neves
@@ -7,7 +8,7 @@
 -- ==================================================================
 */
 
-CREATE OR ALTER PROCEDURE HealthCheck.uspDeleteOverlappingStats
+ALTER PROCEDURE HealthCheck.uspDeleteOverlappingStats
 (
     @MostarStatisticas BIT = 1,
     @Executar BIT = 0
@@ -141,5 +142,4 @@ BEGIN
         FROM #Duplicate AS D;
     END;
 END;
-
 GO

@@ -1,59 +1,71 @@
 
-IF ( OBJECT_ID('TEMPDB..#DadosDeletar') IS NOT NULL )
-    DROP TABLE #DadosDeletar;	
 
+/*Resolve deploy */
 
-CREATE TABLE #DadosDeletar
+DECLARE @deletar BIT = 0;
+
+IF(OBJECT_ID('TEMPDB..#DadosADeletar') IS NOT NULL)
+    DROP TABLE #DadosADeletar;
+
+CREATE TABLE #DadosADeletar
 (
     [SchemaName] NVARCHAR(128),
     [TableName]  NVARCHAR(128),
-    [Script]     NVARCHAR(402),
-    [StatsName]  NVARCHAR(128)
+    [Delet]      NVARCHAR(128),
+    [Script]     NVARCHAR(402)
 );
 
+WITH Dados
+    AS
+    (
+        SELECT S2.name AS SchemaName,
+               T.name AS TableName,
+               S.name AS Delet
+          FROM sys.stats AS S
+               JOIN sys.tables AS T ON S.object_id = T.object_id
+               JOIN sys.schemas AS S2 ON T.schema_id = S2.schema_id
+         WHERE
+            S.name LIKE '%Stats%'
+    )
+INSERT INTO #DadosADeletar(
+                              SchemaName,
+                              TableName,
+                              Delet,
+                              Script
+                          )
+SELECT R.SchemaName,
+       R.TableName,
+       R.Delet,
+       Script = CONCAT('DROP STATISTICS ', R.SchemaName, '.', R.TableName, '.', R.Delet)
+  FROM Dados R;
 
-INSERT INTO #DadosDeletar(
-                             SchemaName,
-                             TableName,
-                             Script,
-                             StatsName
-                         )
+/* declare variables */
+DECLARE @Comando NVARCHAR(800);
 
-SELECT S2.name SchemaName,
-       T.name AS TableName,
-       Script = CONCAT('DROP STATISTICS ', S2.name, '.', T.name, '.', S.name),
-       S.name AS StatsName
-  FROM sys.stats AS S
-       JOIN sys.tables AS T ON S.object_id = T.object_id
-       JOIN sys.schemas AS S2 ON T.schema_id = S2.schema_id
- WHERE
-    S.name LIKE 'Stats_%'
- --   AND T.name IN ('Usuarios');
+DECLARE cursor_DeletaStatis CURSOR FAST_FORWARD READ_ONLY FOR
+SELECT DAD.Script FROM #DadosADeletar AS DAD;
 
+OPEN cursor_DeletaStatis;
 
+FETCH NEXT FROM cursor_DeletaStatis
+ INTO @Comando;
 
+WHILE @@FETCH_STATUS = 0
+    BEGIN
 
- /* declare variables */
- DECLARE @Script VARCHAR(MAX)
- 
- DECLARE cursor_executaScript CURSOR FAST_FORWARD READ_ONLY FOR SELECT  DD.Script FROM #DadosDeletar AS DD
- 
- OPEN cursor_executaScript
- 
- FETCH NEXT FROM cursor_executaScript INTO @Script
- 
- WHILE @@FETCH_STATUS = 0
- BEGIN
-     
+	IF(@deletar =1)
+	BEGIN
+        EXEC sys.sp_executesql @Comando;
+			
+	END
+	ELSE
+	BEGIN
+	    PRINT(@Comando)
+	END
+    
+        FETCH NEXT FROM cursor_DeletaStatis
+         INTO @Comando;
+    END;
 
-	 EXEC (@Script)
-
- 
-     FETCH NEXT FROM cursor_executaScript INTO @Script
- END
- 
- CLOSE cursor_executaScript
- DEALLOCATE cursor_executaScript
-
-
- SELECT * FROM #DadosDeletar AS DD
+CLOSE cursor_DeletaStatis;
+DEALLOCATE cursor_DeletaStatis;

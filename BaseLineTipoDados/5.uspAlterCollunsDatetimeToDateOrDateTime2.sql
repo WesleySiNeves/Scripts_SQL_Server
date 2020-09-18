@@ -36,21 +36,22 @@ SELECT PJ.DataFundacao,
 
 
 
-CREATE OR ALTER PROCEDURE HealthCheck.uspAlterCollunsDatetimeToDateOrDateTime2
-(
-    @ObjectName VARCHAR(200) = NULL,
-    @Efetivar BIT = 0,
-    @Visualizar BIT = 1,
-    @ParseToPrecision2 BIT = 1
-)
-AS
-BEGIN
+--CREATE OR ALTER PROCEDURE HealthCheck.uspAlterCollunsDatetimeToDateOrDateTime2
+--(
+--    @ObjectName VARCHAR(200) = NULL,
+--    @Efetivar BIT = 0,
+--    @Visualizar BIT = 1,
+--    @ParseToPrecision2 BIT = 1
+--)
+--AS
+--BEGIN
 
 
-    --DECLARE @ObjectName VARCHAR(200) = NULL;
-    --DECLARE @Efetivar BIT = 1;
-    --DECLARE @Visualizar BIT = 1;
-    
+	
+    DECLARE @ObjectName VARCHAR(200) = NULL;
+    DECLARE @Efetivar BIT = 1;
+    DECLARE @Visualizar BIT = 1;
+    DECLARE @ParseToPrecision2 BIT = 1;
 
     DECLARE @ObjectId INT = NULL; --1791345446;  --OBJECT_ID(@ObjectName);
 
@@ -482,8 +483,10 @@ BEGIN
    DELETE CDT FROM #CamposDateTime AS CDT
    WHERE CDT.SchemaName LIKE 'HangFire%'
 
-  DELETE CDT FROM #CamposDateTime AS CDT
-   WHERE CDT.Rows = 0
+
+
+	--DELETE CDT FROM #CamposDateTime AS CDT
+	--WHERE CDT.Rows = 0
 
 
 
@@ -492,7 +495,7 @@ BEGIN
 
 
     
-
+	
 
 
 
@@ -512,7 +515,7 @@ BEGIN
 
 
     DECLARE cursor_CamposDateTime CURSOR FAST_FORWARD READ_ONLY FOR
-    SELECT CDT.SchemaName,
+    SELECT TOP 1 CDT.SchemaName,
            CDT.TableName,
            CDT.Rows,
            CDT.object_id,

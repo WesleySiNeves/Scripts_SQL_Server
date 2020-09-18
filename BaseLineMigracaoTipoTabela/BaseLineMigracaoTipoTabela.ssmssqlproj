@@ -3,6 +3,18 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:crea-sp-bi">
+          <Created>2020-09-04T12:35:24.372224-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>crea-sp-bi</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
           <Created>2019-10-01T11:41:35.8896415-03:00</Created>
           <Type>SQL</Type>

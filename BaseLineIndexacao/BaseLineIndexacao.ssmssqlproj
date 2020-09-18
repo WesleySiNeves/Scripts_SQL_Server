@@ -3,7 +3,7 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\wesley.neves">
+        <ConnectionNode Name="DS11\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
           <Created>2018-10-29T13:39:03.2922841-03:00</Created>
           <Type>SQL</Type>
           <Server>DS11\MSSQLSERVER2017</Server>
@@ -15,7 +15,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="localhost\MSSQLSERVER2017:IMPLANTA\wesley.neves">
+        <ConnectionNode Name="localhost\MSSQLSERVER2017:IMPLANTA\Wesley.Neves">
           <Created>2018-10-25T09:21:41.1203502-03:00</Created>
           <Type>SQL</Type>
           <Server>localhost\MSSQLSERVER2017</Server>
@@ -110,10 +110,16 @@
           <FullPath>2.2.sp_AllIndex.sql</FullPath>
         </FileNode>
         <FileNode Name="2.1.sp_SnapShotIndex.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
           <FullPath>2.1.sp_SnapShotIndex.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2.Cria Objetos_Dev_Ops.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>2.Cria Objetos_Dev_Ops.sql</FullPath>
         </FileNode>
         <FileNode Name="3.2.sp_missingIndex.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
@@ -122,9 +128,9 @@
           <FullPath>3.2.sp_missingIndex.sql</FullPath>
         </FileNode>
         <FileNode Name="3.3.sp_AutoCreateIndex.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
           <FullPath>3.3.sp_AutoCreateIndex.sql</FullPath>
         </FileNode>
         <FileNode Name="3.4.sp_InefficientIndex.sql">
@@ -140,15 +146,15 @@
           <FullPath>3.5.sp_UnusedIndex.sql</FullPath>
         </FileNode>
         <FileNode Name="3.6.sp_UpdateStats.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
           <FullPath>3.6.sp_UpdateStats.sql</FullPath>
         </FileNode>
         <FileNode Name="3.7.sp_indexDesfrag.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
           <FullPath>3.7.sp_indexDesfrag.sql</FullPath>
         </FileNode>
         <FileNode Name="3.8.sp_DeleteDuplicateIndex.sql">
@@ -169,6 +175,12 @@
           <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
           <FullPath>4.1.uspDeleteOverlappingStats.sql</FullPath>
         </FileNode>
+        <FileNode Name="4.sp_AutoCreateStats.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <FullPath>4.sp_AutoCreateStats.sql</FullPath>
+        </FileNode>
         <FileNode Name="4.sp_AutoManegerStats.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
@@ -186,6 +198,12 @@
           <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
           <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
           <FullPath>6.Sp_AutoOtimization.sql</FullPath>
+        </FileNode>
+        <FileNode Name="6.Sp_AutoOtimization_V2.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>6.Sp_AutoOtimization_V2.sql</FullPath>
         </FileNode>
         <FileNode Name="CriaConfiguracao.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>

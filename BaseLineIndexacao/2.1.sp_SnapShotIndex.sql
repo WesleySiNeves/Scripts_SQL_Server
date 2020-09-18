@@ -1,9 +1,4 @@
-SET QUOTED_IDENTIFIER ON;
-
-SET ANSI_NULLS ON;
-GO
-
-CREATE OR ALTER PROCEDURE HealthCheck.uspSnapShotIndex
+CREATE OR ALTER  PROCEDURE HealthCheck.uspSnapShotIndex
 (
     @Visualizar  BIT      = 1,
     @DiaExecucao DATETIME = NULL,
@@ -15,10 +10,20 @@ AS
 
         SET TRAN ISOLATION LEVEL READ UNCOMMITTED;
 
-        --   DECLARE @DiaExecucao DATETIME;
+        --      DECLARE @DiaExecucao DATE;
         --DECLARE @Visualizar BIT = 1;
-        --DECLARE @Efetivar BIT = 1 ;
+        --      DECLARE @Efetivar BIT = 1 ;
         SET @DiaExecucao = ISNULL(@DiaExecucao, GETDATE());
+
+        DECLARE @DataUltimaVerificacao DATE = (
+                                                  SELECT MAX(SSIH.SnapShotDate)FROM HealthCheck.SnapShotIndexHistory AS SSIH
+                                              );
+        DECLARE @Executar BIT = IIF(@DataUltimaVerificacao > @DiaExecucao, 1, 0);
+
+        IF(@Executar = 0)
+            BEGIN
+                RETURN;
+            END;
 
         IF(OBJECT_ID('TEMPDB..#SchemasExcessao') IS NOT NULL)
             DROP TABLE #SchemasExcessao;

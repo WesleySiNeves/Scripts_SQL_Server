@@ -112,6 +112,8 @@ BEGIN
            A.page_count
     FROM sys.dm_db_index_physical_stats(DB_ID(), NULL, NULL, NULL, NULL) AS A
     WHERE A.alloc_unit_type_desc IN ( N'IN_ROW_DATA', N'ROW_OVERFLOW_DATA' )
+	AND A.object_id NOT IN (SELECT T.object_id FROM sys.tables AS T
+									WHERE  T.name ='LogsJson')
           AND A.page_count > @MinPageCount
           AND A.avg_fragmentation_in_percent >= @MinFrag;
 
@@ -287,7 +289,7 @@ BEGIN
                     SET @Script
                         = CONCAT(
                                     @Script,
-                                    ' WITH (' + IIF(@TipoVersao IN ( 'Azure', 'Enterprise' ), 'ONLINE=ON ,', '')
+                                    ' WITH (' + IIF(@TipoVersao IN ( 'Azure', 'Enterprise' ), 'ONLINE=ON ,DATA_COMPRESSION = PAGE,', '')
                                     + 'MAXDOP = 8, SORT_IN_TEMPDB= ON , FILLFACTOR =',
                                     @Newfill_factor,
                                     ')'

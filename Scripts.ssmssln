@@ -398,6 +398,14 @@ Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "traceFlags", "traceFlags\tr
 EndProject
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Restores", "Restores\Restores.ssmssqlproj", "{D95B6D6A-AEE2-424C-984F-258A53A59F20}"
 EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaseLinePageCompression", "BaseLinePageCompression\BaseLinePageCompression.ssmssqlproj", "{B0091183-9D50-4A96-B961-4FF42002052F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaseLineShrink", "BaseLineShrink\BaseLineShrink.ssmssqlproj", "{6466099A-3854-48F0-9CC6-6C56ECA214E5}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaselineAcoes", "BaselineAcoes\BaselineAcoes.ssmssqlproj", "{E3A13C48-9009-427B-A8FD-B2EBB6DFDA87}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaselineElastcJobAzure", "BaselineElastcJobAzure\BaselineElastcJobAzure.ssmssqlproj", "{211C52F1-BC0D-4FB6-AF21-92BCD07568BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Default|Default = Default|Default
@@ -534,8 +542,12 @@ Global
 		{C3BD26E0-FD9D-47F8-970E-08789ABD682D}.Default|Default.ActiveCfg = Default
 		{70511E00-A11C-49BC-9B3D-5C30E3C53CA5}.Default|Default.ActiveCfg = Default
 		{38A4F749-6A38-45D7-8205-27D72D64A14B}.Default|Default.ActiveCfg = Default
-		{C8C75B28-F130-4FDB-A985-57FFC891A988}.Default|Default.ActiveCfg = Default
 		{D95B6D6A-AEE2-424C-984F-258A53A59F20}.Default|Default.ActiveCfg = Default
+		{B0091183-9D50-4A96-B961-4FF42002052F}.Default|Default.ActiveCfg = Default
+		{6466099A-3854-48F0-9CC6-6C56ECA214E5}.Default|Default.ActiveCfg = Default
+		{E3A13C48-9009-427B-A8FD-B2EBB6DFDA87}.Default|Default.ActiveCfg = Default
+		{DC685AE6-1F0B-4AD8-83F1-9706EB08D6B3}.Default|Default.ActiveCfg = Default
+		{211C52F1-BC0D-4FB6-AF21-92BCD07568BD}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -725,5 +737,9 @@ Global
 		{9E6532E6-D2F0-46BA-9AA2-FB1539F43D5C} = {45273CCD-31B0-483E-B72F-669843AFBB83}
 		{38A4F749-6A38-45D7-8205-27D72D64A14B} = {9E6532E6-D2F0-46BA-9AA2-FB1539F43D5C}
 		{D95B6D6A-AEE2-424C-984F-258A53A59F20} = {41D23D97-693D-41FC-8664-DFC183E2BBD2}
+		{B0091183-9D50-4A96-B961-4FF42002052F} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{6466099A-3854-48F0-9CC6-6C56ECA214E5} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{E3A13C48-9009-427B-A8FD-B2EBB6DFDA87} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{211C52F1-BC0D-4FB6-AF21-92BCD07568BD} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
 	EndGlobalSection
 EndGlobal

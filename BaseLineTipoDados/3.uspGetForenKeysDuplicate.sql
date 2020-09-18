@@ -39,5 +39,3 @@ BEGIN
        AND x.ForeignKeyRank <> y.ForeignKeyRank;
 
 END;
-
-
