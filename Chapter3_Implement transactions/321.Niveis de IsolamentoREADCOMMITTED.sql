@@ -1,8 +1,16 @@
-USE ExamBook762Ch3;
+
+
+USE [15.1-implanta];
+
+GO
+
+--CREATE SCHEMA Examples 
 
 /*########################
 # OBS: dropa a tabela se existir
 */
+
+
 DROP TABLE IF EXISTS Examples.IsolationLevels 
 
 
@@ -11,10 +19,11 @@ DROP TABLE IF EXISTS Examples.IsolationLevels
 */
 CREATE TABLE Examples.IsolationLevels
 (
-    RowId INT NOT NULL
-        CONSTRAINT PKRowId PRIMARY KEY,
+    RowId      INT          NOT NULL CONSTRAINT PKRowId PRIMARY KEY,
     ColumnText VARCHAR(100) NOT NULL
 );
+
+
 INSERT INTO Examples.IsolationLevels
 (
     RowId,
@@ -38,15 +47,17 @@ Especifica que as instruções não podem ler dados que foram modificados, mas que 
   entre instruções individuais dentro da transação atual, resultando em 
 leituras não repetíveis ou dados fantasmas. Essa é a opção padrão do SQL Server.
 */
+
 SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
-BEGIN TRANSACTION;
+
+BEGIN TRANSACTION T1;
 UPDATE Examples.IsolationLevels
-SET ColumnText = 'Row 1 Updated'
+SET ColumnText = 'Row 1 Updated READ COMMITTED'
 WHERE RowId = 1;
 
 
-
+--ROLLBACK
 --Em nova sessão 
 --Em nova sessão 
 SELECT RowId, ColumnText
@@ -66,6 +77,59 @@ WHERE ColumnText IN
 
 
 
+--Em nova sessão 
+--Em nova sessão 
+SELECT RowId, ColumnText
+FROM Examples.IsolationLevels;
+
+
+--Em nova sessão 
+--Em nova sessão 
+SELECT RowId, ColumnText
+FROM Examples.IsolationLevels w
+WHERE RowId =1
+
+
+--Em nova sessão 
+--Em nova sessão 
+SELECT RowId, ColumnText
+FROM Examples.IsolationLevels
+WITH(INDEX =IdxName)
+WHERE ColumnText IN
+(
+'Row 2',
+'Row 3',
+'Row 4'
+)
+
+
+--Em nova sessão 
+--Em nova sessão 
+SELECT RowId, ColumnText
+FROM Examples.IsolationLevels
+WHERE RowId >1
+
+
+--Em nova sessão 
+--Em nova sessão 
+SELECT RowId, ColumnText
+FROM Examples.IsolationLevels
+WHERE ColumnText  ='Row 2'
+
+
+--Em nova sessão 
+--Em nova sessão 
+SELECT RowId, ColumnText
+FROM Examples.IsolationLevels
+WITH(INDEX =PKRowId)
+WHERE ColumnText IN
+(
+'Row 2',
+'Row 3',
+'Row 4'
+)
+
+
 
 INSERT INTO Examples.IsolationLevels
 (
@@ -76,6 +140,10 @@ VALUES
 (   5, -- RowId - int
     'Row 5' -- ColumnText - varchar(100)
 )
+
+
+DELETE FROM Examples.IsolationLevels
+WHERE RowId =5
 
 
 --CREATE  NONCLUSTERED INDEX IdxName ON Examples.IsolationLevels(ColumnText)

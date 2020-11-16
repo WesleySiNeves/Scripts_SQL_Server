@@ -33,22 +33,109 @@ INSERT INTO #BancosDeDadosExcluidosDoJob(
                                             DatabaseName
                                         )
 VALUES(N'master'),
-(N'Implanta.Manager'),
-(N'cra-es.conversor'),
-(N'Implanta_CRESSSP'),
-(N'aaf-02.implantadev.net.br_Copiar'),
-(N'aaf-11.implantadev.net.br'),
+('DNE'),
+('cra-pr.conversor'),
+('cra-rn.conversor'),
+('cress-sp.Conversor'),
+('cra-mt.conversor'),
+('cra-al.conversor'),
+('cra-pb.conversor'),
+('cress-rj.conversor'),
+('cra-to.conversor'),
+('cra-am.conversor'),
+('cra-pe.conversor'),
+('cra-es.conversor'),
+('cress-rr-Conversor'),
+('cra-df.conversor'),
+('cro-sp.conversor'),
+('cra-sp.conversor'),
+('cra-ma.conversor'),
+('cra-sp.conversor-incremental'),
+('cra-pa.conversor'),
+('cra-sc.Conversor'),
+('cra-go.conversor'),
+('cra-pi.conversor'),
+('cra-se.conversor'),
+('cress-sc.conversor'),
+('cress-mg.conversor'),
+('cress-rs.Conversor'),
+('cra-ro.conversor'),
+('cro-pr.conversor2'),
+('cress-ms.conversor'),
+('cress-pa.conversor'),
+('cro-pr.conversor'),
+('cro-am.conversor'),
+('cress-ce.conversor'),
+('cress-pe.conversor'),
+('cro-go.conversor'),
+('prd-automationjobs-db'),
+('DNE_1711'),
+('cra-ba.conversor'),
+('cress-pr.conversor'),
+('cress-df.conversor'),
+('cra-es.conversor-2'),
+('cra-es.conversor-3'),
+('cra-ms.conversor'),
+('cra-ap.conversor'),
+('cra-sp.implanta.net.br-ESPELHO'),
+('cro-sp.implanta.net.br-ESPELHO'),
+('crtr-08.implanta.net.br'),
+('crtr-01.implanta.net.br'),
+('crb-03.implanta.net.br'),
+('crb-13.implanta.net.br'),
+('crb-08.implanta.net.br'),
+('conter-br.implanta.net.br'),
+('cra-rj.implanta.net.br'),
+('crb-07.implanta.net.br'),
+('crb-04.implanta.net.br'),
+('crb-11.implanta.net.br'),
+('crb-01.implanta.net.br'),
+('cra-mg.implanta.net.br'),
+('cfb-br.implanta.net.br'),
+('crb-02.implanta.net.br'),
+('crtr-14.implanta.net.br'),
+('crtr-09.implanta.net.br'),
+('crb-09.implanta.net.br'),
+('crb-14.implanta.net.br'),
+('crb-10.implanta.net.br'),
+('creci-rj.implanta.net.br'),
+('crb-06.implanta.net.br'),
+('crb-05.implanta.net.br'),
+('core-ap.implanta.net.br'),
+('conrerp-pe.implanta.net.br'),
+('creci-es.implanta.net.br'),
+('cra-df.implanta.net.br_COPY'),
+('cress-df.implanta.net.br_Copy'),
+('cro-go.implanta.net.br_COPY'),
+('cra-to.implanta.net.br_COPY'),
+('cress-pe.implanta.net.br_COPY'),
+('crefito-ba.implanta.net.br_Copy'),
+('crefito-sp.implanta.net.br_COPY'),
+('cra-pb.implanta.net.br_COPY'),
+('cra-es.implanta.net.br_COPY'),
+('cra-rn.implanta.net.br_COPY'),
+('crn-06.implanta.net.br_Copy'),
+('crtr-07.implanta.net.br'),
+('cra-sp-hml.implanta.net.br'),
+('crtr-13.implanta.net.br'),
+('crtr-15.implanta.net.br'),
+('crtr-11.implanta.net.br'),
+('cro-pa.conversor'),
+('cro-to.conversor'),
+('cro-ac.conversor'),
+('cress-al.conversor'),
+('oab-ba.conversor'),
+('cress-al.conversor'),
+('cro-ac.conversor'),
+('cro-to.conversor'),
+('cress-am.conversor'),
+('cro-pi.conversor'),
+('cress-rj.implanta.net.br_COPY'),
+('cra-df.implanta.net.br_COPY'),
+('cress-sp.implanta.net.br_COPY'),
+('cress-al.implanta.net.br_COPY'),
+('cress-go.implanta.net.br_COPY')
 
-(N'rgphml-elasticjob-db'),
-(N'aaf-16.implantadev.net.br'),
-(N'M-SAF-03.implantadev.net.br'),
-(N'ajuda-online.implanta.net.br'),
-(N'cress-go.implanta.net.br'),
-(N'hml-automationjobs-db'),
-(N'Implanta_CRESSSP_Homologacao'),
-(N'DNE'),
-(N'Implanta.Configuracao'),
-(N'Implanta.ManagerTeste');
 
 /* ==================================================================
 --Data: 9/4/2020 
@@ -58,7 +145,7 @@ VALUES(N'master'),
 -- ==================================================================
 */
 
---CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'Very$trongpas'
+--CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'M@st3rP0w3rN@w3r@'
 
 /* ==================================================================
 --Data: 10/6/2020 
@@ -74,7 +161,7 @@ SELECT * FROM sys.database_scoped_credentials AS DSC;
 --DROP  DATABASE SCOPED CREDENTIAL SQLJobUser
 CREATE DATABASE SCOPED CREDENTIAL [implanta]
 WITH IDENTITY = 'implanta',
-     SECRET = 'M@st3rP0w3rN@w3r@Hml';
+     SECRET = 'M@st3rP0w3rN@w3r@';
 
 /* ==================================================================
 --Data: 10/6/2020 
@@ -106,6 +193,10 @@ GO
 
 
 
+DECLARE  @targetGroup VARCHAR(200) ='rgprd-sqlsrv-prd01';
+
+DECLARE  @ServerName VARCHAR(200) ='rgprd-sqlsrv-prd01.database.windows.net';
+
 
 /* ==================================================================
  --Data: 9/4/2020 
@@ -118,11 +209,11 @@ IF(NOT EXISTS (
                   SELECT *
                     FROM jobs.target_groups
                    WHERE
-                      target_group_name = 'rghml-sqlsrv-hm01'
+                      target_group_name = 'rgprd-sqlsrv-prd01'
               )
   )
     BEGIN
-        EXEC jobs.sp_add_target_group 'rghml-sqlsrv-hm01';
+        EXEC jobs.sp_add_target_group 'rgprd-sqlsrv-prd01';
     END;
 
 SELECT * FROM jobs.target_groups AS TG;
@@ -138,16 +229,16 @@ IF(NOT EXISTS (
                   SELECT *
                     FROM jobs.target_group_members AS TGM
                    WHERE
-                      TGM.server_name = 'rghml-sqlsrv-hm01.database.windows.net'
+                      TGM.server_name = 'rgprd-sqlsrv-prd01.database.windows.net'
                       AND TGM.target_type = 'SqlServer'
                       AND TGM.refresh_credential_name = 'implanta'
               )
   )
     BEGIN
-        EXEC jobs.sp_add_target_group_member 'rghml-sqlsrv-hm01',
+        EXEC jobs.sp_add_target_group_member 'rgprd-sqlsrv-prd01',
                                              @target_type = N'SqlServer',
                                              @refresh_credential_name = N'implanta',
-                                             @server_name = 'rghml-sqlsrv-hm01.database.windows.net';
+                                             @server_name = 'rgprd-sqlsrv-prd01.database.windows.net';
     END;
 
 
@@ -192,10 +283,10 @@ FETCH NEXT FROM cursor_DB_Name_on_Exclude
 
 WHILE @@FETCH_STATUS = 0
     BEGIN
-        EXEC jobs.sp_add_target_group_member 'rghml-sqlsrv-hm01',
+        EXEC jobs.sp_add_target_group_member 'rgprd-sqlsrv-prd01',
                                              @membership_type = N'Exclude',
                                              @target_type = N'SqlDatabase',
-                                             @server_name = 'rghml-sqlsrv-hm01.database.windows.net',
+                                             @server_name = 'rgprd-sqlsrv-prd01.database.windows.net',
                                              @database_name = @Db_Name_On_Exclude;
 
         FETCH NEXT FROM cursor_DB_Name_on_Exclude
@@ -278,7 +369,7 @@ IF(NOT EXISTS (
                                  @command = N' EXEC HealthCheck.GetSizeDB;',
                                  @credential_name = 'implanta',
 								 @retry_attempts  =2,
-                                 @target_group_name = 'rghml-sqlsrv-hm01';
+                                 @target_group_name = 'rgprd-sqlsrv-prd01';
     END;
 
 
@@ -292,9 +383,6 @@ IF(NOT EXISTS (
 -- ==================================================================
 */
 DECLARE @job_version INT;
-
-
-
 
 EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
                             @step_name = 'Execução da procedure uspAutoHealthCheck',
@@ -325,7 +413,6 @@ EXEC jobs.sp_update_job @job_name = 'ManutencaoEPerformace',
 */
 EXEC jobs.sp_start_job 'ManutencaoEPerformace';
 
-
 SELECT j.job_id,
        j.job_name,
        j.job_version,
@@ -345,9 +432,17 @@ SELECT j.job_id,
        j.target_elastic_pool_name
   FROM jobs.job_executions j
   WHERE j.lifecycle  = 'Failed'
+  AND j.target_database_name NOT LIKE '%conversor%'
   AND CAST(DATEADD(HOUR,-3, j.current_attempt_start_time) AS DATETIME2(2)) >= CAST(GETDATE() AS DATE)
 
   
+  /* ==================================================================
+  --Data: 10/7/2020 
+  --Autor :Wesley Neves
+  --Observação: Historico de alterações dos jobs
+   
+  -- ==================================================================
+  */
 SELECT J.job_id,
        J.job_version_number,
        J.step_name,

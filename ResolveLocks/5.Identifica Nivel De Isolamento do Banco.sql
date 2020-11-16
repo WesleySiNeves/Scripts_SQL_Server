@@ -1,27 +1,28 @@
-SELECT DES.session_id,
-       DATEADD(HOUR, -3, DES.last_request_start_time) last_request_start_time,
-       CASE DES.transaction_isolation_level WHEN 0 THEN 'Unspecified'
-       WHEN 1 THEN 'ReadUncommitted'
-       WHEN 2 THEN 'ReadCommitted'
-       WHEN 3 THEN 'Repeatable'
-       WHEN 4 THEN 'Serializable'
-       WHEN 5 THEN 'Snapshot' END AS TRANSACTION_ISOLATION_LEVEL,
-       DEST.text,
-       DES.host_name,
-       DES.program_name,
-       DES.login_name,
-       DES.cpu_time,
-       DES.memory_usage,
-       DES.reads,
-       DES.writes,
-       DES.logical_reads,
-       DES.open_transaction_count
-  FROM sys.dm_exec_sessions AS DES
-       JOIN sys.dm_exec_connections AS DEC ON DES.session_id = DEC.session_id
-       CROSS APPLY(SELECT * FROM sys.dm_exec_sql_text(DEC.most_recent_sql_handle) ) AS DEST
- WHERE
-    DES.program_name NOT IN ('Microsoft SQL Server Management Studio - IntelliSense Transact-SQL', 'Microsoft SQL Server Management Studio - Query', 'Microsoft SQL Server Management Studio - Transact-SQL IntelliSense')
- --AND DES.host_name = 'DS10'
- ORDER BY
-    DEC.most_recent_sql_handle;
+SELECT session_id, CASE  transaction_isolation_level 
+WHEN 0 THEN 'Unspecified' 
+WHEN 1 THEN 'ReadUncommitted' 
+WHEN 2 THEN 'ReadCommitted' 
+WHEN 3 THEN 'Repeatable' 
+WHEN 4 THEN 'Serializable' 
+WHEN 5 THEN 'Snapshot' END AS TRANSACTION_ISOLATION_LEVEL 
+FROM sys.dm_exec_sessions 
+where session_id IN(110)
+
+
+
+	
+DECLARE @DatabaseName VARCHAR(200) = DB_NAME();
+
+EXEC HealthCheck.sp_WhoIsActive @filter = @DatabaseName,
+                                @filter_type = 'database', -- varchar(10)
+                                @show_own_spid = 0,        -- bit
+                                @show_system_spids = 0,    -- bit
+                                @show_sleeping_spids = 0,  -- tinyint
+                                @get_full_inner_text = 1,  -- bit
+                                @find_block_leaders = 1,
+                                @get_plans = 1,
+								@get_locks = 1,
+                                @sort_order = '[blocked_session_count]DESC';
+	
+	
 	

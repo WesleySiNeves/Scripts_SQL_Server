@@ -1,0 +1,14 @@
+
+
+SELECT P.IdPagamento,P.Valor FROM  Despesa.Pagamentos AS P
+WHERE P.IdPagamento ='1B43E22C-8E06-4080-94BB-0001099B60DD'
+
+BEGIN  TRAN t1
+
+UPDATE Despesa.Pagamentos SET Valor =10 
+WHERE IdPagamento ='1B43E22C-8E06-4080-94BB-0001099B60DD'
+
+
+
+SELECT P.IdPagamento,P.Valor FROM  Despesa.Pagamentos AS P
+WHERE P.IdPagamento ='1B43E22C-8E06-4080-94BB-0001099B60DD'

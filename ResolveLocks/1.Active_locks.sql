@@ -1,9 +1,9 @@
 
 
 
---SELECT * FROM dbo.Active_locks()
+--SELECT * FROM HealthCheck.ufnActivelocks()
 
-CREATE FUNCTION Active_locks ()
+CREATE FUNCTION  HealthCheck.ufnActivelocks()
 RETURNS TABLE RETURN
 SELECT TOP 10000000 CASE dtl.request_session_id
                          WHEN-2 THEN 'orphaned distributed transaction'

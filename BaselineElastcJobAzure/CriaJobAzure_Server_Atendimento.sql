@@ -26,29 +26,20 @@ IF(OBJECT_ID('TEMPDB..#BancosDeDadosExcluidosDoJob') IS NOT NULL)
 
 CREATE TABLE #BancosDeDadosExcluidosDoJob
 (
-    DatabaseName NVARCHAR(256),
+    DatabaseName VARCHAR(256)
 );
 
 INSERT INTO #BancosDeDadosExcluidosDoJob(
                                             DatabaseName
                                         )
 VALUES(N'master'),
-(N'Implanta.Manager'),
-(N'cra-es.conversor'),
-(N'Implanta_CRESSSP'),
-(N'aaf-02.implantadev.net.br_Copiar'),
-(N'aaf-11.implantadev.net.br'),
+('area-fim-01.implantasuporte.net.br_Old'),
+('atd-automationjobs-db'),
+('conversao-local-09.implantainfo.com.br'),
+('atendimento-df.implantasuporte.net.brOLD'),
+('cress-rj.implanta.net.br_COPY'),
+('conversao-local-15.implantainfo.com.br')
 
-(N'rgphml-elasticjob-db'),
-(N'aaf-16.implantadev.net.br'),
-(N'M-SAF-03.implantadev.net.br'),
-(N'ajuda-online.implanta.net.br'),
-(N'cress-go.implanta.net.br'),
-(N'hml-automationjobs-db'),
-(N'Implanta_CRESSSP_Homologacao'),
-(N'DNE'),
-(N'Implanta.Configuracao'),
-(N'Implanta.ManagerTeste');
 
 /* ==================================================================
 --Data: 9/4/2020 
@@ -58,7 +49,7 @@ VALUES(N'master'),
 -- ==================================================================
 */
 
---CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'Very$trongpas'
+--CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'M@st3rP0w3rN@w3r@'
 
 /* ==================================================================
 --Data: 10/6/2020 
@@ -74,7 +65,7 @@ SELECT * FROM sys.database_scoped_credentials AS DSC;
 --DROP  DATABASE SCOPED CREDENTIAL SQLJobUser
 CREATE DATABASE SCOPED CREDENTIAL [implanta]
 WITH IDENTITY = 'implanta',
-     SECRET = 'M@st3rP0w3rN@w3r@Hml';
+     SECRET = 'M@st3rP0w3rN@w3r@';
 
 /* ==================================================================
 --Data: 10/6/2020 
@@ -106,6 +97,10 @@ GO
 
 
 
+DECLARE  @targetGroup VARCHAR(200) ='rgatd-sqlsrv-atd01';
+
+DECLARE  @ServerName VARCHAR(200) ='rgatd-sqlsrv-atd01.database.windows.net';
+
 
 /* ==================================================================
  --Data: 9/4/2020 
@@ -118,11 +113,11 @@ IF(NOT EXISTS (
                   SELECT *
                     FROM jobs.target_groups
                    WHERE
-                      target_group_name = 'rghml-sqlsrv-hm01'
+                      target_group_name = 'rgatd-sqlsrv-atd01'
               )
   )
     BEGIN
-        EXEC jobs.sp_add_target_group 'rghml-sqlsrv-hm01';
+        EXEC jobs.sp_add_target_group 'rgatd-sqlsrv-atd01';
     END;
 
 SELECT * FROM jobs.target_groups AS TG;
@@ -138,16 +133,16 @@ IF(NOT EXISTS (
                   SELECT *
                     FROM jobs.target_group_members AS TGM
                    WHERE
-                      TGM.server_name = 'rghml-sqlsrv-hm01.database.windows.net'
+                      TGM.server_name = 'rgatd-sqlsrv-atd01.database.windows.net'
                       AND TGM.target_type = 'SqlServer'
                       AND TGM.refresh_credential_name = 'implanta'
               )
   )
     BEGIN
-        EXEC jobs.sp_add_target_group_member 'rghml-sqlsrv-hm01',
+        EXEC jobs.sp_add_target_group_member 'rgatd-sqlsrv-atd01',
                                              @target_type = N'SqlServer',
                                              @refresh_credential_name = N'implanta',
-                                             @server_name = 'rghml-sqlsrv-hm01.database.windows.net';
+                                             @server_name = 'rgatd-sqlsrv-atd01.database.windows.net';
     END;
 
 
@@ -192,10 +187,10 @@ FETCH NEXT FROM cursor_DB_Name_on_Exclude
 
 WHILE @@FETCH_STATUS = 0
     BEGIN
-        EXEC jobs.sp_add_target_group_member 'rghml-sqlsrv-hm01',
+        EXEC jobs.sp_add_target_group_member 'rgatd-sqlsrv-atd01',
                                              @membership_type = N'Exclude',
                                              @target_type = N'SqlDatabase',
-                                             @server_name = 'rghml-sqlsrv-hm01.database.windows.net',
+                                             @server_name = 'rgatd-sqlsrv-atd01.database.windows.net',
                                              @database_name = @Db_Name_On_Exclude;
 
         FETCH NEXT FROM cursor_DB_Name_on_Exclude
@@ -278,7 +273,7 @@ IF(NOT EXISTS (
                                  @command = N' EXEC HealthCheck.GetSizeDB;',
                                  @credential_name = 'implanta',
 								 @retry_attempts  =2,
-                                 @target_group_name = 'rghml-sqlsrv-hm01';
+                                 @target_group_name = 'rgatd-sqlsrv-atd01';
     END;
 
 
@@ -292,9 +287,6 @@ IF(NOT EXISTS (
 -- ==================================================================
 */
 DECLARE @job_version INT;
-
-
-
 
 EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
                             @step_name = 'Execução da procedure uspAutoHealthCheck',
@@ -344,7 +336,7 @@ SELECT j.job_id,
        j.target_database_name,
        j.target_elastic_pool_name
   FROM jobs.job_executions j
-  WHERE j.lifecycle  = 'Failed'
+  WHERE j.lifecycle = 'Failed'
   AND CAST(DATEADD(HOUR,-3, j.current_attempt_start_time) AS DATETIME2(2)) >= CAST(GETDATE() AS DATE)
 
   

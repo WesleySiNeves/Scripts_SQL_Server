@@ -8,9 +8,13 @@ Durante a transação, o SQL Server copia as linhas modificadas por outras transaç
 coleção de páginas no tempdb conhecido como o armazenamento de versão
 */
 
-ALTER DATABASE ExamBook762Ch3 SET READ_COMMITTED_SNAPSHOT ON;
 
-USE ExamBook762Ch3;
+ 
+ALTER DATABASE [15.1-implanta] SET READ_COMMITTED_SNAPSHOT ON WITH ROLLBACK IMMEDIATE;
+
+USE [15.1-implanta];
+
+DELETE FROM Examples.IsolationLevels WHERE RowId >4
 
 BEGIN TRANSACTION;
 SELECT RowId,
@@ -26,26 +30,41 @@ ROLLBACK TRANSACTION;
 /*########################
 # OBS: Em outra sessão 
 */
-
+SELECT * FROM Examples.IsolationLevels AS IL
 
 INSERT INTO Examples.IsolationLevels(RowId, ColumnText)
-VALUES (8, 'Row 8');
+VALUES (7, 'Row 7');
 
 
 /*########################
 # OBS: Exemplo 2
 */
-UPDATE Examples.IsolationLevels SET ColumnText ='Row update'
+
+
+BEGIN TRANSACTION t2;
+UPDATE Examples.IsolationLevels SET ColumnText ='Row  update'
 WHERE RowId =7
 
+WAITFOR DELAY '00:00:10';
+
+SELECT * FROM Examples.IsolationLevels AS IL
+
+COMMIT TRANSACTION;
 
 /*########################
-# OBS: Exemplo 3
+# OBS:Em outra Sessão
 */
 
 BEGIN TRAN t2
 INSERT INTO Examples.IsolationLevels(RowId, ColumnText)
-VALUES (8, 'Row 8');
+VALUES (9, 'Row 9');
+
+SELECT * FROM Examples.IsolationLevels AS IL
+
+WAITFOR DELAY '00:00:05';
+ROLLBACK
+
+
 
 
 

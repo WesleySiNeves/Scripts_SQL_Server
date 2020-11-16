@@ -406,6 +406,8 @@ Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaselineAcoes", "BaselineAc
 EndProject
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaselineElastcJobAzure", "BaselineElastcJobAzure\BaselineElastcJobAzure.ssmssqlproj", "{211C52F1-BC0D-4FB6-AF21-92BCD07568BD}"
 EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "BaseLineMigrationDTUsVcore", "BaseLineMigrationDTUsVcore\BaseLineMigrationDTUsVcore.ssmssqlproj", "{1A5DD999-7EDE-452F-A882-7725AD3E5A14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Default|Default = Default|Default
@@ -546,8 +548,9 @@ Global
 		{B0091183-9D50-4A96-B961-4FF42002052F}.Default|Default.ActiveCfg = Default
 		{6466099A-3854-48F0-9CC6-6C56ECA214E5}.Default|Default.ActiveCfg = Default
 		{E3A13C48-9009-427B-A8FD-B2EBB6DFDA87}.Default|Default.ActiveCfg = Default
-		{DC685AE6-1F0B-4AD8-83F1-9706EB08D6B3}.Default|Default.ActiveCfg = Default
 		{211C52F1-BC0D-4FB6-AF21-92BCD07568BD}.Default|Default.ActiveCfg = Default
+		{1A5DD999-7EDE-452F-A882-7725AD3E5A14}.Default|Default.ActiveCfg = Default
+		{2D85C27B-E564-44B4-ABAA-595515846B21}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -741,5 +744,6 @@ Global
 		{6466099A-3854-48F0-9CC6-6C56ECA214E5} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
 		{E3A13C48-9009-427B-A8FD-B2EBB6DFDA87} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
 		{211C52F1-BC0D-4FB6-AF21-92BCD07568BD} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
+		{1A5DD999-7EDE-452F-A882-7725AD3E5A14} = {C3BBE1AC-5FE1-4638-AE5F-8E8A06BB1636}
 	EndGlobalSection
 EndGlobal

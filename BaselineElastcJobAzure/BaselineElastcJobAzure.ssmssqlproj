@@ -3,6 +3,18 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
+          <Created>2020-11-12T22:11:54.5924745-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>implantadev01</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="rgprd-sqlsrv-prd01.database.windows.net:implanta">
           <Created>2020-09-04T17:25:33.8812313-03:00</Created>
           <Type>SQL</Type>
@@ -36,6 +48,18 @@
           <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
           <AssociatedConnUserName>implanta</AssociatedConnUserName>
           <FullPath>CriaJobAzure.sql</FullPath>
+        </FileNode>
+        <FileNode Name="CriaJobAzure_Server_Atendimento.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>CriaJobAzure_Server_Atendimento.sql</FullPath>
+        </FileNode>
+        <FileNode Name="CriaJobAzure_Server_Producao.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <FullPath>CriaJobAzure_Server_Producao.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

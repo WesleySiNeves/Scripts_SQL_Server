@@ -11,22 +11,6 @@ CREATE TABLE #TabelasAResetar
 IF(OBJECT_ID('TEMPDB..#BancosNaoDeletarArquivos') IS NOT NULL)
     DROP TABLE #BancosNaoDeletarArquivos;
 
-CREATE TABLE #BancosNaoDeletarArquivos
-(
-    termo VARCHAR(100)
-);
-
-INSERT INTO #BancosNaoDeletarArquivos(
-                                         termo
-                                     )
-VALUES('auditoria'),
-('piloto'),
-('vilmar'),
-('apresentacao'),
-('atendimento'),
-('hom'),
-('M-SAM-03');
-
 INSERT INTO #TabelasAResetar(
                                 TableName
                             )
@@ -41,21 +25,6 @@ IF(@TruncarArquivosAnexos = 0)
         DELETE FROM #TabelasAResetar
          WHERE
             #TabelasAResetar.TableName = 'Sistema.ArquivosAnexos';
-    END;
-
-IF(EXISTS (
-              SELECT *
-                FROM #BancosNaoDeletarArquivos AS BNDA
-               WHERE
-                  DB_NAME() LIKE CONCAT('%', BNDA.termo, '%')
-          )
-  )
-    BEGIN
-        DELETE FROM #TabelasAResetar
-         WHERE
-            #TabelasAResetar.TableName = 'Sistema.ArquivosAnexos';
-
-        SET @TruncarArquivosAnexos = 0;
     END;
 
 IF(OBJECT_ID('TEMPDB..#DeletaForenKeys') IS NOT NULL)
