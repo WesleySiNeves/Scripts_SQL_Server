@@ -128,9 +128,9 @@
           <FullPath>3.2.sp_missingIndex.sql</FullPath>
         </FileNode>
         <FileNode Name="3.3.sp_AutoCreateIndex.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
           <FullPath>3.3.sp_AutoCreateIndex.sql</FullPath>
         </FileNode>
         <FileNode Name="3.4.sp_InefficientIndex.sql">

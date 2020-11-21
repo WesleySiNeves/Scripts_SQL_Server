@@ -1,7 +1,7 @@
-EXEC HealthCheck.uspDeletaArquivosAnexosOrfaoes
+--EXEC HealthCheck.uspDeletaArquivosAnexosOrfaoes
 
 
-CREATE OR ALTER PROCEDURE HealthCheck.uspDeletaArquivosAnexosOrfaoes
+CREATE OR ALTER PROCEDURE HealthCheck.uspDeletarArquivosAnexosOrfaos
 (
     @Visualizar BIT = 1,
     @Deletar    BIT = 0

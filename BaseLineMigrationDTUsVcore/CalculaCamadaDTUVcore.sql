@@ -35,3 +35,5 @@ SELECT dtu_logical_cpus,
        END AS M_vcores,
        29.4 AS M_memory_per_core_gb
 FROM dtu_vcore_map;
+
+

@@ -56,8 +56,8 @@
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
         <FileNode Name="CalculaCamadaDTUVcore.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgatd-sqlsrv-atd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rgatd-sqlsrv-atd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
           <AssociatedConnUserName>implanta</AssociatedConnUserName>
           <FullPath>CalculaCamadaDTUVcore.sql</FullPath>
         </FileNode>

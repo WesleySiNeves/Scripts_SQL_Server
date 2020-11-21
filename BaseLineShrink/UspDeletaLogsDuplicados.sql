@@ -1,4 +1,6 @@
-CREATE OR ALTER PROCEDURE HealthCheck.uspDeletaLogsDuplicados
+
+
+CREATE OR ALTER PROCEDURE HealthCheck.uspDeletarLogsDuplicados
 (
     @Visualizar BIT = 1,
     @Deletar    BIT = 0

@@ -1,15 +1,3 @@
-SET QUOTED_IDENTIFIER ON;
-
-SET ANSI_NULLS ON;
-GO
-
---SELECT * FROM  HealthCheck.SizeDBHistory AS SDH
-
---TRUNCATE TABLE HealthCheck.SizeDBHistory 
-
---EXEC HealthCheck.uspAutoHealthCheck @Efetivar = 0,                             -- bit
---                                    @Visualizar = 1                        -- bit
-
 CREATE OR ALTER PROCEDURE HealthCheck.uspAutoHealthCheck
 (
     @Efetivar                                BIT      = 1,
@@ -55,6 +43,33 @@ DECLARE @ConfiguracaoHabilitarAutoHealthCheck BIT = (
                                                          WHERE
                                                             C.Configuracao = 'HabilitarAutoHealthCheck'
                                                     );
+
+
+
+/* ==================================================================
+	Data: 11/16/2020 
+	Autor :Wesley Neves
+	Observação: Altera o Nivel de Isolamento do banco de dados para READ_COMMITTED_SNAPSHOT
+	 
+	 ==================================================================
+	*/
+IF(EXISTS (
+              SELECT s.name,
+                     CASE s.is_read_committed_snapshot_on WHEN 1 THEN 'ENABLED'
+                     WHEN 0 THEN 'DISABLED' END AS 'READ_COMMITTED_SNAPSHOT'
+                FROM sys.databases s
+               WHERE
+                  s.name = DB_NAME()
+                  AND s.is_read_committed_snapshot_on = 0
+          )
+  )
+    BEGIN
+        DECLARE @Script NVARCHAR(1000) = '';
+
+        SET @Script = CONCAT('ALTER DATABASE [', DB_NAME(), '] SET READ_COMMITTED_SNAPSHOT ON WITH ROLLBACK IMMEDIATE ');
+
+        EXEC(@Script);
+    END;
 
 IF(@ConfiguracaoHabilitarAutoHealthCheck IS NULL)
     BEGIN
@@ -162,6 +177,20 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
                                                  A.Nome = 'ExpurgarLogs'
                                                  AND A.Ativo = 1
                                          ) AS BIT);
+        DECLARE @DeletarArquivosAnexosOrfaos BIT = CAST((
+                                                            SELECT TOP 1 1
+                                                              FROM HealthCheck.AcoesPeriodicidadeDias AS A
+                                                             WHERE
+                                                                A.Nome = 'DeletarArquivosAnexosOrfaos'
+                                                                AND A.Ativo = 1
+                                                        ) AS BIT);
+        DECLARE @DeletarLogsDuplicados BIT = CAST((
+                                                      SELECT TOP 1 1
+                                                        FROM HealthCheck.AcoesPeriodicidadeDias AS A
+                                                       WHERE
+                                                          A.Nome = 'DeletarLogsDuplicados'
+                                                          AND A.Ativo = 1
+                                                  ) AS BIT);
         DECLARE @PeriodicidadeEfetuarShrinkDatabase SMALLINT = (
                                                                    SELECT TOP 1 A.Periodicidade
                                                                      FROM HealthCheck.AcoesPeriodicidadeDias AS A
@@ -212,15 +241,18 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
 	 
 	-- ==================================================================
 	*/
-        SET @StartTime = GETDATE();
+        IF(EXISTS (SELECT * FROM sys.procedures AS P WHERE P.name = 'GetSizeDB'))
+            BEGIN
+                SET @StartTime = GETDATE();
 
-        EXEC HealthCheck.GetSizeDB;
+                EXEC HealthCheck.GetSizeDB;
 
-        INSERT INTO @TableLogs
-        VALUES(   'HealthCheck.GetSizeDB', -- NomeProcedure - varchar(200)
-                  @StartTime,              -- DataInicio - datetime
-                  GETDATE()                -- DataTermino - datetime
-              );
+                INSERT INTO @TableLogs
+                VALUES(   'HealthCheck.GetSizeDB', -- NomeProcedure - varchar(200)
+                          @StartTime,              -- DataInicio - datetime
+                          GETDATE()                -- DataTermino - datetime
+                      );
+            END;
 
         /* ==================================================================
 			  --Data: 9/4/2020 
@@ -236,20 +268,26 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
                       AND DATEDIFF(DAY, @DataUltimaExecucao, @DiaExecucao) >= @PeriodicidadeEfetuarShrinkDatabase
                   )
                     BEGIN
-                        SET @StartTime = GETDATE();
+                        IF(EXISTS (
+                                      SELECT * FROM sys.procedures AS P WHERE P.name = 'uspExecutaShrink'
+                                  )
+                          )
+                            BEGIN
+                                SET @StartTime = GETDATE();
 
-                        EXEC HealthCheck.uspExecutaShrink;
+                                EXEC HealthCheck.uspExecutaShrink;
 
-                        INSERT INTO @TableLogs
-                        VALUES(   'HealthCheck.uspExecutaShrink', -- NomeProcedure - varchar(200)
-                                  @StartTime,                     -- DataInicio - datetime
-                                  GETDATE()                       -- DataTermino - datetime
-                              );
+                                INSERT INTO @TableLogs
+                                VALUES(   'HealthCheck.uspExecutaShrink', -- NomeProcedure - varchar(200)
+                                          @StartTime,                     -- DataInicio - datetime
+                                          GETDATE()                       -- DataTermino - datetime
+                                      );
 
-                        UPDATE HealthCheck.AcoesPeriodicidadeDias
-                           SET DataUltimaExecucao = GETDATE()
-                         WHERE
-                            Nome = 'ShrinkDatabase';
+                                UPDATE HealthCheck.AcoesPeriodicidadeDias
+                                   SET DataUltimaExecucao = GETDATE()
+                                 WHERE
+                                    Nome = 'ShrinkDatabase';
+                            END;
                     END;
             END;
 
@@ -266,17 +304,23 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
                   )
           )
             BEGIN
-                SET @StartTime = GETDATE();
+                IF(EXISTS (
+                              SELECT * FROM sys.procedures AS P WHERE P.name = 'uspSnapShotIndex'
+                          )
+                  )
+                    BEGIN
+                        SET @StartTime = GETDATE();
 
-                EXEC HealthCheck.uspSnapShotIndex @Visualizar = @Visualizar,   -- bit
-                                                  @DiaExecucao = @DiaExecucao, -- datetime
-                                                  @Efetivar = @Efetivar;
+                        EXEC HealthCheck.uspSnapShotIndex @Visualizar = @Visualizar,   -- bit
+                                                          @DiaExecucao = @DiaExecucao, -- datetime
+                                                          @Efetivar = @Efetivar;
 
-                INSERT INTO @TableLogs
-                VALUES(   'HealthCheck.uspSnapShotIndex', -- NomeProcedure - varchar(200)
-                          @StartTime,                     -- DataInicio - datetime
-                          GETDATE()                       -- DataTermino - datetime
-                      );
+                        INSERT INTO @TableLogs
+                        VALUES(   'HealthCheck.uspSnapShotIndex', -- NomeProcedure - varchar(200)
+                                  @StartTime,                     -- DataInicio - datetime
+                                  GETDATE()                       -- DataTermino - datetime
+                              );
+                    END;
             END;
 
         /* ==================================================================
@@ -294,77 +338,104 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
 	 */
         IF(@AtualizarStatisticas = 1)
             BEGIN
-                SET @StartTime = GETDATE();
+                IF(EXISTS (
+                              SELECT *
+                                FROM sys.procedures AS P
+                               WHERE
+                                  P.name = 'uspDeleteOverlappingStats'
+                          )
+                  )
+                    BEGIN
+                        SET @StartTime = GETDATE();
 
-                EXEC HealthCheck.uspDeleteOverlappingStats @MostarStatisticas = @Visualizar, -- bit
-                                                           @Executar = @Efetivar;            -- bit
+                        EXEC HealthCheck.uspDeleteOverlappingStats @MostarStatisticas = @Visualizar, -- bit
+                                                                   @Executar = @Efetivar;            -- bit
 
-                INSERT INTO @TableLogs
-                VALUES(   'HealthCheck.uspDeleteOverlappingStats', -- NomeProcedure - varchar(200)
-                          @StartTime,                              -- DataInicio - datetime
-                          GETDATE()                                -- DataTermino - datetime
-                      );
+                        INSERT INTO @TableLogs
+                        VALUES(   'HealthCheck.uspDeleteOverlappingStats', -- NomeProcedure - varchar(200)
+                                  @StartTime,                              -- DataInicio - datetime
+                                  GETDATE()                                -- DataTermino - datetime
+                              );
+                    END;
 
-                SET @StartTime = GETDATE();
+                IF(EXISTS (
+                              SELECT * FROM sys.procedures AS P WHERE P.name = 'uspUpdateStats'
+                          )
+                  )
+                    BEGIN
+                        SET @StartTime = GETDATE();
 
-                /*Atualiza Statisticas Necessárias (diario)*/
-                EXEC HealthCheck.uspUpdateStats @MostarStatisticas = @Visualizar, -- bit
-                                                @ExecutarAtualizacao = @Efetivar, -- bit
-                                                @TableRowsInUpdateStats = 1000,
-                                                @NumberLinesToDetermineFullScan = @NumberLinesToDetermineFullScan;
+                        /*Atualiza Statisticas Necessárias (diario)*/
+                        EXEC HealthCheck.uspUpdateStats @MostarStatisticas = @Visualizar, -- bit
+                                                        @ExecutarAtualizacao = @Efetivar, -- bit
+                                                        @TableRowsInUpdateStats = 1000,
+                                                        @NumberLinesToDetermineFullScan = @NumberLinesToDetermineFullScan;
 
-                INSERT INTO @TableLogs
-                VALUES(   'HealthCheck.uspUpdateStats', -- NomeProcedure - varchar(200)
-                          @StartTime,                   -- DataInicio - datetime
-                          GETDATE()                     -- DataTermino - datetime
-                      );
+                        INSERT INTO @TableLogs
+                        VALUES(   'HealthCheck.uspUpdateStats', -- NomeProcedure - varchar(200)
+                                  @StartTime,                   -- DataInicio - datetime
+                                  GETDATE()                     -- DataTermino - datetime
+                              );
 
-                UPDATE HealthCheck.AcoesPeriodicidadeDias
-                   SET DataUltimaExecucao = GETDATE()
-                 WHERE
-                    Nome = 'AtualizarStatisticas';
+                        UPDATE HealthCheck.AcoesPeriodicidadeDias
+                           SET DataUltimaExecucao = GETDATE()
+                         WHERE
+                            Nome = 'AtualizarStatisticas';
+                    END;
             END;
 
         IF(@CriarIndicesAutomaticamente = 1)
             BEGIN
-                SET @StartTime = GETDATE();
+                IF(EXISTS (
+                              SELECT * FROM sys.procedures AS P WHERE P.name = 'uspAutoCreateIndex'
+                          )
+                  )
+                    BEGIN
+                        SET @StartTime = GETDATE();
 
-                /*Cria Automaticamente Missing Index (diario)*/
-                EXEC HealthCheck.uspAutoCreateIndex @Efetivar = @Efetivar,            -- bit
-                                                    @VisualizarMissing = @Visualizar, -- bit
-                                                    @defaultTunningPerform = @DefaultTunningPerform;
+                        /*Cria Automaticamente Missing Index (diario)*/
+                        EXEC HealthCheck.uspAutoCreateIndex @Efetivar = @Efetivar,            -- bit
+                                                            @VisualizarMissing = @Visualizar, -- bit
+                                                            @DefaultTunningPerform = @DefaultTunningPerform;
 
-                INSERT INTO @TableLogs
-                VALUES(   'HealthCheck.uspAutoCreateIndex', -- NomeProcedure - varchar(200)
-                          @StartTime,                       -- DataInicio - datetime
-                          GETDATE()                         -- DataTermino - datetime
-                      );
+                        INSERT INTO @TableLogs
+                        VALUES(   'HealthCheck.uspAutoCreateIndex', -- NomeProcedure - varchar(200)
+                                  @StartTime,                       -- DataInicio - datetime
+                                  GETDATE()                         -- DataTermino - datetime
+                              );
 
-                UPDATE HealthCheck.AcoesPeriodicidadeDias
-                   SET DataUltimaExecucao = GETDATE()
-                 WHERE
-                    Nome = 'CriarIndicesAutomaticamente';
+                        UPDATE HealthCheck.AcoesPeriodicidadeDias
+                           SET DataUltimaExecucao = GETDATE()
+                         WHERE
+                            Nome = 'CriarIndicesAutomaticamente';
+                    END;
             END;
 
         IF(@CriarStatisticasColunas = 1)
             BEGIN
-                SET @StartTime = GETDATE();
+                IF(EXISTS (
+                              SELECT * FROM sys.procedures AS P WHERE P.name = 'uspAutoCreateStats'
+                          )
+                  )
+                    BEGIN
+                        SET @StartTime = GETDATE();
 
-                /*Cria os Statisticas Colunares de tabelas que foram acessados pelos indices*/
-                EXEC HealthCheck.uspAutoCreateStats @MostrarStatistica = @Visualizar, -- bit
-                                                    @Efetivar = @Efetivar,            -- bit
-                                                    @NumberLinesToDetermineFullScan = 10000;
+                        /*Cria os Statisticas Colunares de tabelas que foram acessados pelos indices*/
+                        EXEC HealthCheck.uspAutoCreateStats @MostrarStatistica = @Visualizar, -- bit
+                                                            @Efetivar = @Efetivar,            -- bit
+                                                            @NumberLinesToDetermineFullScan = 10000;
 
-                INSERT INTO @TableLogs
-                VALUES(   'HealthCheck.uspAutoCreateStats', -- NomeProcedure - varchar(200)
-                          @StartTime,                       -- DataInicio - datetime
-                          GETDATE()                         -- DataTermino - datetime
-                      );
+                        INSERT INTO @TableLogs
+                        VALUES(   'HealthCheck.uspAutoCreateStats', -- NomeProcedure - varchar(200)
+                                  @StartTime,                       -- DataInicio - datetime
+                                  GETDATE()                         -- DataTermino - datetime
+                              );
 
-                UPDATE HealthCheck.AcoesPeriodicidadeDias
-                   SET DataUltimaExecucao = GETDATE()
-                 WHERE
-                    Nome = 'CriarStatisticasColunas';
+                        UPDATE HealthCheck.AcoesPeriodicidadeDias
+                           SET DataUltimaExecucao = GETDATE()
+                         WHERE
+                            Nome = 'CriarStatisticasColunas';
+                    END;
             END;
 
         /* ==================================================================
@@ -381,24 +452,30 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
                       AND DATEDIFF(DAY, @DataUltimaExecucao, @DiaExecucao) >= @PeriodicidadeDeletarIndicesDuplicados
                   )
                     BEGIN
-                        SET @StartTime = GETDATE();
+                        IF(EXISTS (
+                                      SELECT * FROM sys.procedures AS P WHERE P.name = 'uspDeleteDuplicateIndex'
+                                  )
+                          )
+                            BEGIN
+                                SET @StartTime = GETDATE();
 
-                        EXEC HealthCheck.uspDeleteDuplicateIndex @Efetivar = @Efetivar,                            -- bit
-                                                                 @MostrarIndicesDuplicados = @Visualizar,
-                                                                 @MostrarIndicesMarcadosParaDeletar = @Visualizar, -- bit
-                                                                 @QuantidadeDiasAnalizados = @NumberOfDaysAnalyzedsForDuplicateIndexs,
-                                                                 @TaxaDeSeguranca = 10;                            -- Não deletar indices com acesso superior a 10 % mesmo duplicado(é necessário uma analise individual)
+                                EXEC HealthCheck.uspDeleteDuplicateIndex @Efetivar = @Efetivar,                            -- bit
+                                                                         @MostrarIndicesDuplicados = @Visualizar,
+                                                                         @MostrarIndicesMarcadosParaDeletar = @Visualizar, -- bit
+                                                                         @QuantidadeDiasAnalizados = @NumberOfDaysAnalyzedsForDuplicateIndexs,
+                                                                         @TaxaDeSeguranca = 10;                            -- Não deletar indices com acesso superior a 10 % mesmo duplicado(é necessário uma analise individual)
 
-                        INSERT INTO @TableLogs
-                        VALUES(   'HealthCheck.uspDeleteDuplicateIndex', -- NomeProcedure - varchar(200)
-                                  @StartTime,                            -- DataInicio - datetime
-                                  GETDATE()                              -- DataTermino - datetime
-                              );
+                                INSERT INTO @TableLogs
+                                VALUES(   'HealthCheck.uspDeleteDuplicateIndex', -- NomeProcedure - varchar(200)
+                                          @StartTime,                            -- DataInicio - datetime
+                                          GETDATE()                              -- DataTermino - datetime
+                                      );
 
-                        UPDATE HealthCheck.AcoesPeriodicidadeDias
-                           SET DataUltimaExecucao = GETDATE()
-                         WHERE
-                            Nome = 'DeletarIndicesDuplicados';
+                                UPDATE HealthCheck.AcoesPeriodicidadeDias
+                                   SET DataUltimaExecucao = GETDATE()
+                                 WHERE
+                                    Nome = 'DeletarIndicesDuplicados';
+                            END;
                     END;
 
                 --Somente Domingos
@@ -407,24 +484,30 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
                       AND DATEDIFF(DAY, @DataUltimaExecucao, @DiaExecucao) >= @PeriodicidadeAnalisarIndicesIneficientes
                   )
                     BEGIN
-                        SET @StartTime = GETDATE();
+                        IF(EXISTS (
+                                      SELECT * FROM sys.procedures AS P WHERE P.name = 'uspInefficientIndex'
+                                  )
+                          )
+                            BEGIN
+                                SET @StartTime = GETDATE();
 
-                        /*Executa de analize  eficiencia de indices*/
-                        EXEC HealthCheck.uspInefficientIndex @percentualAproveitamento = @PercAccessForInefficientIndex,          --  (Acesso <= 9 %) smallint
-                                                             @EfetivarDelecao = @Efetivar,                                        -- bit
-                                                             @NumberOfDaysForInefficientIndex = @NumberOfDaysForInefficientIndex, -- smallint  (7 dias)
-                                                             @MostrarIndiceIneficiente = @Visualizar;                             -- bit
+                                /*Executa de analize  eficiencia de indices*/
+                                EXEC HealthCheck.uspInefficientIndex @percentualAproveitamento = @PercAccessForInefficientIndex,          --  (Acesso <= 9 %) smallint
+                                                                     @EfetivarDelecao = @Efetivar,                                        -- bit
+                                                                     @NumberOfDaysForInefficientIndex = @NumberOfDaysForInefficientIndex, -- smallint  (7 dias)
+                                                                     @MostrarIndiceIneficiente = @Visualizar;                             -- bit
 
-                        INSERT INTO @TableLogs
-                        VALUES(   'HealthCheck.uspInefficientIndex', -- NomeProcedure - varchar(200)
-                                  @StartTime,                        -- DataInicio - datetime
-                                  GETDATE()                          -- DataTermino - datetime
-                              );
+                                INSERT INTO @TableLogs
+                                VALUES(   'HealthCheck.uspInefficientIndex', -- NomeProcedure - varchar(200)
+                                          @StartTime,                        -- DataInicio - datetime
+                                          GETDATE()                          -- DataTermino - datetime
+                                      );
 
-                        UPDATE HealthCheck.AcoesPeriodicidadeDias
-                           SET DataUltimaExecucao = GETDATE()
-                         WHERE
-                            Nome = 'AnalisarIndicesIneficientes';
+                                UPDATE HealthCheck.AcoesPeriodicidadeDias
+                                   SET DataUltimaExecucao = GETDATE()
+                                 WHERE
+                                    Nome = 'AnalisarIndicesIneficientes';
+                            END;
                     END;
 
                 IF(
@@ -432,24 +515,30 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
                       AND DATEDIFF(DAY, @DataUltimaExecucao, @DiaExecucao) >= @PeriodicidadeDesfragmentacaoIndices
                   )
                     BEGIN
-                        SET @StartTime = GETDATE();
+                        IF(EXISTS (
+                                      SELECT * FROM sys.procedures AS P WHERE P.name = 'uspIndexDesfrag'
+                                  )
+                          )
+                            BEGIN
+                                SET @StartTime = GETDATE();
 
-                        /* Desfragmento dos indices */
-                        EXEC HealthCheck.uspIndexDesfrag @MostrarIndices = @Visualizar,                         -- bit
-                                                         @MinFrag = @PercMinFragmentation,                      -- smallint
-                                                         @MinPageCount = @QuantityPagesOfAnalyzedFragmentation, -- smallint
-                                                         @Efetivar = @Efetivar;                                 -- bit
+                                /* Desfragmento dos indices */
+                                EXEC HealthCheck.uspIndexDesfrag @MostrarIndices = @Visualizar,                         -- bit
+                                                                 @MinFrag = @PercMinFragmentation,                      -- smallint
+                                                                 @MinPageCount = @QuantityPagesOfAnalyzedFragmentation, -- smallint
+                                                                 @Efetivar = @Efetivar;                                 -- bit
 
-                        INSERT INTO @TableLogs
-                        VALUES(   'HealthCheck.uspIndexDesfrag', -- NomeProcedure - varchar(200)
-                                  @StartTime,                    -- DataInicio - datetime
-                                  GETDATE()                      -- DataTermino - datetime
-                              );
+                                INSERT INTO @TableLogs
+                                VALUES(   'HealthCheck.uspIndexDesfrag', -- NomeProcedure - varchar(200)
+                                          @StartTime,                    -- DataInicio - datetime
+                                          GETDATE()                      -- DataTermino - datetime
+                                      );
 
-                        UPDATE HealthCheck.AcoesPeriodicidadeDias
-                           SET DataUltimaExecucao = GETDATE()
-                         WHERE
-                            Nome = 'DesfragmentacaoIndices';
+                                UPDATE HealthCheck.AcoesPeriodicidadeDias
+                                   SET DataUltimaExecucao = GETDATE()
+                                 WHERE
+                                    Nome = 'DesfragmentacaoIndices';
+                            END;
                     END;
             END;
 
@@ -464,23 +553,29 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
               AND DATEDIFF(DAY, @DataUltimaExecucao, @DiaExecucao) >= @PeriodicidadeDeletarIndicesNaoUsados
           )
             BEGIN
-                SET @StartTime = GETDATE();
+                IF(EXISTS (
+                              SELECT * FROM sys.procedures AS P WHERE P.name = 'uspUnusedIndex'
+                          )
+                  )
+                    BEGIN
+                        SET @StartTime = GETDATE();
 
-                /*Deletar os indices que não estão sendo usados pelo otimizador por mais de X dias*/
-                EXEC HealthCheck.uspUnusedIndex @EfetivarDelecao = @Efetivar,                                       -- bit
-                                                @QuantidadeDiasConfigurado = @PeriodicidadeDeletarIndicesNaoUsados, -- smallint (30 dias)
-                                                @MostrarIndice = @Visualizar;                                       -- bit
+                        /*Deletar os indices que não estão sendo usados pelo otimizador por mais de X dias*/
+                        EXEC HealthCheck.uspUnusedIndex @EfetivarDelecao = @Efetivar,                                       -- bit
+                                                        @QuantidadeDiasConfigurado = @PeriodicidadeDeletarIndicesNaoUsados, -- smallint (30 dias)
+                                                        @MostrarIndice = @Visualizar;                                       -- bit
 
-                INSERT INTO @TableLogs
-                VALUES(   'HealthCheck.uspUnusedIndex', -- NomeProcedure - varchar(200)
-                          @StartTime,                   -- DataInicio - datetime
-                          GETDATE()                     -- DataTermino - datetime
-                      );
+                        INSERT INTO @TableLogs
+                        VALUES(   'HealthCheck.uspUnusedIndex', -- NomeProcedure - varchar(200)
+                                  @StartTime,                   -- DataInicio - datetime
+                                  GETDATE()                     -- DataTermino - datetime
+                              );
 
-                UPDATE HealthCheck.AcoesPeriodicidadeDias
-                   SET DataUltimaExecucao = GETDATE()
-                 WHERE
-                    Nome = 'DeletarIndicesNaoUsados';
+                        UPDATE HealthCheck.AcoesPeriodicidadeDias
+                           SET DataUltimaExecucao = GETDATE()
+                         WHERE
+                            Nome = 'DeletarIndicesNaoUsados';
+                    END;
             END;
 
         EXEC HealthCheck.uspSnapShotClear @diasExpurgo = @PeriodicidadeDeletarIndicesNaoUsados; -- smallint
@@ -497,38 +592,102 @@ IF(@ConfiguracaoHabilitarAutoHealthCheck = 1)
 
                 IF(DATEDIFF(DAY, @DataUltimaExecucaoExpurgoElmah, @DiaExecucao) >= @PeriodicidadeExpurgarElmah)
                     BEGIN
-                        SET @StartTime = GETDATE();
+                        IF(EXISTS (SELECT * FROM sys.procedures AS P WHERE P.name = 'ExpurgarElmah'))
+                            BEGIN
+                                SET @StartTime = GETDATE();
 
-                        EXEC HealthCheck.ExpurgarElmah;
+                                EXEC HealthCheck.ExpurgarElmah;
 
-                        INSERT INTO @TableLogs
-                        VALUES(   'HealthCheck.ExpurgarElmah', -- NomeProcedure - varchar(200)
-                                  @StartTime,                  -- DataInicio - datetime
-                                  GETDATE()                    -- DataTermino - datetime
-                              );
+                                INSERT INTO @TableLogs
+                                VALUES(   'HealthCheck.ExpurgarElmah', -- NomeProcedure - varchar(200)
+                                          @StartTime,                  -- DataInicio - datetime
+                                          GETDATE()                    -- DataTermino - datetime
+                                      );
 
-                        UPDATE HealthCheck.AcoesPeriodicidadeDias
-                           SET DataUltimaExecucao = GETDATE()
-                         WHERE
-                            Nome = 'ExpurgarElmah';
+                                UPDATE HealthCheck.AcoesPeriodicidadeDias
+                                   SET DataUltimaExecucao = GETDATE()
+                                 WHERE
+                                    Nome = 'ExpurgarElmah';
+                            END;
                     END;
             END;
 
         IF(@ExpurgarLogs = 1)
             BEGIN
-                SET @StartTime = GETDATE();
+                IF(EXISTS (
+                              SELECT * FROM sys.procedures AS P WHERE P.name = 'uspExpurgoLogsJson'
+                          )
+                  )
+                    BEGIN
+                        SET @StartTime = GETDATE();
 
-                EXEC Log.uspExpurgoLogsJson;
+                        EXEC Log.uspExpurgoLogsJson;
 
-                INSERT INTO @TableLogs
-                VALUES(   'Log.uspExpurgoLogsJson', -- NomeProcedure - varchar(200)
-                          @StartTime,               -- DataInicio - datetime
-                          GETDATE()                 -- DataTermino - datetime
-                      );
+                        INSERT INTO @TableLogs
+                        VALUES(   'Log.uspExpurgoLogsJson', -- NomeProcedure - varchar(200)
+                                  @StartTime,               -- DataInicio - datetime
+                                  GETDATE()                 -- DataTermino - datetime
+                              );
 
-                UPDATE HealthCheck.AcoesPeriodicidadeDias
-                   SET DataUltimaExecucao = GETDATE()
-                 WHERE
-                    Nome = 'ExpurgarLogs';
+                        UPDATE HealthCheck.AcoesPeriodicidadeDias
+                           SET DataUltimaExecucao = GETDATE()
+                         WHERE
+                            Nome = 'ExpurgarLogs';
+                    END;
+            END;
+
+        IF(@DeletarArquivosAnexosOrfaos = 1)
+            BEGIN
+                IF(EXISTS (
+                              SELECT *
+                                FROM sys.procedures AS P
+                               WHERE
+                                  P.name = 'uspDeletarArquivosAnexosOrfaos'
+                          )
+                  )
+                    BEGIN
+
+						SET @StartTime = GETDATE();
+
+                        EXEC HealthCheck.uspDeletarArquivosAnexosOrfaos @Visualizar = 0, -- bit
+                                                                        @Deletar = 1;    -- bit
+
+
+				
+
+					
+
+						INSERT INTO @TableLogs
+						VALUES(   'HealthCheck.uspDeletarArquivosAnexosOrfaos', -- NomeProcedure - varchar(200)
+									@StartTime,               -- DataInicio - datetime
+									GETDATE()                 -- DataTermino - datetime
+								);
+                    END;
+            END;
+
+        IF(@DeletarLogsDuplicados = 1)
+            BEGIN
+                IF(EXISTS (
+                              SELECT *
+                                FROM sys.procedures AS P
+                               WHERE
+                                  P.name = 'uspDeletarLogsDuplicados'
+                          )
+                  )
+                    BEGIN
+
+							SET @StartTime = GETDATE();
+
+                        EXEC HealthCheck.uspDeletarLogsDuplicados @Visualizar = 0, -- bit
+                                                                  @Deletar = 1;    -- bit
+
+						INSERT INTO @TableLogs
+						VALUES(   'HealthCheck.uspDeletarArquivosAnexosOrfaos', -- NomeProcedure - varchar(200)
+									@StartTime,               -- DataInicio - datetime
+									GETDATE()                 -- DataTermino - datetime
+								);
+
+                    END;
             END;
     END;
+GO

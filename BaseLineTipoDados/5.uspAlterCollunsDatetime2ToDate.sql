@@ -13,9 +13,25 @@ SELECT PJ.DataFundacao,
 -- ==================================================================
 */
 
+--IF(EXISTS (
+--              SELECT *
+--                FROM sys.procedures AS P
+--               WHERE
+--                  P.name = 'uspAlterCollunsDatetime2ToDate'
+--          )
+--  )
+--    BEGIN
+--        EXEC HealthCheck.uspAlterCollunsDatetime2ToDate @ObjectName = NULL,          -- varchar(200)
+--                                                          @Efetivar = 1,          -- bit
+--                                                          @Visualizar = 0,        -- bit
+--                                                          @ParseToDate = 1,
+--														  @UsarCamposJaCalculados  =1  -- bit
+--    END;
+
+
 EXEC HealthCheck.uspAlterCollunsDatetime2ToDate @ObjectName = NULL,          -- varchar(200)
 
-                                                          @Efetivar = 2,          -- bit
+                                                          @Efetivar = 1,          -- bit
                                                           @Visualizar = 1,        -- bit
                                                           @ParseToDate = 1,
 														  @UsarCamposJaCalculados  =1  -- bit
@@ -709,6 +725,14 @@ AS
           FROM #CamposDateTime AS CDT
          WHERE
             CDT.TableName LIKE 'LogsJson%';
+
+
+		IF(@UsarCamposJaCalculados =0)
+		BEGIN
+		DELETE #CamposDateTime
+		WHERE Rows = 0		
+		END
+		
 
         IF(@UsarCamposJaCalculados = 1)
             BEGIN

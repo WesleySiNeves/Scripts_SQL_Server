@@ -27,6 +27,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:wesley.neves@ImplantaInformatica.com.br">
+          <Created>2020-11-19T12:52:39.1647655-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgdev-sqlsrv-dev01.database.windows.net</Server>
+          <UserName>wesley.neves@ImplantaInformatica.com.br</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>15-1implanta</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="rghml-sqlsrv-hm01.database.windows.net:implanta">
           <Created>2018-11-27T11:15:23.5582874-02:00</Created>
           <Type>SQL</Type>
@@ -204,6 +216,12 @@
           <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
           <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
           <FullPath>uspModifierAllCollunsDatetimeToDateTime2.sql</FullPath>
+        </FileNode>
+        <FileNode Name="uspTruncateTableWithForenKeys.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:wesley.neves@ImplantaInformatica.com.br</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>wesley.neves@ImplantaInformatica.com.br</AssociatedConnUserName>
+          <FullPath>uspTruncateTableWithForenKeys.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

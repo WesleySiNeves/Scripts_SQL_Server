@@ -295,6 +295,37 @@ EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
 							@credential_name = 'implanta',
                             @max_parallelism = 5;
 
+
+
+
+DECLARE @SqlScript NVARCHAR(1000) = CONCAT('IF(EXISTS (
+              SELECT TOP 1 1
+                FROM sys.databases AS D
+               WHERE
+                  NOT(
+                         D.name LIKE ''%master%''
+                         OR D.name LIKE ''%Manager%''
+                         OR D.name LIKE ''%Copy%''
+                         OR D.name LIKE ''%DNE%''
+                         OR D.name LIKE ''%automationjobs%''
+                         OR D.name LIKE ''%Configuracao%''
+                         OR D.name LIKE ''%rglab%''
+                     )
+          )
+  )
+    BEGIN
+        EXEC HealthCheck.uspAutoHealthCheck @Efetivar = 1, @Visualizar = 0;
+    END;','');
+
+
+EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
+                            @step_name = 'Execução da procedure uspAutoHealthCheck',
+							@retry_attempts  =3,
+							@command =@SqlScript,
+							@credential_name = 'implanta',
+                            @max_parallelism = 5;
+
+
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
