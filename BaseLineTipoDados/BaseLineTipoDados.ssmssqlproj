@@ -86,9 +86,9 @@
           <FullPath>4.uspGetTableSemPK.sql</FullPath>
         </FileNode>
         <FileNode Name="5.uspAlterCollunsDatetime2ToDate.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:wesley.neves@ImplantaInformatica.com.br</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <AssociatedConnUserName>wesley.neves@ImplantaInformatica.com.br</AssociatedConnUserName>
           <FullPath>5.uspAlterCollunsDatetime2ToDate.sql</FullPath>
         </FileNode>
         <FileNode Name="5.uspAlterCollunsDatetimeToDateOrDateTime2.sql">

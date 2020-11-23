@@ -15,6 +15,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="rgatd-sqlsrv-atd01.database.windows.net:wesley.neves@ImplantaInformatica.com.br">
+          <Created>2020-11-20T11:45:27.9423512-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgatd-sqlsrv-atd01.database.windows.net</Server>
+          <UserName>wesley.neves@ImplantaInformatica.com.br</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="rgdev-sqlsrv-dev01.database.windows.net:implantadev01">
           <Created>2020-11-12T22:11:54.5924745-03:00</Created>
           <Type>SQL</Type>
@@ -62,9 +74,9 @@
           <FullPath>AdicionarBancoDeDadosJob.sql</FullPath>
         </FileNode>
         <FileNode Name="Busca_TodasExecucoesElasticjobs.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgatd-sqlsrv-atd01.database.windows.net:False:wesley.neves@ImplantaInformatica.com.br</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgatd-sqlsrv-atd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>wesley.neves@ImplantaInformatica.com.br</AssociatedConnUserName>
           <FullPath>Busca_TodasExecucoesElasticjobs.sql</FullPath>
         </FileNode>
         <FileNode Name="CriaJobAzure.sql">
@@ -74,9 +86,9 @@
           <FullPath>CriaJobAzure.sql</FullPath>
         </FileNode>
         <FileNode Name="CriaJobAzure_Server_Atendimento.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgatd-sqlsrv-atd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgatd-sqlsrv-atd01.database.windows.net:False:wesley.neves@ImplantaInformatica.com.br</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>rgatd-sqlsrv-atd01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <AssociatedConnUserName>wesley.neves@ImplantaInformatica.com.br</AssociatedConnUserName>
           <FullPath>CriaJobAzure_Server_Atendimento.sql</FullPath>
         </FileNode>
         <FileNode Name="CriaJobAzure_Server_Producao.sql">
