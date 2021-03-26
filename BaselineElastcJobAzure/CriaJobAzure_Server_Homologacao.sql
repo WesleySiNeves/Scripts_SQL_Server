@@ -16,7 +16,7 @@ e posteriormente exluir os desnecessários , para isso  conectar em master e rode
 para pegar os bancos de dados a serem excluidos
 
 SELECT * FROM  sys.databases AS D
-WHERE D.name NOT LIKE '%implanta%'
+WHERE D.name NOT LIKE '%implantadev%'
 
 -- ==================================================================
 */
@@ -35,11 +35,17 @@ INSERT INTO #BancosDeDadosExcluidosDoJob(
                                         )
 VALUES
 ('master'),
-('20-Conversor'),
-('sonarcube'),
-('19-Conversor'),
-('dev-automationjobs-db'),
-('DNE')
+('Implanta_CRESSSP'),
+('treinamento-nn.implantasuporte.net.br'),
+('apresentacao-nn.implantasuporte.net.br'),
+('atendimento-nn.implantasuporte.net.br'),
+('Implanta_CRABA_Homologacao'),
+('hml-automationjobs-db'),
+('Implanta_CFO_Homologacao'),
+('curso'),
+('ajuda-online.implanta.net.br'),
+('DNE'),
+('Implanta.Configuracao')
 
 
 /* ==================================================================
@@ -50,7 +56,7 @@ VALUES
 -- ==================================================================
 */
 
---CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'Dev#Infra*!mpl@nt@112020'
+--CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'M@st3rP0w3rN@w3r@'
 
 
 
@@ -63,21 +69,12 @@ VALUES
 */
 
 
-IF(NOT EXISTS (
-                  SELECT *
-                    FROM sys.database_scoped_credentials AS DSC
-                   WHERE
-                      DSC.name = 'JobExecuter'
-              )
-  )
-    BEGIN
-        --DROP  DATABASE SCOPED CREDENTIAL [JobExecuter]
-        CREATE DATABASE SCOPED CREDENTIAL [JobExecuter]
-        WITH IDENTITY = 'implanta',
-             SECRET = 'Dev#Infra*!mpl@nt@112020';
-    END;
+SELECT * FROM sys.database_scoped_credentials AS DSC;
 
-
+--DROP  DATABASE SCOPED CREDENTIAL [implanta]
+CREATE DATABASE SCOPED CREDENTIAL [JobExecuter]
+WITH IDENTITY = 'implanta',
+     SECRET = 'Dev#Infra*!mpl@nt@112020';
 
 
 	 
@@ -96,8 +93,6 @@ IF(NOT EXISTS (
 -- ==================================================================
 */
 /*This script will be executed on master (System database) database */
-
-
 CREATE LOGIN JobExecuter WITH PASSWORD = 'Dev#Infra*!mpl@nt@112020';
 
 /*
@@ -116,25 +111,18 @@ GO
 
 
 
-DECLARE  @targetGroup VARCHAR(200) ='rgdev-sqlsrv-dev01';
+DECLARE  @targetGroup VARCHAR(200) ='rghml-sqlsrv-hm01';
 
-DECLARE  @ServerName VARCHAR(200) ='rgatd-sqlsrv-atd01.database.windows.net';
+DECLARE  @ServerName VARCHAR(200) ='rghml-sqlsrv-hm01.database.windows.net';
 
 
 /* ==================================================================
  --Data: 9/4/2020 
  --Autor :Wesley Neves
  --Observação: Passo 2) Criar um  target group
-
- //Para excluir
-  EXEC jobs.sp_delete_target_group @target_group_name = N'rgdev-elspool-dev01', -- nvarchar(128)
-                                  @force = 1             -- bit
- 
   
  -- ==================================================================
  */
-
-
 IF(NOT EXISTS (
                   SELECT *
                     FROM jobs.target_groups
@@ -148,7 +136,6 @@ IF(NOT EXISTS (
 
 SELECT * FROM jobs.target_groups AS TG;
 
-
 /* ==================================================================
 --Data: 9/4/2020 
 --Autor :Wesley Neves
@@ -160,17 +147,17 @@ IF(NOT EXISTS (
                   SELECT *
                     FROM jobs.target_group_members AS TGM
                    WHERE
-                      TGM.server_name = 'rgatd-sqlsrv-atd01.database.windows.net'
+                      TGM.server_name = 'rghml-sqlsrv-hm01.database.windows.net'
                       AND TGM.target_type = 'SqlServer'
 					  AND TGM.refresh_credential_name ='JobExecuter'
                       
               )
   )
     BEGIN
-        EXEC jobs.sp_add_target_group_member 'rgdev-sqlsrv-dev01',
+        EXEC jobs.sp_add_target_group_member 'rghml-sqlsrv-hm01',
                                              @target_type = N'SqlServer',
                                              @refresh_credential_name = N'JobExecuter',
-                                             @server_name = 'rgatd-sqlsrv-atd01.database.windows.net';
+                                             @server_name = 'rghml-sqlsrv-hm01.database.windows.net';
     END;
 
 
@@ -179,7 +166,7 @@ IF(NOT EXISTS (
 --Autor :Wesley Neves
 --Observação: Caso queira remover um target_group_member
  
- EXEC jobs.sp_delete_target_group_member @target_group_name = N'rgdev-sqlsrv-dev01', -- nvarchar(128)
+ EXEC jobs.sp_delete_target_group_member @target_group_name = N'rghml-sqlsrv-hm01', -- nvarchar(128)
                                         @target_id = 'F0148FFD-2DB8-454F-93FC-2CDD91F7A4BF'         -- uniqueidentifier
 
 
@@ -229,10 +216,10 @@ FETCH NEXT FROM cursor_DB_Name_on_Exclude
 
 WHILE @@FETCH_STATUS = 0
     BEGIN
-        EXEC jobs.sp_add_target_group_member 'rgdev-sqlsrv-dev01',
+        EXEC jobs.sp_add_target_group_member 'rghml-sqlsrv-hm01',
                                              @membership_type = N'Exclude',
                                              @target_type = N'SqlDatabase',
-                                             @server_name = 'rgatd-sqlsrv-atd01.database.windows.net',
+                                             @server_name = 'rghml-sqlsrv-hm01.database.windows.net',
                                              @database_name = @Db_Name_On_Exclude;
 
         FETCH NEXT FROM cursor_DB_Name_on_Exclude
@@ -323,20 +310,30 @@ IF(NOT EXISTS (
                                  @command = N' EXEC HealthCheck.GetSizeDB;',
                                  @credential_name = 'JobExecuter',
 								 @retry_attempts  =2,
-                                 @target_group_name = 'rgdev-sqlsrv-dev01';
+                                 @target_group_name = 'rghml-sqlsrv-hm01';
     END;
 
- 
+
+
 
 DECLARE @SqlScript NVARCHAR(1000) = CONCAT('IF(EXISTS (
               SELECT TOP 1 1
                 FROM sys.databases AS D
-				WHERE
-				D.name LIKE ''%implantasuporte%''
-				AND NOT(
-							D.name LIKE ''%Cop%''
-							OR D.name LIKE ''%Exclu%''
-							OR D.name LIKE ''%202%''
+               WHERE
+                       (
+                         D.name LIKE ''%implantadev%''
+                         OR D.name LIKE ''%implantasuporte%''
+                         
+                        )
+						AND NOT
+						(
+						 D.name LIKE ''%teste%''
+						 OR
+						  D.name LIKE ''%rglab%''
+						  OR
+						  D.name LIKE ''%copy%'' COLLATE Latin1_General_CI_AI
+						  OR
+						  D.name LIKE ''%202%'' COLLATE Latin1_General_CI_AI
 						)
           )
   )
@@ -344,7 +341,7 @@ DECLARE @SqlScript NVARCHAR(1000) = CONCAT('IF(EXISTS (
        IF(EXISTS( SELECT 1 FROM sys.procedures AS P
 		WHERE P.name =''GetSizeDB''))
 		BEGIN	
-			EXEC HealthCheck.GetSizeDB;
+			EXEC HealthCheck.GetSizeDB ;
 
 		END
 	END;','');
@@ -358,7 +355,6 @@ EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
                             @max_parallelism = 5;
 
 
-
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
@@ -366,12 +362,11 @@ EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
  
 -- ==================================================================
 */
-
 EXEC jobs.sp_update_job @job_name = 'ManutencaoEPerformace',
                         @enabled = 1,
                         @schedule_interval_type = 'Days',
                         @schedule_interval_count = 1,
-                        @schedule_start_time = N'20210211 23:59'; --N'20200904 23:59'  =>> 9:00 da noite
+                        @schedule_start_time = N'20210210 23:59'; --N'20200904 23:59'  =>> 9:00 da noite
 
 
 
@@ -383,16 +378,6 @@ EXEC jobs.sp_update_job @job_name = 'ManutencaoEPerformace',
 -- ==================================================================
 */
 EXEC jobs.sp_start_job 'ManutencaoEPerformace';
-
-
-
-
-
-DECLARE @oldest_date DATETIME2(2) = GETDATE();
-
-EXEC jobs.sp_purge_jobhistory @job_name = 'ManutencaoEPerformace',
-                              @oldest_date = @oldest_date;
-
 
 
 
@@ -463,16 +448,24 @@ SELECT J.job_id,
 
 
 
-
 DECLARE @SqlScript NVARCHAR(1000) = CONCAT('IF(EXISTS (
               SELECT TOP 1 1
                 FROM sys.databases AS D
-				WHERE
-				D.name LIKE ''%implantasuporte%''
-				AND NOT(
-							D.name LIKE ''%Cop%''
-							OR D.name LIKE ''%Exclu%''
-							OR D.name LIKE ''%202%''
+               WHERE
+                       (
+                         D.name LIKE ''%implantadev%''
+                         OR D.name LIKE ''%implantasuporte%''
+                         
+                        )
+						AND NOT
+						(
+						 D.name LIKE ''%teste%''
+						 OR
+						  D.name LIKE ''%rglab%''
+						  OR
+						  D.name LIKE ''%copy%'' COLLATE Latin1_General_CI_AI
+						  OR
+						  D.name LIKE ''%202%'' COLLATE Latin1_General_CI_AI
 						)
           )
   )

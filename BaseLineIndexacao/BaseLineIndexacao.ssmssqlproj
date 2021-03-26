@@ -116,9 +116,9 @@
           <FullPath>2.1.sp_SnapShotIndex.sql</FullPath>
         </FileNode>
         <FileNode Name="2.Cria Objetos_Dev_Ops.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:wesley.neves@ImplantaInformatica.com.br</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <AssociatedConnUserName>wesley.neves@ImplantaInformatica.com.br</AssociatedConnUserName>
           <FullPath>2.Cria Objetos_Dev_Ops.sql</FullPath>
         </FileNode>
         <FileNode Name="3.2.sp_missingIndex.sql">
@@ -152,9 +152,9 @@
           <FullPath>3.6.sp_UpdateStats.sql</FullPath>
         </FileNode>
         <FileNode Name="3.7.sp_indexDesfrag.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:wesley.neves@ImplantaInformatica.com.br</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <AssociatedConnUserName>wesley.neves@ImplantaInformatica.com.br</AssociatedConnUserName>
           <FullPath>3.7.sp_indexDesfrag.sql</FullPath>
         </FileNode>
         <FileNode Name="3.8.sp_DeleteDuplicateIndex.sql">
@@ -272,15 +272,15 @@
           <FullPath>sp_DropStatisticasOnPreDeploy.sql</FullPath>
         </FileNode>
         <FileNode Name="sp_IndicesMuitoBloqueados.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgdev-sqlsrv-dev01.database.windows.net:False:implantadev01</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rgdev-sqlsrv-dev01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implantadev01</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:wesley.neves@ImplantaInformatica.com.br</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>wesley.neves@ImplantaInformatica.com.br</AssociatedConnUserName>
           <FullPath>sp_IndicesMuitoBloqueados.sql</FullPath>
         </FileNode>
         <FileNode Name="Validacoes.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rghml-sqlsrv-hm01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>rghml-sqlsrv-hm01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>implanta</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgprd-sqlsrv-prd01.database.windows.net:False:wesley.neves@ImplantaInformatica.com.br</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>rgprd-sqlsrv-prd01.database.windows.net</AssociatedConnSrvName>
+          <AssociatedConnUserName>wesley.neves@ImplantaInformatica.com.br</AssociatedConnUserName>
           <FullPath>Validacoes.sql</FullPath>
         </FileNode>
       </Items>

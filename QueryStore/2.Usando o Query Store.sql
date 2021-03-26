@@ -1,3 +1,16 @@
+
+
+/* ==================================================================
+--Data: 23/02/2021 
+--Autor :Wesley Neves
+--Observação: Sugestões de leitura
+ 
+ https://www.sqlskills.com/blogs/erin/query-store-settings/
+https://docs.microsoft.com/pt-br/sql/relational-databases/performance/monitoring-performance-by-using-the-query-store?view=sql-server-ver15
+https://docs.microsoft.com/pt-br/sql/relational-databases/performance/best-practice-with-the-query-store?view=sql-server-ver15
+https://docs.microsoft.com/pt-br/sql/t-sql/statements/alter-database-transact-sql-set-options?view=sql-server-ver15
+-- ==================================================================
+*/
 /* ==================================================================
 
 --Observação: Tamanho Máximo (MB): especifica o limite para o espaço de dados que o Repositório de
@@ -14,69 +27,58 @@ O valor padrão (100 MB) pode não ser suficiente se sua carga de trabalho gerar m
 -- ==================================================================
 */
 
-ALTER DATABASE [13-implanta]  
-SET QUERY_STORE (MAX_STORAGE_SIZE_MB = 50); 
+DECLARE @IsAzure BIT = IIF(@@VERSION LIKE '%Azure%', 1, 0);
+DECLARE @query VARCHAR(1000);
+DECLARE @db_name VARCHAR(1000) = DB_NAME();
 
-/* ==================================================================
-	
---Observação: Intervalo de Coleta de Estatísticas: define o nível de granularidade para a estatística de tempo de execução
- coletada (o padrão é 1 hora). Considere usar o valor mais baixo se você precisar de granularidade mais fina ou menos 
- tempo para detectar e mitigar os problemas, mas tenha em mente que isso afetará diretamente o tamanho dos dados do Repositório de Consultas. Use o SSMS ou Transact-SQL para definir um valor diferente para o Intervalo de Coleta de Estatísticas:
- 
--- ==================================================================
-*/
+--ALTER DATABASE [15-1implanta] SET QUERY_STORE CLEAR;
+IF(@IsAzure = 1)
+    BEGIN
+        SET @query = CONCAT('ALTER DATABASE [', @db_name, '] SET QUERY_STORE = ON
+    (
+      OPERATION_MODE = READ_WRITE,
+      CLEANUP_POLICY = ( STALE_QUERY_THRESHOLD_DAYS = 30 ),
+      DATA_FLUSH_INTERVAL_SECONDS = 900,
+      MAX_STORAGE_SIZE_MB = 300,
+      INTERVAL_LENGTH_MINUTES = 15,
+      SIZE_BASED_CLEANUP_MODE = AUTO,
+      MAX_PLANS_PER_QUERY = 20,
+      WAIT_STATS_CAPTURE_MODE = ON,
+      QUERY_CAPTURE_MODE = CUSTOM,
+      QUERY_CAPTURE_POLICY = (
+        STALE_CAPTURE_POLICY_THRESHOLD = 1 HOUR,
+        EXECUTION_COUNT = 100,
+        TOTAL_COMPILE_CPU_TIME_MS = 1000,    --1 Segundo
+        TOTAL_EXECUTION_CPU_TIME_MS = 1000  --10 segundos
+      )
+    );');
+    END;
+ELSE
+    BEGIN
+        SET @query = CONCAT('ALTER DATABASE ', @db_name, ' SET QUERY_STORE = ON
+    (
+      OPERATION_MODE = READ_WRITE,
+      CLEANUP_POLICY = ( STALE_QUERY_THRESHOLD_DAYS = 30 ),
+      DATA_FLUSH_INTERVAL_SECONDS = 900,
+      MAX_STORAGE_SIZE_MB = 300,
+      INTERVAL_LENGTH_MINUTES = 15,
+      SIZE_BASED_CLEANUP_MODE = AUTO,
+      MAX_PLANS_PER_QUERY = 20,
+      WAIT_STATS_CAPTURE_MODE = ON,
+      QUERY_CAPTURE_MODE = AUTO
+      
+    );');
+    END;
 
-ALTER DATABASE [13-implanta] SET QUERY_STORE (INTERVAL_LENGTH_MINUTES = 30); 
+EXEC(@query);
 
-
-/* ==================================================================
---Observação: 
- 
-Limite de Consulta Obsoleto (Dias): política de limpeza com base em tempo que controla o período de retenção de estatísticas de tempo
- de execução persistentes e consultas inativas.
-Por padrão, o Repositório de Consultas está configurado para manter os dados por 30 dias, o que pode ser desnecessariamente
- longo para seu cenário.
-
-Evite manter dados históricos que você não planeja usar. Isso reduzirá as alterações para o status somente leitura.
- O tamanho dos dados do Repositório de Consultas, bem como o tempo para detectar e reduzir o problema, serão mais previsíveis. 
- 
--- ==================================================================
-*/
-
-ALTER DATABASE [13-implanta]   
-SET QUERY_STORE (CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 90));  
-
-
-/* ==================================================================
---Data: 20/11/2018 
---Autor :Wesley Neves
---Observação: Modo de Limpeza com Base no Tamanho: especifica se a limpeza automática de dados ocorrerá quando o tamanho dos dados no
- Repositório de Consultas se aproximar do limite.
-
-É altamente recomendável ativar limpeza com base no tamanho para certificar-se de que o repositório de consultas seja sempre executado no
- modo de leitura-gravação e colete sempre os dados mais recentes.
- 
--- ==================================================================
-*/
-
-ALTER DATABASE [13-implanta]   
-SET QUERY_STORE (SIZE_BASED_CLEANUP_MODE = AUTO);  
-
-/* ==================================================================
-
---Observação: 
- Modo de Captura do Repositório de Consultas: Especifica a política de captura de consultas para o repositório de consultas.
-
-All – captura todas as consultas. Essa é a opção padrão.
-
-Auto – consultas incomuns e consultas com duração de compilação e execução insignificantes são ignoradas. Os limites para a duração da execução de contagem, da compilação e do tempo de execução são determinados internamente.
-
-None – o Repositório de Consultas para de capturar novas consultas.
-
-O script a seguir define o Modo de Captura de Consultas para Auto:
--- ==================================================================
-*/
-
-
-ALTER DATABASE [QueryStoreDB]   
-SET QUERY_STORE (QUERY_CAPTURE_MODE = AUTO);  
+SELECT DQSO.actual_state_desc AS ModoAtual,
+       DQSO.readonly_reason,
+       DQSO.current_storage_size_mb AS TamanhoAtual,
+       DQSO.max_storage_size_mb AS TamanhoMaximo,
+       flush_interval_Minutos = DQSO.flush_interval_seconds / 60,
+       DQSO.interval_length_minutes [Intervalo de Coleta de Estatísticas],
+       DQSO.stale_query_threshold_days [Limite de Consulta Obsoleta (Dias)],
+       DQSO.size_based_cleanup_mode_desc,
+       DQSO.max_plans_per_query
+  FROM sys.database_query_store_options AS DQSO;

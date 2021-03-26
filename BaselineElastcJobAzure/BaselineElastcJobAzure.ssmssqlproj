@@ -63,6 +63,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="rgprd-sqlsrv-prd01.database.windows.net:wesley.neves@ImplantaInformatica.com.br">
+          <Created>2021-02-23T20:17:25.8982994-03:00</Created>
+          <Type>SQL</Type>
+          <Server>rgprd-sqlsrv-prd01.database.windows.net</Server>
+          <UserName>wesley.neves@ImplantaInformatica.com.br</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
@@ -86,9 +98,9 @@
           <FullPath>CriaJobAzure.sql</FullPath>
         </FileNode>
         <FileNode Name="CriaJobAzure_Server_Atendimento.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgatd-sqlsrv-atd01.database.windows.net:False:wesley.neves@ImplantaInformatica.com.br</AssociatedConnectionMoniker>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:rgatd-sqlsrv-atd01.database.windows.net:False:implanta</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>rgatd-sqlsrv-atd01.database.windows.net</AssociatedConnSrvName>
-          <AssociatedConnUserName>wesley.neves@ImplantaInformatica.com.br</AssociatedConnUserName>
+          <AssociatedConnUserName>implanta</AssociatedConnUserName>
           <FullPath>CriaJobAzure_Server_Atendimento.sql</FullPath>
         </FileNode>
         <FileNode Name="CriaJobAzure_Server_Producao.sql">

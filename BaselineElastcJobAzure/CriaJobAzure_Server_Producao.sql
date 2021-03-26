@@ -12,129 +12,40 @@
 --Data: 10/6/2020 
 --Autor :Wesley Neves
 --Observação: Ao criar um novo job , fica mais facil adicionar todos os bancos do servidor 
-e posteriormente exluir os desnecessários , para isso  conect em master e rode o script 
+e posteriormente exluir os desnecessários , para isso  conectar em master e rode o script 
 para pegar os bancos de dados a serem excluidos
 
 SELECT * FROM  sys.databases AS D
-WHERE D.name NOT LIKE '%implantadev%'
- 
+WHERE D.name NOT LIKE '%implanta.net.br%'
+
 -- ==================================================================
 */
+
 
 IF(OBJECT_ID('TEMPDB..#BancosDeDadosExcluidosDoJob') IS NOT NULL)
     DROP TABLE #BancosDeDadosExcluidosDoJob;
 
 CREATE TABLE #BancosDeDadosExcluidosDoJob
 (
-    DatabaseName NVARCHAR(256),
+    DatabaseName VARCHAR(256)
 );
 
 INSERT INTO #BancosDeDadosExcluidosDoJob(
                                             DatabaseName
                                         )
-VALUES(N'master'),
+VALUES
+('master'),
+('Implanta_CRESSSP'),
+('treinamento-nn.implantasuporte.net.br'),
+('apresentacao-nn.implantasuporte.net.br'),
+('atendimento-nn.implantasuporte.net.br'),
+('Implanta_CRABA_Homologacao'),
+('hml-automationjobs-db'),
+('Implanta_CFO_Homologacao'),
+('curso'),
+('ajuda-online.implanta.net.br'),
 ('DNE'),
-('cra-pr.conversor'),
-('cra-rn.conversor'),
-('cress-sp.Conversor'),
-('cra-mt.conversor'),
-('cra-al.conversor'),
-('cra-pb.conversor'),
-('cress-rj.conversor'),
-('cra-to.conversor'),
-('cra-am.conversor'),
-('cra-pe.conversor'),
-('cra-es.conversor'),
-('cress-rr-Conversor'),
-('cra-df.conversor'),
-('cro-sp.conversor'),
-('cra-sp.conversor'),
-('cra-ma.conversor'),
-('cra-sp.conversor-incremental'),
-('cra-pa.conversor'),
-('cra-sc.Conversor'),
-('cra-go.conversor'),
-('cra-pi.conversor'),
-('cra-se.conversor'),
-('cress-sc.conversor'),
-('cress-mg.conversor'),
-('cress-rs.Conversor'),
-('cra-ro.conversor'),
-('cro-pr.conversor2'),
-('cress-ms.conversor'),
-('cress-pa.conversor'),
-('cro-pr.conversor'),
-('cro-am.conversor'),
-('cress-ce.conversor'),
-('cress-pe.conversor'),
-('cro-go.conversor'),
-('prd-automationjobs-db'),
-('DNE_1711'),
-('cra-ba.conversor'),
-('cress-pr.conversor'),
-('cress-df.conversor'),
-('cra-es.conversor-2'),
-('cra-es.conversor-3'),
-('cra-ms.conversor'),
-('cra-ap.conversor'),
-('cra-sp.implanta.net.br-ESPELHO'),
-('cro-sp.implanta.net.br-ESPELHO'),
-('crtr-08.implanta.net.br'),
-('crtr-01.implanta.net.br'),
-('crb-03.implanta.net.br'),
-('crb-13.implanta.net.br'),
-('crb-08.implanta.net.br'),
-('conter-br.implanta.net.br'),
-('cra-rj.implanta.net.br'),
-('crb-07.implanta.net.br'),
-('crb-04.implanta.net.br'),
-('crb-11.implanta.net.br'),
-('crb-01.implanta.net.br'),
-('cra-mg.implanta.net.br'),
-('cfb-br.implanta.net.br'),
-('crb-02.implanta.net.br'),
-('crtr-14.implanta.net.br'),
-('crtr-09.implanta.net.br'),
-('crb-09.implanta.net.br'),
-('crb-14.implanta.net.br'),
-('crb-10.implanta.net.br'),
-('creci-rj.implanta.net.br'),
-('crb-06.implanta.net.br'),
-('crb-05.implanta.net.br'),
-('core-ap.implanta.net.br'),
-('conrerp-pe.implanta.net.br'),
-('creci-es.implanta.net.br'),
-('cra-df.implanta.net.br_COPY'),
-('cress-df.implanta.net.br_Copy'),
-('cro-go.implanta.net.br_COPY'),
-('cra-to.implanta.net.br_COPY'),
-('cress-pe.implanta.net.br_COPY'),
-('crefito-ba.implanta.net.br_Copy'),
-('crefito-sp.implanta.net.br_COPY'),
-('cra-pb.implanta.net.br_COPY'),
-('cra-es.implanta.net.br_COPY'),
-('cra-rn.implanta.net.br_COPY'),
-('crn-06.implanta.net.br_Copy'),
-('crtr-07.implanta.net.br'),
-('cra-sp-hml.implanta.net.br'),
-('crtr-13.implanta.net.br'),
-('crtr-15.implanta.net.br'),
-('crtr-11.implanta.net.br'),
-('cro-pa.conversor'),
-('cro-to.conversor'),
-('cro-ac.conversor'),
-('cress-al.conversor'),
-('oab-ba.conversor'),
-('cress-al.conversor'),
-('cro-ac.conversor'),
-('cro-to.conversor'),
-('cress-am.conversor'),
-('cro-pi.conversor'),
-('cress-rj.implanta.net.br_COPY'),
-('cra-df.implanta.net.br_COPY'),
-('cress-sp.implanta.net.br_COPY'),
-('cress-al.implanta.net.br_COPY'),
-('cress-go.implanta.net.br_COPY')
+('Implanta.Configuracao')
 
 
 /* ==================================================================
@@ -147,34 +58,42 @@ VALUES(N'master'),
 
 --CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'M@st3rP0w3rN@w3r@'
 
+
+
 /* ==================================================================
---Data: 10/6/2020 
+--Data: 10/02/2021 
 --Autor :Wesley Neves
---Observação: Passo 2) Criar  a CREDENTIAL logado no banco  do job
-  
+--Observação: Criar a  SCOPED CREDENTIAL no banco  do elastc job
+ 
 -- ==================================================================
 */
+
+
 SELECT * FROM sys.database_scoped_credentials AS DSC;
 
-
-
---DROP  DATABASE SCOPED CREDENTIAL SQLJobUser
-CREATE DATABASE SCOPED CREDENTIAL [implanta]
+--DROP  DATABASE SCOPED CREDENTIAL [implanta]
+CREATE DATABASE SCOPED CREDENTIAL [JobExecuter]
 WITH IDENTITY = 'implanta',
-     SECRET = 'M@st3rP0w3rN@w3r@';
+     SECRET = 'Dev#Infra*!mpl@nt@112020';
+
+
+	 
+
+
 
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
 --Observação: Passo 3) Criar os Logins Necessários nos bancos de dados master e os targets
 
---AGORA, VAMOS CRIAR UM LOGIN SQL NO BANCO DE DADOS MESTRE. O NOME DE LOGIN E A SENHA DEVEM SER OS MESMOS QUE USAMOS COMO IDENTIDADE PARA CRIAR UMA CREDENCIAL 
+--AGORA, VAMOS CRIAR UM LOGIN SQL NO BANCO DE DADOS MESTRE. O NOME DE LOGIN E A SENHA DEVEM SER OS MESMOS
+ QUE USAMOS COMO IDENTIDADE PARA CRIAR UMA CREDENCIAL 
 
-NÂO PRECISA DA PARTE DO LOGIN
+
 -- ==================================================================
 */
 /*This script will be executed on master (System database) database */
-CREATE LOGIN SQLJobUser WITH PASSWORD = 'M@st3rP0w3rN@w3r@Hml';
+CREATE LOGIN JobExecuter WITH PASSWORD = 'Dev#Infra*!mpl@nt@112020';
 
 /*
  A SEGUIR, CRIAREMOS UM USUÁRIO PARA CADA BANCO DE DADOS DE DESTINO.
@@ -183,13 +102,12 @@ CREATE LOGIN SQLJobUser WITH PASSWORD = 'M@st3rP0w3rN@w3r@Hml';
 */
 
 /*Rodar no Mult Script para cada banco configurado*/
-CREATE USER SQLJobUser FROM LOGIN SQLJobUser;
+CREATE USER JobExecuter FROM LOGIN JobExecuter;
 
-ALTER ROLE db_owner ADD MEMBER [SQLJobUser];
+ALTER ROLE db_owner ADD MEMBER [JobExecuter];
 GO
 
 
---NÂO PRECISA DA PARTE DO LOGIN
 
 
 
@@ -209,11 +127,11 @@ IF(NOT EXISTS (
                   SELECT *
                     FROM jobs.target_groups
                    WHERE
-                      target_group_name = 'rgprd-sqlsrv-prd01'
+                      target_group_name = @targetGroup
               )
   )
     BEGIN
-        EXEC jobs.sp_add_target_group 'rgprd-sqlsrv-prd01';
+        EXEC jobs.sp_add_target_group @targetGroup;
     END;
 
 SELECT * FROM jobs.target_groups AS TG;
@@ -231,32 +149,47 @@ IF(NOT EXISTS (
                    WHERE
                       TGM.server_name = 'rgprd-sqlsrv-prd01.database.windows.net'
                       AND TGM.target_type = 'SqlServer'
-                      AND TGM.refresh_credential_name = 'implanta'
+					  AND TGM.refresh_credential_name ='JobExecuter'
+                      
               )
   )
     BEGIN
         EXEC jobs.sp_add_target_group_member 'rgprd-sqlsrv-prd01',
                                              @target_type = N'SqlServer',
-                                             @refresh_credential_name = N'implanta',
+                                             @refresh_credential_name = N'JobExecuter',
                                              @server_name = 'rgprd-sqlsrv-prd01.database.windows.net';
     END;
 
 
+/* ==================================================================
+--Data: 10/02/2021 
+--Autor :Wesley Neves
+--Observação: Caso queira remover um target_group_member
+ 
+ EXEC jobs.sp_delete_target_group_member @target_group_name = N'rgprd-sqlsrv-prd01', -- nvarchar(128)
+                                        @target_id = 'AD8B4033-1B87-424B-B12F-7CD48289D646'         -- uniqueidentifier
 
 
+-- ==================================================================
+*/
 
 
 SELECT *
   FROM jobs.target_group_members AS TGM
+  WHERE TGM.target_type ='SqlServer'
  ORDER BY
     TGM.membership_type DESC;
+
+
+
 
 
 
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação: Excluir os bancos de dados no job
+--Observação: Rodar o script no banco de dados configurado para o job
+ Excluir os bancos de dados no job
  
 -- ==================================================================
 */
@@ -314,6 +247,7 @@ SELECT TGM.target_group_name,
        TGM.database_name,
        TGM.elastic_pool_name
   FROM jobs.target_group_members AS TGM
+  WHERE TGM.membership_type ='Exclude'
  ORDER BY
     TGM.membership_type DESC;
 
@@ -354,6 +288,13 @@ SELECT *
  
 -- ==================================================================
 */
+
+--DECLARE @job_version INT =3;
+
+--EXEC jobs.sp_delete_jobstep @job_name = N'ManutencaoEPerformace',                   -- nvarchar(128)
+--                            @step_name = N'Execução da procedure uspAutoHealthCheck',                  -- nvarchar(120)
+--                            @job_version = @job_version OUTPUT -- int
+
 IF(NOT EXISTS (
                   SELECT *
                     FROM jobs.jobsteps AS J
@@ -363,66 +304,21 @@ IF(NOT EXISTS (
               )
   )
     BEGIN
+
+
+
         EXEC jobs.sp_add_jobstep @job_name = 'ManutencaoEPerformace',
                                  @step_name = 'Execução da procedure uspAutoHealthCheck',
                                  @max_parallelism = 5,
                                  @command = N' EXEC HealthCheck.GetSizeDB;',
-                                 @credential_name = 'implanta',
+                                 @credential_name = 'JobExecuter',
 								 @retry_attempts  =2,
                                  @target_group_name = 'rgprd-sqlsrv-prd01';
     END;
 
 
---EXEC HealthCheck.uspAutoHealthCheck @Efetivar = 1 ,@Visualizar = 0;
-
-/* ==================================================================
---Data: 10/6/2020 
---Autor :Wesley Neves
---Observação:  Caso vc queria fazer alguma alteração no step
-						  
--- ==================================================================
-*/
-DECLARE @job_version INT;
-
-EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
-                            @step_name = 'Execução da procedure uspAutoHealthCheck',
-							@retry_attempts  =3,
-							@command ='EXEC HealthCheck.uspAutoHealthCheck @Efetivar = 1 ,@Visualizar = 0;',
-							@credential_name = 'implanta',
-                            @max_parallelism = 5;
 
 
-
-
-
-DECLARE @SqlScript NVARCHAR(1000) = CONCAT('IF(EXISTS (
-              SELECT TOP 1 1
-                FROM sys.databases AS D
-               WHERE
-                  NOT(
-                         D.name LIKE ''%master%''
-                         OR D.name LIKE ''%Manager%''
-                         OR D.name LIKE ''%Copy%''
-                         OR D.name LIKE ''%DNE%''
-                         OR D.name LIKE ''%automationjobs%''
-                         OR D.name LIKE ''%Configuracao%''
-                         OR D.name LIKE ''%rglab%''
-						 OR D.name LIKE ''%ESPELHO%''
-						 OR D.name LIKE ''%conversor%''
-                     )
-          )
-  )
-    BEGIN
-        EXEC HealthCheck.uspAutoHealthCheck @Efetivar = 1, @Visualizar = 0;
-    END;','');
-
-
-EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
-                            @step_name = 'Execução da procedure uspAutoHealthCheck',
-							@retry_attempts  =3,
-							@command =@SqlScript,
-							@credential_name = 'implanta',
-                            @max_parallelism = 5;
 
 
 /* ==================================================================
@@ -436,7 +332,52 @@ EXEC jobs.sp_update_job @job_name = 'ManutencaoEPerformace',
                         @enabled = 1,
                         @schedule_interval_type = 'Days',
                         @schedule_interval_count = 1,
-                        @schedule_start_time = N'20200904 21:00'; --N'20200904 21:00'  =>> 6:00 da tarde
+                        @schedule_start_time = N'20210210 23:59'; --N'20200904 23:59'  =>> 9:00 da noite
+
+
+
+
+
+
+DECLARE @SqlScript NVARCHAR(1000) = CONCAT('IF(EXISTS (
+              SELECT D.name
+  FROM sys.databases AS D
+ WHERE
+    (
+        D.name LIKE ''%implanta.net.br%''
+     
+    )
+    AND NOT(
+               D.name LIKE ''%teste%''
+               OR D.name LIKE ''%ESPELHO%''
+			   OR CHARINDEX(''_'',D.name) > 1
+			   OR D.name LIKE ''%rglab%''
+               OR D.name LIKE ''%copy%'' COLLATE Latin1_General_CI_AI
+               OR D.name LIKE ''%202%'' COLLATE Latin1_General_CI_AI
+           )
+		  
+
+          )
+  )
+    BEGIN
+       IF(EXISTS( SELECT 1 FROM sys.procedures AS P
+		WHERE P.name =''GetSizeDB''))
+		BEGIN	
+			EXEC HealthCheck.GetSizeDB;
+
+		END
+	END;','');
+
+
+EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
+                            @step_name = 'Execução da procedure uspAutoHealthCheck',
+							@retry_attempts  =3,
+							@command =@SqlScript,
+							@credential_name = 'JobExecuter',
+                            @max_parallelism = 5;
+
+
+
 
 /* ==================================================================
 --Data: 10/6/2020 
@@ -446,6 +387,17 @@ EXEC jobs.sp_update_job @job_name = 'ManutencaoEPerformace',
 -- ==================================================================
 */
 EXEC jobs.sp_start_job 'ManutencaoEPerformace';
+
+
+
+
+/* ==================================================================
+--Data: 10/02/2021 
+--Autor :Wesley Neves
+--Observação: Confere a execução o job
+ 
+-- ==================================================================
+*/
 
 SELECT j.job_id,
        j.job_name,
@@ -465,18 +417,13 @@ SELECT j.job_id,
        j.target_database_name,
        j.target_elastic_pool_name
   FROM jobs.job_executions j
-  WHERE j.lifecycle  = 'Failed'
-  AND j.target_database_name NOT LIKE '%conversor%'
+  WHERE j.lifecycle = 'Failed'
+  AND j.job_version = (SELECT MAX(JE.job_version_number) FROM jobs_internal.job_executions AS JE)
   AND CAST(DATEADD(HOUR,-3, j.current_attempt_start_time) AS DATETIME2(2)) >= CAST(GETDATE() AS DATE)
 
-  
-  /* ==================================================================
-  --Data: 10/7/2020 
-  --Autor :Wesley Neves
-  --Observação: Historico de alterações dos jobs
+
    
-  -- ==================================================================
-  */
+
 SELECT J.job_id,
        J.job_version_number,
        J.step_name,
@@ -497,6 +444,64 @@ SELECT J.job_id,
 	   JOIN jobs_internal.targets AS T ON T.target_id = JD.target_id
        JOIN jobs_internal.command_data AS CD ON CD.command_data_id = JD.command_data_id
 	   ORDER BY J.job_version_number DESC
+
+
+
+
+/* ==================================================================
+--Data: 10/6/2020 
+--Autor :Wesley Neves
+--Observação:  Caso vc queria fazer alguma alteração no step
+						  
+-- ==================================================================
+*/
+
+
+
+
+
+DECLARE @SqlScript NVARCHAR(1000) = CONCAT('IF(EXISTS (
+              SELECT D.name
+  FROM sys.databases AS D
+ WHERE
+    (
+        D.name LIKE ''%implanta.net.br%''
+     
+    )
+    AND NOT(
+               D.name LIKE ''%teste%''
+               OR D.name LIKE ''%ESPELHO%''
+			   OR CHARINDEX(''_'',D.name) > 1
+			   OR D.name LIKE ''%rglab%''
+               OR D.name LIKE ''%copy%'' COLLATE Latin1_General_CI_AI
+               OR D.name LIKE ''%202%'' COLLATE Latin1_General_CI_AI
+           )
+		  
+
+          )
+  )
+    BEGIN
+       IF(EXISTS( SELECT 1 FROM sys.procedures AS P
+		WHERE P.name =''uspAutoHealthCheck''))
+		BEGIN	
+				EXEC HealthCheck.uspAutoHealthCheck @Efetivar = 1, @Visualizar = 0;
+
+		END
+	END;','');
+
+
+EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
+                            @step_name = 'Execução da procedure uspAutoHealthCheck',
+							@retry_attempts  =3,
+							@command =@SqlScript,
+							@credential_name = 'JobExecuter',
+                            @max_parallelism = 5;
+
+
+
+
+
+
 
 /* ==================================================================
 --Data: 9/4/2020 
