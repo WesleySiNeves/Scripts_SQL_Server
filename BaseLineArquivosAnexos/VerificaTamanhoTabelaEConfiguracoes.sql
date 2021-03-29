@@ -92,7 +92,7 @@ WITH Dados
                                             AND C.Valor = 'true'
                                       ),
                                'SIM',
-                               'NÂO'),
+                               'Nï¿½O'),
             ContainerAzureStorageArquivosAnexos = ISNULL(
                                                   (
                                                   SELECT C.Valor
@@ -129,7 +129,11 @@ WITH Dados
            --AND P.[Nome Schema] IN ('ArquivosAnexos')
            AND P.[Nome Tabela] IN ( 'ArquivosAnexos' )
      )
-SELECT R.object_id,
+
+SELECT 
+DB_NAME() AS Cliente,
+SUBSTRING(DB_NAME(),0,CHARINDEX('-',DB_NAME())) AS Categoria,
+R.object_id,
        R.[Nome Schema],
        R.[Nome Tabela],
        R.[Bytes/Row],
@@ -162,8 +166,6 @@ SELECT R.object_id,
 FROM COnfiguracoes R;
 
 
-SELECT * FROM  Sistema.Configuracoes AS C
-WHERE C.Configuracao LIKE '%arquiv%'
 
 
 

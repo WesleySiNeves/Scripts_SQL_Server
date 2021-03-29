@@ -260,6 +260,12 @@ EXEC jobs.sp_start_job 'Azure-SQL-Automation-CriarBancosEspelhos';
 
 
 
+select * from sys.dm_database_copies
+
+select state_desc, * from sys.databases s
+ORDER BY s.state_desc  DESC
+
+
 
 SELECT last_message  
 FROM jobs.job_executions 
