@@ -1,6 +1,8 @@
 DECLARE @MascararDados BIT = 1;
 DECLARE @DetalharCamposSensiveis BIT = 0;
 
+DECLARE @MascararCPFCNPJ BIT = CAST('$_MASCARAR_CPFCNPJ' AS BIT);
+
 IF(EXISTS (
               SELECT * FROM sys.syscursors AS S WHERE S.cursor_name = 'cursor_Execute'
           )
@@ -42,11 +44,12 @@ SELECT X.Coluna,
                 ('Nascimento', 'Person', 'Person Info'),
                 ('PISPASEP', 'Person', 'Person Info'),
                 ('Nacionalidade', 'Person', 'Person Info'),
-                ('Nacionalidade', 'Person', 'Person Info'),
                 ('Naturalidade', 'Person', 'Person Info'),
                 ('EstadoCivil', 'Person', 'Person Info'),
                 ('Etnia', 'Person', 'Person Info'),
-                ('Sanguineo', 'Person', 'Person Info')
+                ('TipoSanguineo', 'Person', 'Person Info'),
+                ('Religiao', 'Person', 'Person Info'),
+                ('Deficiencia', 'Person', 'Person Info')
       ) AS X(Coluna, Classificacao, Tipo);
 
 IF(@DetalharCamposSensiveis = 1)
@@ -63,7 +66,6 @@ CREATE TABLE #ConfidencialData
     [PK]             VARCHAR(128),
     [CollunsName]    VARCHAR(128),
     Tamanho          INT,
-    [collation_name] VARCHAR(128),
     [is_nullable]    BIT,
     [TypeData]       VARCHAR(128),
     [Tipo]           VARCHAR(12),
@@ -71,6 +73,69 @@ CREATE TABLE #ConfidencialData
     [Classificacao]  VARCHAR(20),
     ScriptSql        NVARCHAR(MAX)
 );
+
+IF ( OBJECT_ID('TEMPDB..#AllData') IS NOT NULL )
+    DROP TABLE #AllData;	
+
+CREATE TABLE #AllData
+(
+    [SchemaName]  VARCHAR(128),
+    [TableName]   VARCHAR(128),
+    [PK]          VARCHAR(128),
+    [CollunsName] VARCHAR(128),
+    [max_length]  SMALLINT,
+    [is_nullable] BIT,
+    [TypeData]    VARCHAR(128),
+    [Level]       VARCHAR(12)
+);
+
+
+INSERT INTO #AllData
+SELECT S.name SchemaName,
+       T.name AS TableName,
+       Pk.PK,
+       C.name AS CollunsName,
+       C.max_length,
+       C.is_nullable is_nullable,
+       T2.name AS TypeData,
+       -- @Tipo AS Tipo,
+       'Confidential' AS Level
+  -- @Classificacao AS Classificacao
+  FROM sys.schemas AS S
+       JOIN sys.tables AS T ON T.schema_id = S.schema_id
+       JOIN sys.dm_db_partition_stats partition ON partition.object_id = T.object_id
+       JOIN sys.columns AS C ON C.object_id = T.object_id
+       JOIN sys.types AS T2 ON T2.user_type_id = C.user_type_id
+       JOIN(
+               SELECT T3.object_id,
+                      C2.name AS PK,
+                      T4.name AS Tipo
+                 FROM sys.tables AS T3
+                      JOIN sys.columns AS C2 ON C2.object_id = T3.object_id
+                      JOIN sys.types AS T4 ON T4.system_type_id = C2.system_type_id
+                WHERE
+                   C2.column_id = 1
+           )Pk ON Pk.object_id = T.object_id
+ WHERE
+    partition.index_id = 1
+    AND partition.row_count > 0
+    AND C.is_computed = 0
+    AND NOT EXISTS (
+                       SELECT I.name,
+                              IC.column_id,
+                              Co.name,
+                              I.is_unique
+                         FROM sys.indexes AS I
+                              JOIN sys.index_columns IC ON IC.object_id = I.object_id
+                                                           AND I.index_id = IC.index_id
+                              JOIN sys.columns Co ON Co.object_id = I.object_id
+                                                     AND IC.column_id = Co.column_id
+                        WHERE
+                           I.object_id = T.object_id
+                           AND Co.column_id = C.column_id
+                           AND I.is_unique = 1
+                   );
+
 
 DECLARE @id            SMALLINT,
         @Termo         VARCHAR(50),
@@ -96,63 +161,25 @@ WHILE @@FETCH_STATUS = 0
                                          PK,
                                          CollunsName,
                                          Tamanho,
-                                         collation_name,
                                          is_nullable,
                                          TypeData,
                                          Tipo,
                                          Level,
                                          Classificacao
                                      )
-        SELECT S.name SchemaName,
-               T.name AS TableName,
-               Pk.PK,
-               C.name AS CollunsName,
-               C.max_length,
-               C.collation_name,
-               C.is_nullable is_nullable,
-               T2.name AS TypeData,
+        SELECT S.SchemaName SchemaName,
+               S.TableName AS TableName,
+               S.PK,
+               S.CollunsName,
+               S.max_length,
+               S.is_nullable is_nullable,
+               S.TypeData,
                @Tipo AS Tipo,
                'Confidential' AS Level,
                @Classificacao AS Classificacao
-          FROM sys.schemas AS S
-               JOIN sys.tables AS T ON T.schema_id = S.schema_id
-               JOIN sys.dm_db_partition_stats partition ON partition.object_id = T.object_id
-               JOIN sys.columns AS C ON C.object_id = T.object_id
-               JOIN sys.types AS T2 ON T2.user_type_id = C.user_type_id
-               JOIN(
-                       SELECT T3.object_id,
-                              C2.name AS PK,
-                              T4.name AS Tipo
-                         FROM sys.tables AS T3
-                              JOIN sys.columns AS C2 ON C2.object_id = T3.object_id
-                              JOIN sys.types AS T4 ON T4.system_type_id = C2.system_type_id
-                        WHERE
-                           C2.column_id = 1
-                   )Pk ON Pk.object_id = T.object_id
+          FROM #AllData AS S
          WHERE
-            C.name LIKE CONCAT('%', @Termo, '%')
-            AND partition.index_id = 1
-            AND partition.row_count > 0
-            AND C.is_computed = 0
-            AND NOT EXISTS (
-                               SELECT I.name,
-                                      IC.column_id,
-                                      Co.name,
-                                      I.is_unique
-                                 FROM sys.indexes AS I
-                                      JOIN sys.index_columns IC ON IC.object_id = I.object_id
-                                                                   AND I.index_id = IC.index_id
-                                      JOIN sys.columns Co ON Co.object_id = I.object_id
-                                                             AND IC.column_id = Co.column_id
-                                WHERE
-                                   I.object_id = T.object_id
-                                   AND Co.column_id = C.column_id
-                                   AND I.is_unique = 1
-                           )
-         ORDER BY
-            S.name,
-            T.name,
-            C.column_id;
+            S.CollunsName LIKE CONCAT('%', @Termo, '%')
 
         FETCH NEXT FROM cursor_TermosSensiveis
          INTO @id,
@@ -161,12 +188,14 @@ WHILE @@FETCH_STATUS = 0
               @Tipo;
     END;
 
+	
+
 CLOSE cursor_TermosSensiveis;
 DEALLOCATE cursor_TermosSensiveis;
 
-DELETE CD FROM #ConfidencialData AS CD WHERE CD.CollunsName LIKE '%Label%';
 
-DELETE CD FROM #ConfidencialData AS CD WHERE CD.CollunsName LIKE '%Tipo%';
+
+DELETE CD FROM #ConfidencialData AS CD WHERE CD.CollunsName LIKE '%Label%';
 
 DELETE CD
   FROM #ConfidencialData AS CD
@@ -176,12 +205,19 @@ DELETE CD
 DELETE CD
   FROM #ConfidencialData AS CD
  WHERE
-    CD.CollunsName LIKE '%Validar%';
+    CD.CollunsName LIKE '%Tipo%';
 
 DELETE CD
   FROM #ConfidencialData AS CD
  WHERE
-    TypeData IN ('uniqueidentifier', 'bit', 'int');
+    CD.CollunsName LIKE '%IdConfiguracao%';
+
+DELETE CD
+  FROM #ConfidencialData AS CD
+ WHERE
+    CD.CollunsName LIKE '%Validar%';
+
+DELETE CD FROM #ConfidencialData AS CD WHERE TypeData IN ('bit', 'int');
 
 DELETE CD
   FROM #ConfidencialData AS CD
@@ -221,6 +257,8 @@ DELETE CD
 
 DELETE CD FROM #ConfidencialData AS CD WHERE CD.SchemaName = 'DNE';
 
+DELETE CD FROM #ConfidencialData AS CD WHERE CD.CollunsName LIKE '%DNE%';
+
 ;WITH Duplicates
     AS
     (
@@ -246,8 +284,9 @@ DELETE R FROM Duplicates R WHERE R.RN > 1;
 
 IF(@DetalharCamposSensiveis = 1)
     BEGIN
-        SELECT * FROM #ConfidencialData AS CD;
+      SELECT * FROM #ConfidencialData AS CD
     END;
+	
 
 IF(@DetalharCamposSensiveis = 1)
     BEGIN
@@ -330,13 +369,10 @@ IF(@DetalharCamposSensiveis = 1)
 
         CLOSE cursor_LGDP;
         DEALLOCATE cursor_LGDP;
-
-        SELECT * FROM #TabelasModificaveis AS TM;
     END;
 
 UPDATE #ConfidencialData SET Tamanho = IIF(Tamanho = -1, 1000, Tamanho);
 
---SELECT * FROM #ConfidencialData AS CD;
 DECLARE @SchemaName_update     VARCHAR(150),
         @TableName_update      VARCHAR(150),
         @ColunaSensivel_update VARCHAR(200),
@@ -429,24 +465,28 @@ WHILE @@FETCH_STATUS = 0
                     BEGIN
                         IF(@ColunaSensivel_update LIKE '%Passaporte%' AND LEN(@ScriptUpdate) = 0)
                             BEGIN
-							SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'SUBSTRING(', CHAR(39), 'GA499999', CHAR(39), ',', '0', ',', @Tamanho_update, ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
-
+                                SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'SUBSTRING(', CHAR(39), 'GA499999', CHAR(39), ',', '0', ',', @Tamanho_update, ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
                             END;
 
                         IF(@ColunaSensivel_update LIKE '%RGIE%' AND LEN(@ScriptUpdate) = 0)
                             BEGIN
-
-								SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'SUBSTRING(', CHAR(39), '11111111-9', CHAR(39), ',', '0', ',', @Tamanho_update, ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
+                                SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'SUBSTRING(', CHAR(39), '11111111-9', CHAR(39), ',', '0', ',', @Tamanho_update, ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
                             END;
 
                         IF(@ColunaSensivel_update = 'CPF' AND LEN(@ScriptUpdate) = 0)
                             BEGIN
-                                SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', CHAR(39), '111.111.111-11', CHAR(39), ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
+                                IF(@MascararCPFCNPJ = 1)
+                                    BEGIN
+                                        SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', CHAR(39), '111.111.111-11', CHAR(39), ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
+                                    END;
                             END;
 
                         IF(@ColunaSensivel_update LIKE '%CNPJ%' AND LEN(@ScriptUpdate) = 0)
                             BEGIN
-                                SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'IIF(LEN(RTRIM(LTRIM(target.', QUOTENAME(@ColunaSensivel_update), '))) <= 15,', SPACE(2), CHAR(39), '111.111.111-11', CHAR(39), ',', SPACE(2), CHAR(39), '00.000.000/0000-00', CHAR(39), ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
+                                IF(@MascararCPFCNPJ = 1)
+                                    BEGIN
+                                        SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'IIF(LEN(RTRIM(LTRIM(target.', QUOTENAME(@ColunaSensivel_update), '))) <= 15,', SPACE(2), CHAR(39), '111.111.111-11', CHAR(39), ',', SPACE(2), CHAR(39), '00.000.000/0000-00', CHAR(39), ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
+                                    END;
                             END;
                     END;
             END;
@@ -460,16 +500,22 @@ WHILE @@FETCH_STATUS = 0
 
                 IF(@Type_data_update IN ('varchar'))
                     BEGIN
-						SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'SUBSTRING(', CHAR(39), 'Não informado', CHAR(39), ',', '0', ',', @Tamanho_update, ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
+                        SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'SUBSTRING(', CHAR(39), 'Não informado', CHAR(39), ',', '0', ',', @Tamanho_update, ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
                     END;
             END;
-			
-			
-		IF(LEN(@ScriptUpdate) = 0 AND @Type_data_update IN ('varchar'))
+
+        IF(
+              LEN(@ScriptUpdate) = 0
+              AND @Type_data_update IN ('varchar')
+              AND NOT(
+                         @ColunaSensivel_update = 'CPF'
+                         OR @ColunaSensivel_update LIKE '%CNPJ%'
+                     )
+          )
             BEGIN
-                 SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'SUBSTRING(', CHAR(39), 'Não informado', CHAR(39), ',', '0', ',', @Tamanho_update, ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
+                SET @ScriptUpdate = CONCAT('UPDATE target SET target.', QUOTENAME(@ColunaSensivel_update), '=', 'SUBSTRING(', CHAR(39), 'Não informado', CHAR(39), ',', '0', ',', @Tamanho_update, ')', ' FROM  ', QUOTENAME(@SchemaName_update), '.', QUOTENAME(@TableName_update), ' as target');
             END;
-         
+
         IF(LEN(@ScriptUpdate) > 0)
             BEGIN
                 SET @ScriptUpdate = CONCAT(@ScriptUpdate, SPACE(2), ' WHERE target.', QUOTENAME(@ColunaSensivel_update), ' IS NOT NULL ');
@@ -495,8 +541,41 @@ WHILE @@FETCH_STATUS = 0
 CLOSE cursor_Update;
 DEALLOCATE cursor_Update;
 
+UPDATE target
+   SET target.ScriptSql = CONCAT('UPDATE target SET target.', QUOTENAME(target.CollunsName), '=', CHAR(39), '00000000-0000-0000-0000-000000000700', CHAR(39), ' FROM  ', QUOTENAME(target.SchemaName), '.', QUOTENAME(target.TableName), ' as target')
+  FROM #ConfidencialData target
+ WHERE
+    target.TableName = 'PessoasFisicas'
+    AND target.CollunsName = 'IdTipoSanguineo';
 
-SELECT * FROM #ConfidencialData
+UPDATE target
+   SET target.ScriptSql = CONCAT('UPDATE target SET target.', QUOTENAME(target.CollunsName), '=', CHAR(39), '00000000-0000-0000-0000-000000000600', CHAR(39), ' FROM  ', QUOTENAME(target.SchemaName), '.', QUOTENAME(target.TableName), ' as target')
+  FROM #ConfidencialData target
+ WHERE
+    target.TableName = 'PessoasFisicas'
+    AND target.CollunsName = 'IdEtnia';
+
+UPDATE target
+   SET target.ScriptSql = CONCAT('UPDATE target SET target.', QUOTENAME(target.CollunsName), '=', CHAR(39), '00000000-0000-0000-0000-000000000000', CHAR(39), ' FROM  ', QUOTENAME(target.SchemaName), '.', QUOTENAME(target.TableName), ' as target')
+  FROM #ConfidencialData target
+ WHERE
+    target.TableName = 'PessoasFisicas'
+    AND target.CollunsName = 'IdNaturalidade';
+
+UPDATE target
+   SET target.ScriptSql = CONCAT('UPDATE target SET target.', QUOTENAME(target.CollunsName), '=', CHAR(39), 'E4FCA1B6-A10B-E111-A3B4-B8AC6FC43B89', CHAR(39), ' FROM  ', QUOTENAME(target.SchemaName), '.', QUOTENAME(target.TableName), ' as target')
+  FROM #ConfidencialData target
+ WHERE
+    target.TableName = 'PessoasFisicas'
+    AND target.CollunsName = 'IdEstadoCivil';
+
+UPDATE target
+   SET target.ScriptSql = CONCAT('UPDATE target SET target.', QUOTENAME(target.CollunsName), '=', CHAR(39), '00000000-0000-0000-0000-000000000000', CHAR(39), ' FROM  ', QUOTENAME(target.SchemaName), '.', QUOTENAME(target.TableName), ' as target')
+  FROM #ConfidencialData target
+ WHERE
+    target.TableName = 'PessoasFisicas'
+    AND target.CollunsName = 'IdReligiao';
+
 IF(@MascararDados = 1)
     BEGIN
 
@@ -542,6 +621,181 @@ IF(@MascararDados = 1)
 
         CLOSE cursor_Execute;
         DEALLOCATE cursor_Execute;
-
-        SELECT * FROM #ConfidencialData AS CD;
     END;
+
+
+
+IF(@MascararCPFCNPJ = 1)
+    BEGIN
+                WITH Strip_Name
+            AS
+            (
+                SELECT P.IdPessoa,
+                       UPPER(CONCAT(String_AGG(strip.strip_Name, ' '), ' Da Silva')) stripName
+                  FROM Cadastro.Pessoas AS P
+                       CROSS APPLY(
+                                      SELECT value AS strip_Name,
+                                             RN = ROW_NUMBER() OVER (ORDER BY(SELECT NULL))
+                                        FROM STRING_SPLIT(REPLACE(REPLACE(REPLACE(P.NomeRazaoSocial, 'DAS', ' '), 'DOS', ' '), 'DE', ' '), ' ')
+                                  )strip
+                 WHERE
+                    P.TipoPessoaFisica = 1
+                   
+                    AND P.IdPessoa <> '00000000-1111-2222-3333-000000000002'
+                    AND strip.RN <= 2
+                 GROUP BY
+                    P.IdPessoa
+            )
+        UPDATE P
+           SET P.NomeRazaoSocial = strip.stripName
+          FROM Cadastro.Pessoas AS P
+               JOIN Strip_Name strip ON P.IdPessoa = strip.IdPessoa;
+
+			   
+			  
+
+			 ;WITH Strip_PreCadastroLogico
+            AS
+            (
+                SELECT P.IdPreCadastroLogico,
+                       UPPER(CONCAT(String_AGG(strip.strip_Name, ' '), ' Da Silva')) stripName
+                  FROM ONLINE.PreCadastroLogico P
+                       CROSS APPLY(
+                                      SELECT value AS strip_Name,
+                                             RN = ROW_NUMBER() OVER (ORDER BY(SELECT NULL))
+                                        FROM STRING_SPLIT(REPLACE(REPLACE(REPLACE(P.NomeRazaoSocial, 'DAS', ' '), 'DOS', ' '), 'DE', ' '), ' ')
+                                  )strip
+                 WHERE
+                     strip.RN <= 2
+					 AND LEN(P.CPFCNPJ) = 14
+					 GROUP BY P.IdPreCadastroLogico
+                
+            )
+        UPDATE P
+           SET P.NomeRazaoSocial = strip.stripName
+          FROM ONLINE.PreCadastroLogico AS P
+               JOIN Strip_PreCadastroLogico strip ON P.IdPreCadastroLogico = strip.IdPreCadastroLogico;
+
+    END;
+
+/*Parte especifica para limpar configurações com vinculo ao cliente*/
+UPDATE C
+   SET C.Valor = 'D:\temp_blob_azure\demonstracao\'
+  FROM Sistema.Configuracoes AS C
+ WHERE
+    C.Configuracao = 'CaminhoCacheLocalAzureStorageArquivosAnexos';
+
+UPDATE C
+   SET C.Valor = ''
+  FROM Sistema.Configuracoes AS C
+ WHERE
+    C.Configuracao LIKE '%Link%'
+    AND LEN(C.Valor) > 0
+    AND C.Configuracao NOT LIKE '%Treinamento%';
+
+UPDATE C
+   SET C.Valor = 'Demonstração/DF'
+  FROM Sistema.Configuracoes AS C
+ WHERE
+    C.Configuracao = 'SiglaCliente';
+
+UPDATE C
+   SET C.Valor = 'Conselho de demonstração'
+  FROM Sistema.Configuracoes AS C
+ WHERE
+    C.Configuracao = 'NomeClienteExtenso';
+
+UPDATE P
+   SET P.NomeRazaoSocial = 'Conselho de demonstração'
+  FROM Cadastro.Pessoas AS P
+ WHERE
+    P.IdPessoa = '00000000-0000-0000-0000-000000000001';
+
+UPDATE PJ
+   SET PJ.Sigla = 'Demonstração/DF'
+  FROM Cadastro.PessoasJuridicas AS PJ
+ WHERE
+    PJ.IdPessoaJuridica = '00000000-0000-0000-0000-000000000001';
+
+UPDATE AA
+   SET AA.Conteudo = NULL,
+       AA.NomeIdentificadorStorageExterno = '',
+       AA.UrlStorageExterno = ''
+  FROM Sistema.ArquivosAnexos AS AA
+ WHERE
+    AA.Entidade = 'Cadastro.PessoasImagens'
+    AND AA.IdEntidade IN(
+                            SELECT PI.IdPessoaImagem
+                              FROM Cadastro.PessoasJuridicas AS PJ
+                                   JOIN Cadastro.PessoasImagens AS PI ON PI.IdPessoa = PJ.IdPessoa
+                             WHERE
+                                PJ.IdPessoaJuridica = '00000000-0000-0000-0000-000000000001'
+                        );
+
+
+
+
+
+/*Mascaramento em colunas JSON*/
+/* declare variables */
+DECLARE @IdPreCadastroLogico UNIQUEIDENTIFIER,
+        @NomeRazaoSocial     VARCHAR(200),
+        @Informacaoes        VARCHAR(MAX);
+DECLARE @json VARCHAR(MAX) = '';
+
+DECLARE cursor_LimpaDadosPessoaisInJson CURSOR FAST_FORWARD READ_ONLY FOR
+SELECT IdPreCadastroLogico,
+       NomeRazaoSocial,
+       Informacoes
+  FROM Online.PreCadastroLogico precadastro
+   WHERE Informacoes IS NOT NULL
+
+OPEN cursor_LimpaDadosPessoaisInJson;
+
+FETCH NEXT FROM cursor_LimpaDadosPessoaisInJson
+ INTO @IdPreCadastroLogico,
+      @NomeRazaoSocial,
+      @Informacaoes;
+	  
+WHILE @@FETCH_STATUS = 0
+    BEGIN
+        SET @json = '';
+        SET @json = @Informacaoes;
+
+        SELECT @json = LOWER(@json);
+
+		
+
+		
+        SET @json = JSON_MODIFY(@json, '$.nomerazaosocial', CONCAT(SUBSTRING(@NomeRazaoSocial, 0, CHARINDEX(' ', @NomeRazaoSocial)), ' DA SILVA'));
+        SET @json = JSON_MODIFY(@json, '$.cpfcnpj', '999.999.999-99');
+        SET @json = JSON_MODIFY(@json, '$.rgnumero', REPLICATE('1', LEN('$.rgnumero')));
+        SET @json = JSON_MODIFY(@json, '$.tituloeleitornumero', '9999999909');
+        SET @json = JSON_MODIFY(@json, '$.tituloeleitorsecao', '1111');
+        SET @json = JSON_MODIFY(@json, '$.cdnumero', '9999');
+        SET @json = JSON_MODIFY(@json, '$.endereco.logradouro', 'Não identificável');
+        SET @json = JSON_MODIFY(@json, '$.endereco.complemento', 'Não identificável');
+        SET @json = JSON_MODIFY(@json, '$.endereco.cep', '77777777');
+        SET @json = JSON_MODIFY(@json, '$.nomepai', 'Não identificável');
+        SET @json = JSON_MODIFY(@json, '$.nomemae', 'Não identificável');
+        SET @json = JSON_MODIFY(@json, '$.telefonecomercial.telefone', '55555555500');
+        SET @json = JSON_MODIFY(@json, '$.telefonecelular.telefone', '(61) 11111-0101');
+        SET @json = JSON_MODIFY(@json, '$.telefoneresidencial.telefone', '(61) 11111-0101');
+        SET @json = JSON_MODIFY(@json, '$.email.email', 'emailnaoinformado@emailnaoinformado.com');
+
+		
+		 
+        UPDATE target
+           SET target.Informacoes = @json
+          FROM Online.PreCadastroLogico target
+         WHERE
+            target.IdPreCadastroLogico = @IdPreCadastroLogico;
+
+        FETCH NEXT FROM cursor_LimpaDadosPessoaisInJson
+         INTO @IdPreCadastroLogico,
+              @NomeRazaoSocial,
+              @Informacaoes;
+    END;
+
+CLOSE cursor_LimpaDadosPessoaisInJson;
+DEALLOCATE cursor_LimpaDadosPessoaisInJson;
