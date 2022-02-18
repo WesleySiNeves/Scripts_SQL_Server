@@ -1,7 +1,7 @@
 /* ==================================================================
 --Data: 24/09/2018 
 --Autor :Wesley Neves
---Observação: Compressao de dados
+--Observaï¿½ï¿½o: Compressao de dados
 https://docs.microsoft.com/pt-br/sql/relational-databases/data-compression/enable-compression-on-a-table-or-index?view=sql-server-2017
 https://docs.microsoft.com/pt-br/sql/relational-databases/data-compression/data-compression?view=sql-server-2017
  
@@ -31,7 +31,7 @@ EXEC sys.sp_estimate_data_compression_savings @schema_name = 'Log',    -- sysnam
 
 USE master
 
-USE Implanta
+
 
 CREATE DATABASE DemoDataDataBaseCompression
 
@@ -40,7 +40,7 @@ USE DemoDataDataBaseCompression
 /* ==================================================================
 --Data: 24/09/2018 
 --Autor :Wesley Neves
---Observação: Vamos Criar uma tabela com esse exemplo
+--Observaï¿½ï¿½o: Vamos Criar uma tabela com esse exemplo
  
  CREATE TABLE [Movimentos]
 (
@@ -84,7 +84,7 @@ GO
 /* ==================================================================
 --Data: 24/09/2018 
 --Autor :Wesley Neves
---Observação:  Esse exemplo aqui faz a compactação de dados de um indice
+--Observaï¿½ï¿½o:  Esse exemplo aqui faz a compactaï¿½ï¿½o de dados de um indice
  
 -- ==================================================================
 */
@@ -112,7 +112,7 @@ GO
 /* ==================================================================
 --Data: 25/09/2018 
 --Autor :Wesley Neves
---Observação: Criando uma tabela com comprensão de pagina
+--Observaï¿½ï¿½o: Criando uma tabela com comprensï¿½o de pagina
  
 -- ==================================================================
 */
@@ -133,7 +133,7 @@ CREATE TABLE [Log].[Logs]
 /* ==================================================================
 --Data: 25/09/2018 
 --Autor :Wesley Neves
---Observação: Criando uma tabela com comprensão de de Row
+--Observaï¿½ï¿½o: Criando uma tabela com comprensï¿½o de de Row
  
 -- ==================================================================
 */

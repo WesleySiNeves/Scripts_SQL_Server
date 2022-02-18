@@ -1,4 +1,4 @@
-USE TSQLV4
+
 
 -- suppliers from Japan and products they supply
 -- suppliers without products included

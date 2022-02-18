@@ -1,8 +1,0 @@
---CREATE SCHEMA Dw
-
---GO
-
-CREATE TABLE Dw.DimTempo
-(
- IdDimTempo INT NOT NULL PRIMARY KEY identut
-)
