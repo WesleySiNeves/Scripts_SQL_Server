@@ -1,11 +1,11 @@
 SELECT op.actual_state_desc AS AtualEstado,
        op.current_storage_size_mb AS [TamanhoAtual(MB)],
        op.max_storage_size_mb AS [TamanhoMaximo(MB)],
-       op.interval_length_minutes AS [Intervalo de Coleta de Estatísticas(min)],
+       op.interval_length_minutes AS [Intervalo de Coleta de Estatï¿½sticas(min)],
 	   op.stale_query_threshold_days AS [Limite de Consulta Obsoleto(days)],
 	   op.size_based_cleanup_mode_desc AS [Modo Auto Lipeza],
 	   op.query_capture_mode_desc AS [ModoCaptura],
-       IIF(op.readonly_reason = 1, 'SIM', 'NÂO') AS SomenteLeitura
+       IIF(op.readonly_reason = 1, 'SIM', 'Nï¿½O') AS SomenteLeitura
   FROM sys.database_query_store_options op;
 
 /*Se o tamanho maximo estiver chegando perto , vc tem que fazer um flush ou aumentar o tamanho*/
