@@ -8,11 +8,11 @@ GO
 
 /*##################################Variaveis que controla a tabela de logs ####################################*/
 
-/*Variavel que controla a criação da tabela auxiliar ([Log].[TempLogs]) */
+/*Variavel que controla a criaï¿½ï¿½o da tabela auxiliar ([Log].[TempLogs]) */
 DECLARE @CriarTabelaLog BIT = 0;
 DECLARE @CriarTabelaDetalhes BIT = 1;
 
-/*Variavel que controla a INSERÇÃO DE DADOS na tabela auxiliar ([Log].[TempLogs]) */
+/*Variavel que controla a INSERï¿½ï¿½O DE DADOS na tabela auxiliar ([Log].[TempLogs]) */
 DECLARE @InserirLog BIT = 0;
 
 /*Variavel que controla a TRUNCAGEM DE DADOS na tabela auxiliar ([Log].[TempLogs]) QUANDO ERRO */
@@ -117,7 +117,7 @@ IF @LimpartabelaQuandoErro = 1
 
 -- importados (default = ##tabela, coloque o nome da tabela que geralmente via receber
 
--- os dados das suas importações)
+-- os dados das suas importaï¿½ï¿½es)
 DECLARE @tabelaLOG VARCHAR(100) = '[dbo].[TempLogs2]';
 DECLARE @tabelaLOGDetalhes VARCHAR(100) = '[dbo].[TempLogsDetalhes2]';
 
@@ -136,7 +136,7 @@ CREATE TABLE #tmp
          id INT IDENTITY(1, 1)
        );
 
--- Declaração de variáveis que serão usadas no decorrer do processo
+-- Declaraï¿½ï¿½o de variï¿½veis que serï¿½o usadas no decorrer do processo
 
 DECLARE @arquivo VARCHAR(1000) ,
         @sql VARCHAR(1000) ,
@@ -147,7 +147,7 @@ DECLARE @arquivo VARCHAR(1000) ,
 
 IF @InserirLog = 1
    BEGIN
-			-- Formação do comando que será usado no DOS para listar os arquivos
+			-- Formaï¿½ï¿½o do comando que serï¿½ usado no DOS para listar os arquivos
   
          SELECT @cmd = 'dir "' + @CaminhoLog + '*.csv" /b';
 
@@ -160,7 +160,7 @@ IF @InserirLog = 1
                 ( out )
                 EXEC sys.xp_cmdshell @cmd;
 
--- apaga registros que não tem arquivo .txt
+-- apaga registros que nï¿½o tem arquivo .txt
 
 
 
@@ -174,7 +174,7 @@ IF @InserirLog = 1
 
 	
 	
--- Configurações para repetição
+-- Configuraï¿½ï¿½es para repetiï¿½ï¿½o
 
          SELECT @min = MIN(id) ,
                 @max = MAX(id)
@@ -193,7 +193,7 @@ IF @InserirLog = 1
                      FROM   #tmp
                      WHERE  id = @min;
 
--- monta a instrução SQL para fazer o BULK INSERT
+-- monta a instruï¿½ï¿½o SQL para fazer o BULK INSERT
 
                      DECLARE @SQL_BULK1 VARCHAR(MAX);
                      SET @SQL_BULK1 = 'BULK INSERT ' + @tabelaLOG + ' FROM '''
@@ -210,13 +210,13 @@ IF @InserirLog = 1
                      EXEC (@SQL_BULK1);
    
 
--- incrementa variável de controle para passar para o próximo arquivo
+-- incrementa variï¿½vel de controle para passar para o prï¿½ximo arquivo
 
                      SET @min = @min + 1;
 
                END;
 
--- drop da tabela temporária usada
+-- drop da tabela temporï¿½ria usada
 
          DROP TABLE #tmp;	
    END;
@@ -238,7 +238,7 @@ IF @InserirLogDetalhe = 1
                 ( out )
                 EXEC sys.xp_cmdshell @cmd;
 
--- apaga registros que não tem arquivo .txt
+-- apaga registros que nï¿½o tem arquivo .txt
 
 
 
@@ -252,7 +252,7 @@ IF @InserirLogDetalhe = 1
 
 	
 	
--- Configurações para repetição
+-- Configuraï¿½ï¿½es para repetiï¿½ï¿½o
 
          SELECT @min = MIN(id) ,
                 @max = MAX(id)
@@ -271,7 +271,7 @@ IF @InserirLogDetalhe = 1
                      FROM   #tmp
                      WHERE  id = @min;
 
--- monta a instrução SQL para fazer o BULK INSERT
+-- monta a instruï¿½ï¿½o SQL para fazer o BULK INSERT
 
                      DECLARE @SQL_BULK2 VARCHAR(MAX);
                      SET @SQL_BULK2 = 'BULK INSERT ' + @tabelaLOGDetalhes
@@ -289,13 +289,13 @@ IF @InserirLogDetalhe = 1
                      EXEC (@SQL_BULK2);
    
 
--- incrementa variável de controle para passar para o próximo arquivo
+-- incrementa variï¿½vel de controle para passar para o prï¿½ximo arquivo
 
                      SET @min = @min + 1;
 
                END;
 
--- drop da tabela temporária usada
+-- drop da tabela temporï¿½ria usada
 
          DROP TABLE #tmp;
 

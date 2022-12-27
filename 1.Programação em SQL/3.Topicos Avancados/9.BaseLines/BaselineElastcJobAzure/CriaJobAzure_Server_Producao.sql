@@ -1,7 +1,7 @@
 /* ==================================================================
 --Data: 9/4/2020 
 --Autor :Wesley Neves
---Observação:Tirados do https://docs.microsoft.com/pt-br/azure/azure-sql/database/elastic-jobs-tsql-create-manage#create-a-target-group-servers
+--Observaï¿½ï¿½o:Tirados do https://docs.microsoft.com/pt-br/azure/azure-sql/database/elastic-jobs-tsql-create-manage#create-a-target-group-servers
 						https://www.sqlshack.com/automating-azure-sql-database-index-maintenance-using-elastic-job-agents/
 						https://www.sqlshack.com/overview-of-create-database-statement-in-azure-sql-server/#:~:text=Navigate%20to%20SQL%20databases%20and,and%20service%20objective%20as%20S0.
 						
@@ -11,8 +11,8 @@
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação: Ao criar um novo job , fica mais facil adicionar todos os bancos do servidor 
-e posteriormente exluir os desnecessários , para isso  conectar em master e rode o script 
+--Observaï¿½ï¿½o: Ao criar um novo job , fica mais facil adicionar todos os bancos do servidor 
+e posteriormente exluir os desnecessï¿½rios , para isso  conectar em master e rode o script 
 para pegar os bancos de dados a serem excluidos
 
 SELECT * FROM  sys.databases AS D
@@ -51,7 +51,7 @@ VALUES
 /* ==================================================================
 --Data: 9/4/2020 
 --Autor :Wesley Neves
---Observação: Passo 1) Criar a master  key se precisar
+--Observaï¿½ï¿½o: Passo 1) Criar a master  key se precisar
  
 -- ==================================================================
 */
@@ -63,7 +63,7 @@ VALUES
 /* ==================================================================
 --Data: 10/02/2021 
 --Autor :Wesley Neves
---Observação: Criar a  SCOPED CREDENTIAL no banco  do elastc job
+--Observaï¿½ï¿½o: Criar a  SCOPED CREDENTIAL no banco  do elastc job
  
 -- ==================================================================
 */
@@ -71,10 +71,10 @@ VALUES
 
 SELECT * FROM sys.database_scoped_credentials AS DSC;
 
---DROP  DATABASE SCOPED CREDENTIAL [implanta]
+--DROP  DATABASE SCOPED CREDENTIAL JobExecuter
 CREATE DATABASE SCOPED CREDENTIAL [JobExecuter]
 WITH IDENTITY = 'implanta',
-     SECRET = 'Dev#Infra*!mpl@nt@112020';
+     SECRET = 'xoY1KWjP8XGaxTvspoNF';
 
 
 	 
@@ -84,7 +84,7 @@ WITH IDENTITY = 'implanta',
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação: Passo 3) Criar os Logins Necessários nos bancos de dados master e os targets
+--Observaï¿½ï¿½o: Passo 3) Criar os Logins Necessï¿½rios nos bancos de dados master e os targets
 
 --AGORA, VAMOS CRIAR UM LOGIN SQL NO BANCO DE DADOS MESTRE. O NOME DE LOGIN E A SENHA DEVEM SER OS MESMOS
  QUE USAMOS COMO IDENTIDADE PARA CRIAR UMA CREDENCIAL 
@@ -93,12 +93,16 @@ WITH IDENTITY = 'implanta',
 -- ==================================================================
 */
 /*This script will be executed on master (System database) database */
-CREATE LOGIN JobExecuter WITH PASSWORD = 'Dev#Infra*!mpl@nt@112020';
+
+
+-- CREATE LOGIN JobExecuter WITH PASSWORD = 'xoY1KWjP8XGaxTvspoNF';
+
+-- ALTER USER JobExecuter WITH PASSWORD = 'xoY1KWjP8XGaxTvspoNF';
 
 /*
- A SEGUIR, CRIAREMOS UM USUÁRIO PARA CADA BANCO DE DADOS DE DESTINO.
-  CERTIFIQUE-SE DE QUE O USUÁRIO DEVE TER AS PERMISSÕES APROPRIADAS NO BANCO DE DADOS DE DESTINO. AQUI, 
-  ESTOU CONCEDENDO A PERMISSÃO DB_OWNER PARA GARANTIR QUE O TRABALHO SQL SEJA EXECUTADO COM ÊXITO
+ A SEGUIR, CRIAREMOS UM USUï¿½RIO PARA CADA BANCO DE DADOS DE DESTINO.
+  CERTIFIQUE-SE DE QUE O USUï¿½RIO DEVE TER AS PERMISSï¿½ES APROPRIADAS NO BANCO DE DADOS DE DESTINO. AQUI, 
+  ESTOU CONCEDENDO A PERMISSï¿½O DB_OWNER PARA GARANTIR QUE O TRABALHO SQL SEJA EXECUTADO COM ï¿½XITO
 */
 
 /*Rodar no Mult Script para cada banco configurado*/
@@ -119,7 +123,7 @@ DECLARE  @ServerName VARCHAR(200) ='rgprd-sqlsrv-prd01.database.windows.net';
 /* ==================================================================
  --Data: 9/4/2020 
  --Autor :Wesley Neves
- --Observação: Passo 2) Criar um  target group
+ --Observaï¿½ï¿½o: Passo 2) Criar um  target group
   
  -- ==================================================================
  */
@@ -139,7 +143,7 @@ SELECT * FROM jobs.target_groups AS TG;
 /* ==================================================================
 --Data: 9/4/2020 
 --Autor :Wesley Neves
---Observação: Passo 3) adicionar o servidor alvo
+--Observaï¿½ï¿½o: Passo 3) adicionar o servidor alvo
  
 -- ==================================================================
 */
@@ -164,7 +168,7 @@ IF(NOT EXISTS (
 /* ==================================================================
 --Data: 10/02/2021 
 --Autor :Wesley Neves
---Observação: Caso queira remover um target_group_member
+--Observaï¿½ï¿½o: Caso queira remover um target_group_member
  
  EXEC jobs.sp_delete_target_group_member @target_group_name = N'rgprd-sqlsrv-prd01', -- nvarchar(128)
                                         @target_id = 'AD8B4033-1B87-424B-B12F-7CD48289D646'         -- uniqueidentifier
@@ -188,7 +192,7 @@ SELECT *
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação: Rodar o script no banco de dados configurado para o job
+--Observaï¿½ï¿½o: Rodar o script no banco de dados configurado para o job
  Excluir os bancos de dados no job
  
 -- ==================================================================
@@ -234,7 +238,7 @@ DEALLOCATE cursor_DB_Name_on_Exclude;
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação: Verificar os bancos de dados excluidos do job
+--Observaï¿½ï¿½o: Verificar os bancos de dados excluidos do job
  
 -- ==================================================================
 */
@@ -254,7 +258,7 @@ SELECT TGM.target_group_name,
 /* ==================================================================
 --Data: 9/4/2020 
 --Autor :Wesley Neves
---Observação: Passo 6) Criar o Job no banco de dados do elasticjob
+--Observaï¿½ï¿½o: Passo 6) Criar o Job no banco de dados do elasticjob
  
 -- ==================================================================
 */
@@ -270,7 +274,7 @@ IF(NOT EXISTS (
 
         --Add job for create table
         EXEC jobs.sp_add_job @job_name = 'ManutencaoEPerformace',
-                             @description = 'executa as rotinas de manutenção no banco de dados, criação e manutenção de indices e statisticas , alem de expurgos de logs e Elmah';
+                             @description = 'executa as rotinas de manutenï¿½ï¿½o no banco de dados, criaï¿½ï¿½o e manutenï¿½ï¿½o de indices e statisticas , alem de expurgos de logs e Elmah';
     END;
 
 SELECT *
@@ -284,7 +288,7 @@ SELECT *
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação: Adiciona o Step aonde vai ser executado o script
+--Observaï¿½ï¿½o: Adiciona o Step aonde vai ser executado o script
  
 -- ==================================================================
 */
@@ -292,7 +296,7 @@ SELECT *
 --DECLARE @job_version INT =3;
 
 --EXEC jobs.sp_delete_jobstep @job_name = N'ManutencaoEPerformace',                   -- nvarchar(128)
---                            @step_name = N'Execução da procedure uspAutoHealthCheck',                  -- nvarchar(120)
+--                            @step_name = N'Execuï¿½ï¿½o da procedure uspAutoHealthCheck',                  -- nvarchar(120)
 --                            @job_version = @job_version OUTPUT -- int
 
 IF(NOT EXISTS (
@@ -300,7 +304,7 @@ IF(NOT EXISTS (
                     FROM jobs.jobsteps AS J
                    WHERE
                       J.job_name = 'ManutencaoEPerformace'
-                      AND J.step_name = 'Execução da procedure uspAutoHealthCheck'
+                      AND J.step_name = 'ExecuÃ§Ã£o da procedure uspAutoHealthCheck'
               )
   )
     BEGIN
@@ -308,23 +312,32 @@ IF(NOT EXISTS (
 
 
         EXEC jobs.sp_add_jobstep @job_name = 'ManutencaoEPerformace',
-                                 @step_name = 'Execução da procedure uspAutoHealthCheck',
+                                 @step_name = 'ExecuÃ§Ã£o da procedure uspAutoHealthCheck',
                                  @max_parallelism = 5,
                                  @command = N' EXEC HealthCheck.GetSizeDB;',
                                  @credential_name = 'JobExecuter',
-								 @retry_attempts  =2,
+								                @retry_attempts  =2,
                                  @target_group_name = 'rgprd-sqlsrv-prd01';
     END;
 
 
 
 
+/*Update Jobs*/ 
+
+ EXEC jobs.sp_update_jobstep   @job_name = 'ManutencaoEPerformace',
+                                 @step_name = 'ExecuÃ§Ã£o da procedure uspAutoHealthCheck',
+                                 @max_parallelism = 5,
+                                 @command = N' EXEC HealthCheck.GetSizeDB;',
+                                 @credential_name = 'JobExecuter',
+								                @retry_attempts  =2,
+                                 @target_group_name = 'rgprd-sqlsrv-prd01';
 
 
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação:  Faz a configuração para executar  o job
+--Observaï¿½ï¿½o:  Faz a configuraï¿½ï¿½o para executar  o job
  
 -- ==================================================================
 */
@@ -370,10 +383,10 @@ DECLARE @SqlScript NVARCHAR(1000) = CONCAT('IF(EXISTS (
 
 
 EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
-                            @step_name = 'Execução da procedure uspAutoHealthCheck',
-							@retry_attempts  =3,
-							@command =@SqlScript,
-							@credential_name = 'JobExecuter',
+                            @step_name = 'Execuï¿½ï¿½o da procedure uspAutoHealthCheck',
+						              	@retry_attempts  =3,
+							            @command =@SqlScript,
+						              	@credential_name = 'JobExecuter',
                             @max_parallelism = 5;
 
 
@@ -382,7 +395,7 @@ EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação:  Inicializa o Job
+--Observaï¿½ï¿½o:  Inicializa o Job
  
 -- ==================================================================
 */
@@ -394,7 +407,7 @@ EXEC jobs.sp_start_job 'ManutencaoEPerformace';
 /* ==================================================================
 --Data: 10/02/2021 
 --Autor :Wesley Neves
---Observação: Confere a execução o job
+--Observaï¿½ï¿½o: Confere a execuï¿½ï¿½o o job
  
 -- ==================================================================
 */
@@ -451,7 +464,7 @@ SELECT J.job_id,
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação:  Caso vc queria fazer alguma alteração no step
+--Observaï¿½ï¿½o:  Caso vc queria fazer alguma alteraï¿½ï¿½o no step
 						  
 -- ==================================================================
 */
@@ -491,7 +504,7 @@ DECLARE @SqlScript NVARCHAR(1000) = CONCAT('IF(EXISTS (
 
 
 EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
-                            @step_name = 'Execução da procedure uspAutoHealthCheck',
+                            @step_name = 'Execuï¿½ï¿½o da procedure uspAutoHealthCheck',
 							@retry_attempts  =3,
 							@command =@SqlScript,
 							@credential_name = 'JobExecuter',
@@ -506,7 +519,7 @@ EXEC jobs.sp_update_jobstep @job_name = N'ManutencaoEPerformace',
 /* ==================================================================
 --Data: 9/4/2020 
 --Autor :Wesley Neves
---Observação: Expurgar o historico de execução antiga
+--Observaï¿½ï¿½o: Expurgar o historico de execuï¿½ï¿½o antiga
  
 -- ==================================================================
 */
@@ -522,7 +535,7 @@ EXEC jobs.sp_purge_jobhistory @job_name = 'ManutencaoEPerformace',
 /* ==================================================================
 --Data: 10/6/2020 
 --Autor :Wesley Neves
---Observação: Tabelas
+--Observaï¿½ï¿½o: Tabelas
  
 -- ==================================================================
 */
@@ -535,7 +548,7 @@ SELECT * FROM jobs_internal.job_task_executions AS JTE
 /* ==================================================================
 --Data: 9/4/2020 
 --Autor :Wesley Neves
---Observação:  caso vc queria cancelar o job
+--Observaï¿½ï¿½o:  caso vc queria cancelar o job
  
 -- ==================================================================
 */
@@ -577,23 +590,23 @@ GO
 /* ==================================================================
 --Data: 9/4/2020 
 --Autor :Wesley Neves
---Observação: Agendamento pra o job
+--Observaï¿½ï¿½o: Agendamento pra o job
  
- Abaixo tem a seguintes opçoes
+ Abaixo tem a seguintes opï¿½oes
 
- ‘Once’ =Uma vez'
-‘Minutes’ ='Minutos'
-‘Hours’ ='Horas'
-‘Days’  ='Dias'
-‘Weeks’ ='Semanas'
-‘Months’ ='Meses'
+ ï¿½Onceï¿½ =Uma vez'
+ï¿½Minutesï¿½ ='Minutos'
+ï¿½Hoursï¿½ ='Horas'
+ï¿½Daysï¿½  ='Dias'
+ï¿½Weeksï¿½ ='Semanas'
+ï¿½Monthsï¿½ ='Meses'
 -- ==================================================================
 */
 EXEC jobs.sp_update_job @job_name = 'ManutencaoEPerformace',
                         @enabled = 1,
                         @schedule_interval_type = 'Days',
                                                                   --@refresh_credential_name=N'JobRun', --credential required to refresh the databases in a server
-                        @schedule_start_time = N'20200905 01:00', -- Esse horario será	22:00 pois são -3 horas GTM
+                        @schedule_start_time = N'20200905 01:00', -- Esse horario serï¿½	22:00 pois sï¿½o -3 horas GTM
                         @schedule_interval_count = 1;
 
 
@@ -602,7 +615,7 @@ EXEC jobs.sp_update_job @job_name = 'ManutencaoEPerformace',
 /* ==================================================================
 --Data: 9/4/2020 
 --Autor :Wesley Neves
---Observação: Excluir todo o Job
+--Observaï¿½ï¿½o: Excluir todo o Job
  
 -- ==================================================================
 */
