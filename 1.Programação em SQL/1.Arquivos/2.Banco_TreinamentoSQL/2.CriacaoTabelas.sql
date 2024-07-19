@@ -2,18 +2,6 @@ DROP TABLE IF EXISTS dbo.Lancamentos
 DROP TABLE IF EXISTS dbo.ContaBancaria
 
 
-IF(NOT EXISTS(SELECT * FROM sys.schemas AS S
-WHERE S.name ='Automation'))
-BEGIN
-		EXEC ('CREATE SCHEMA Automation;');
-END
-
-IF(NOT EXISTS(SELECT * FROM sys.schemas AS S
-WHERE S.name ='HealthCheck'))
-BEGIN
-		EXEC ('CREATE SCHEMA HealthCheck;');
-END
-
 
 
 IF (OBJECT_ID('ContaBancaria', 'U') IS NULL)
