@@ -25,7 +25,7 @@ IN_ROW_DATA				13890		0			98,7070051890289				0,0215982721382289				999998			139
 */
 
 /*########################
-# OBS: Definição da tabela
+# OBS: Definiï¿½ï¿½o da tabela
 */
 
 /*
@@ -48,7 +48,7 @@ Credito	bit	not null
 ALTER TABLE dbo.Lancamentos ALTER COLUMN NumeroLancamento BIGINT NOT NULL
 
 /*########################
-# OBS: Diferença no que ocorreu na tabela apos a modificacao
+# OBS: Diferenï¿½a no que ocorreu na tabela apos a modificacao
 */
 SELECT FORMAT( CAST((( CAST( 13949 AS DECIMAL(18,2)) * 8 ) / 1024) AS DECIMAL(18,2)),'N','pt-BR')
 

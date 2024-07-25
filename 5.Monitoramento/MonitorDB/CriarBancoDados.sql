@@ -77,43 +77,43 @@ WITH ResultSet AS (
 SELECT [Database] = COALESCE(DB_NAME(DTDT.database_id),DB_NAME()),
        [Usuario] = DES.login_name,
        [Maquina Conectada] = DES.host_name,
-       [Sessão] = DES.session_id,
+       [Sessï¿½o] = DES.session_id,
        [transaction_id] = DTDT.transaction_id,
-       [Nivel Isolamento] =  CASE WHEN DES.transaction_isolation_level =0 THEN 'Não Especificado'
-								  WHEN DES.transaction_isolation_level =1 THEN 'Leitura Não Confirmada'
+       [Nivel Isolamento] =  CASE WHEN DES.transaction_isolation_level =0 THEN 'Nï¿½o Especificado'
+								  WHEN DES.transaction_isolation_level =1 THEN 'Leitura Nï¿½o Confirmada'
 								  WHEN DES.transaction_isolation_level =2 THEN 'Leitura Confirmada'
-								  WHEN DES.transaction_isolation_level =3 THEN 'Repetível'
-								  WHEN DES.transaction_isolation_level =4 THEN 'Serializável'
-								  WHEN DES.transaction_isolation_level =5 THEN 'Instantâneo' END,
+								  WHEN DES.transaction_isolation_level =3 THEN 'Repetï¿½vel'
+								  WHEN DES.transaction_isolation_level =4 THEN 'Serializï¿½vel'
+								  WHEN DES.transaction_isolation_level =5 THEN 'Instantï¿½neo' END,
 	   
-	   [Tempo da transação aberta] =CONVERT(TIME,DATEADD (ms, DATEDIFF(MILLISECOND, DTDT.database_transaction_begin_time, CURRENT_TIMESTAMP), 0)),
+	   [Tempo da transaï¿½ï¿½o aberta] =CONVERT(TIME,DATEADD (ms, DATEDIFF(MILLISECOND, DTDT.database_transaction_begin_time, CURRENT_TIMESTAMP), 0)),
 	   [lock_timeout config session] = DES.lock_timeout,
 	     [time  last query]  =CONVERT(TIME,DATEADD (ms, DATEDIFF(MILLISECOND, DES.last_request_start_time, DES.last_request_end_time), 0)),
 	   s_est.text AS [Last T-SQL Text],
 	   [Tamanho Pacote] = DEC.net_packet_size,
        [Transaction_type] = CASE
                                 WHEN DTDT.database_transaction_type = 1 THEN
-                                    'Transação de leitura/gravação'
+                                    'Transaï¿½ï¿½o de leitura/gravaï¿½ï¿½o'
                                 WHEN DTDT.database_transaction_type = 2 THEN
-                                    'Transação somente leitura'
+                                    'Transaï¿½ï¿½o somente leitura'
                                 WHEN DTDT.database_transaction_type = 3 THEN
-                                    'Transação de sistema'
+                                    'Transaï¿½ï¿½o de sistema'
                             END,
        [Transaction_state] = CASE
                                  WHEN DTDT.database_transaction_state = 1 THEN
-                                     'A transação não foi inicializada'
+                                     'A transaï¿½ï¿½o nï¿½o foi inicializada'
                                  WHEN DTDT.database_transaction_state = 3 THEN
-                                     'A transação foi inicializada mas não gerou registros de log'
+                                     'A transaï¿½ï¿½o foi inicializada mas nï¿½o gerou registros de log'
                                  WHEN DTDT.database_transaction_state = 4 THEN
-                                     'A transação gerou registros de log.'
+                                     'A transaï¿½ï¿½o gerou registros de log.'
                                  WHEN DTDT.database_transaction_state = 5 THEN
-                                     'A transação foi preparada'
+                                     'A transaï¿½ï¿½o foi preparada'
                                  WHEN DTDT.database_transaction_state = 10 THEN
-                                     'A transação efetuou COMMIT'
+                                     'A transaï¿½ï¿½o efetuou COMMIT'
                                  WHEN DTDT.database_transaction_state = 11 THEN
-                                     'A transação efetuou ROLLBACK'
+                                     'A transaï¿½ï¿½o efetuou ROLLBACK'
                                  WHEN DTDT.database_transaction_state = 12 THEN
-                                     'A transação está sendo confirmada. (O registro de log está sendo gerado, mas não foi materializado ou persistente.)'
+                                     'A transaï¿½ï¿½o estï¿½ sendo confirmada. (O registro de log estï¿½ sendo gerado, mas nï¿½o foi materializado ou persistente.)'
                              END,
        [bytes_used] = DTDT.database_transaction_log_bytes_used,
        [bytes_reserved] = DTDT.database_transaction_log_bytes_reserved,
@@ -134,10 +134,10 @@ FROM sys.dm_tran_database_transactions AS DTDT
 SELECT R.[Database],
        R.Usuario,
        R.[Maquina Conectada],
-       R.Sessão,
+       R.Sessï¿½o,
        R.transaction_id,
        R.[Nivel Isolamento],
-       R.[Tempo da transação aberta],
+       R.[Tempo da transaï¿½ï¿½o aberta],
        R.[lock_timeout config session],
        R.[time  last query],
        R.[Last T-SQL Text],
@@ -150,7 +150,7 @@ SELECT R.[Database],
        R.[Last Plan]
 	    FROM ResultSet R
 WHERE R.[Database] <>'tempdb'
-ORDER BY R.[Tempo da transação aberta]
+ORDER BY R.[Tempo da transaï¿½ï¿½o aberta]
 OFFSET 0 ROW FETCH NEXT 100000 ROW ONLY
 
 
