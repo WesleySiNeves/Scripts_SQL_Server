@@ -3,7 +3,7 @@
 /* ==================================================================
 --Data: 23/02/2021 
 --Autor :Wesley Neves
---Observação: Sugestões de leitura
+--Observaï¿½ï¿½o: Sugestï¿½es de leitura
  
  https://www.sqlskills.com/blogs/erin/query-store-settings/
 https://docs.microsoft.com/pt-br/sql/relational-databases/performance/monitoring-performance-by-using-the-query-store?view=sql-server-ver15
@@ -13,16 +13,16 @@ https://docs.microsoft.com/pt-br/sql/t-sql/statements/alter-database-transact-sq
 */
 /* ==================================================================
 
---Observação: Tamanho Máximo (MB): especifica o limite para o espaço de dados que o Repositório de
- Consultas admitirá em seu banco de dados. Essa é a configuração mais importante, que afeta diretamente
-  o modo de operação do Repositório de Consultas.
+--Observaï¿½ï¿½o: Tamanho Mï¿½ximo (MB): especifica o limite para o espaï¿½o de dados que o Repositï¿½rio de
+ Consultas admitirï¿½ em seu banco de dados. Essa ï¿½ a configuraï¿½ï¿½o mais importante, que afeta diretamente
+  o modo de operaï¿½ï¿½o do Repositï¿½rio de Consultas.
 
-Conforme o Repositório de Consultas coleta consultas, planos de execução e estatísticas, 
-seu tamanho no banco de dados cresce até esse limite ser atingido. Quando isso acontece,
- o Repositório de Consultas automaticamente altera o modo de operação para somente leitura e para de coletar novos dados, o que significa que a análise de desempenho não é mais precisa.
+Conforme o Repositï¿½rio de Consultas coleta consultas, planos de execuï¿½ï¿½o e estatï¿½sticas, 
+seu tamanho no banco de dados cresce atï¿½ esse limite ser atingido. Quando isso acontece,
+ o Repositï¿½rio de Consultas automaticamente altera o modo de operaï¿½ï¿½o para somente leitura e para de coletar novos dados, o que significa que a anï¿½lise de desempenho nï¿½o ï¿½ mais precisa.
 
-O valor padrão (100 MB) pode não ser suficiente se sua carga de trabalho gerar muitos e planos
- e consultas diferentes, ou caso você deseje manter o histórico de consulta por um período de tempo maior. Controle o uso de espaço atual e aumente o Tamanho Máximo (MB) para impedir que o Repositório de Consultas passe para o modo somente leitura. Use Management Studio ou execute o script a seguir para obter as informações mais recentes sobre o tamanho do Repositório de Consultas
+O valor padrï¿½o (100 MB) pode nï¿½o ser suficiente se sua carga de trabalho gerar muitos e planos
+ e consultas diferentes, ou caso vocï¿½ deseje manter o histï¿½rico de consulta por um perï¿½odo de tempo maior. Controle o uso de espaï¿½o atual e aumente o Tamanho Mï¿½ximo (MB) para impedir que o Repositï¿½rio de Consultas passe para o modo somente leitura. Use Management Studio ou execute o script a seguir para obter as informaï¿½ï¿½es mais recentes sobre o tamanho do Repositï¿½rio de Consultas
  
 -- ==================================================================
 */
@@ -39,7 +39,7 @@ IF(@IsAzure = 1)
       OPERATION_MODE = READ_WRITE,
       CLEANUP_POLICY = ( STALE_QUERY_THRESHOLD_DAYS = 30 ),
       DATA_FLUSH_INTERVAL_SECONDS = 900,
-      MAX_STORAGE_SIZE_MB = 300,
+      MAX_STORAGE_SIZE_MB = 1024,
       INTERVAL_LENGTH_MINUTES = 15,
       SIZE_BASED_CLEANUP_MODE = AUTO,
       MAX_PLANS_PER_QUERY = 20,
@@ -77,7 +77,7 @@ SELECT DQSO.actual_state_desc AS ModoAtual,
        DQSO.current_storage_size_mb AS TamanhoAtual,
        DQSO.max_storage_size_mb AS TamanhoMaximo,
        flush_interval_Minutos = DQSO.flush_interval_seconds / 60,
-       DQSO.interval_length_minutes [Intervalo de Coleta de Estatísticas],
+       DQSO.interval_length_minutes [Intervalo de Coleta de Estatï¿½sticas],
        DQSO.stale_query_threshold_days [Limite de Consulta Obsoleta (Dias)],
        DQSO.size_based_cleanup_mode_desc,
        DQSO.max_plans_per_query
