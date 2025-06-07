@@ -140,3 +140,101 @@ SELECT Ano = YEAR(L.Data),
 FROM dbo.Lancamentos AS L
 GROUP BY YEAR(L.Data)
 ORDER BY YEAR(L.Data);
+
+
+-- ==================================================================
+-- Criação de novas tabelas para complementar o modelo
+-- ==================================================================
+
+-- Tabela de Categorias para classificar lançamentos
+IF (OBJECT_ID('Categorias', 'U') IS NULL)
+BEGIN
+    CREATE TABLE dbo.Categorias
+    (
+        idCategoria UNIQUEIDENTIFIER NOT NULL
+            CONSTRAINT DEF_CategoriasIdCategoria
+                DEFAULT (NEWSEQUENTIALID()),
+        NomeCategoria VARCHAR(50) NOT NULL,
+        Descricao VARCHAR(200) NULL,
+        DataCriacao DATETIME2(2) NOT NULL DEFAULT (GETDATE()),
+        Ativo BIT NOT NULL DEFAULT (1),
+        CONSTRAINT PK_Categorias
+            PRIMARY KEY (idCategoria)
+    );
+
+    -- Inserir algumas categorias padrão
+    INSERT dbo.Categorias
+    (
+        NomeCategoria,
+        Descricao
+    )
+    VALUES
+    ('Alimentação', 'Gastos com restaurantes, mercado e delivery'),
+    ('Transporte', 'Combustível, transporte público, aplicativos de mobilidade'),
+    ('Moradia', 'Aluguel, contas de água, luz, internet, etc'),
+    ('Saúde', 'Consultas médicas, medicamentos, plano de saúde'),
+    ('Educação', 'Cursos, livros, material escolar'),
+    ('Lazer', 'Cinema, viagens, hobbies'),
+    ('Investimentos', 'Aplicações financeiras'),
+    ('Salário', 'Recebimento de salário e benefícios'),
+    ('Outros', 'Categorias diversas');
+END;
+
+-- Tabela para relacionar lançamentos com categorias
+IF (OBJECT_ID('LancamentoCategorias', 'U') IS NULL)
+BEGIN
+    CREATE TABLE dbo.LancamentoCategorias
+    (
+        idLancamentoCategoria UNIQUEIDENTIFIER NOT NULL
+            CONSTRAINT DEF_LancamentoCategoriasIdLancamentoCategoria
+                DEFAULT (NEWSEQUENTIALID()),
+        idLancamento UNIQUEIDENTIFIER NOT NULL,
+        idCategoria UNIQUEIDENTIFIER NOT NULL,
+        Observacao VARCHAR(200) NULL,
+        CONSTRAINT PK_LancamentoCategorias
+            PRIMARY KEY (idLancamentoCategoria),
+        CONSTRAINT FK_LancamentoCategorias_Lancamentos
+            FOREIGN KEY (idLancamento)
+            REFERENCES dbo.Lancamentos (idLancamento),
+        CONSTRAINT FK_LancamentoCategorias_Categorias
+            FOREIGN KEY (idCategoria)
+            REFERENCES dbo.Categorias (idCategoria)
+    );
+
+    -- Criar um índice para melhorar a performance de consultas
+    CREATE INDEX IX_LancamentoCategorias_IdLancamento
+    ON dbo.LancamentoCategorias (idLancamento);
+
+    CREATE INDEX IX_LancamentoCategorias_IdCategoria
+    ON dbo.LancamentoCategorias (idCategoria);
+END;
+
+-- Inserir algumas categorias aleatórias para os lançamentos existentes
+-- Isso vai categorizar apenas uma amostra dos lançamentos para não sobrecarregar o banco
+DECLARE @TotalLancamentos INT = 10000; -- Limitar a quantidade para não sobrecarregar
+
+WITH LancamentosAmostra AS (
+    SELECT TOP (@TotalLancamentos) 
+           idLancamento,
+           ROW_NUMBER() OVER (ORDER BY NEWID()) AS RowNum
+    FROM dbo.Lancamentos
+)
+INSERT INTO dbo.LancamentoCategorias (idLancamento, idCategoria)
+SELECT 
+    L.idLancamento,
+    (SELECT TOP 1 idCategoria FROM dbo.Categorias ORDER BY NEWID()) AS idCategoria
+FROM LancamentosAmostra L;
+
+-- ==================================================================
+-- Consulta para verificar a distribuição de categorias nos lançamentos
+-- ==================================================================
+
+SELECT 
+    C.NomeCategoria,
+    COUNT(LC.idLancamentoCategoria) AS QuantidadeLancamentos,
+    FORMAT(SUM(L.Valor), 'C', 'pt-BR') AS ValorTotal
+FROM dbo.Categorias C
+LEFT JOIN dbo.LancamentoCategorias LC ON C.idCategoria = LC.idCategoria
+LEFT JOIN dbo.Lancamentos L ON LC.idLancamento = L.idLancamento
+GROUP BY C.NomeCategoria
+ORDER BY COUNT(LC.idLancamentoCategoria) DESC;
