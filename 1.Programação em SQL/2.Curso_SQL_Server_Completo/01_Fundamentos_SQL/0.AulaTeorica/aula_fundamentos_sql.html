@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1: Fundamentos do SQL Server</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navegação -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-database"></i>
+                <span>SQL Server Fundamentos</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#introducao" class="nav-link">Introdução</a></li>
+                <li><a href="#conceitos" class="nav-link">Conceitos</a></li>
+                <li><a href="#tipos-dados" class="nav-link">Tipos de Dados</a></li>
+                <li><a href="#pratica" class="nav-link">Prática</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Módulo 1: Fundamentos do SQL Server</h1>
+                <p class="hero-subtitle">Domine os conceitos básicos e construa uma base sólida em SQL Server</p>
+                <div class="hero-objectives">
+                    <h3>🎯 Objetivos do Módulo</h3>
+                    <ul>
+                        <li>Compreender os conceitos básicos do SQL Server</li>
+                        <li>Aprender a sintaxe fundamental do T-SQL</li>
+                        <li>Entender tipos de dados e estruturas básicas</li>
+                        <li>Conhecer as ferramentas essenciais</li>
+                    </ul>
+                </div>
+                <button class="cta-button" onclick="scrollToSection('introducao')">Começar Aula</button>
+            </div>
+            <div class="hero-visual">
+                <div class="database-3d">
+                    <div class="server-rack">
+                        <div class="server-unit"></div>
+                        <div class="server-unit"></div>
+                        <div class="server-unit active"></div>
+                        <div class="server-unit"></div>
+                    </div>
+                    <div class="data-flow">
+                        <div class="data-particle"></div>
+                        <div class="data-particle"></div>
+                        <div class="data-particle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção 1: Introdução ao SQL Server -->
+    <section id="introducao" class="content-section">
+        <div class="container">
+            <h2 class="section-title">1.1 Introdução ao SQL Server</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>História e Evolução</h3>
+                        <p>O SQL Server foi lançado pela Microsoft em 1989, evoluindo de uma parceria com a Sybase. Desde então, tornou-se um dos SGBDs mais utilizados no mundo corporativo.</p>
+                        <div class="evolution-chart">
+                            <div class="version-item" data-year="1989">SQL Server 1.0</div>
+                            <div class="version-item" data-year="2005">SQL Server 2005</div>
+                            <div class="version-item" data-year="2016">SQL Server 2016</div>
+                            <div class="version-item" data-year="2022">SQL Server 2022</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Arquitetura Básica</h3>
+                        <p>O SQL Server possui uma arquitetura robusta dividida em camadas:</p>
+                        <div class="architecture-diagram">
+                            <div class="arch-layer" data-layer="aplicacao">Camada de Aplicação</div>
+                            <div class="arch-layer" data-layer="servicos">Serviços do SQL Server</div>
+                            <div class="arch-layer" data-layer="motor">Motor de Banco de Dados</div>
+                            <div class="arch-layer" data-layer="armazenamento">Armazenamento</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Versões do SQL Server</h3>
+                        <div class="versions-grid">
+                            <div class="version-card express">
+                                <h4>Express</h4>
+                                <p>Gratuita, limitada a 10GB</p>
+                                <ul>
+                                    <li>Ideal para desenvolvimento</li>
+                                    <li>Aplicações pequenas</li>
+                                </ul>
+                            </div>
+                            <div class="version-card standard">
+                                <h4>Standard</h4>
+                                <p>Versão comercial completa</p>
+                                <ul>
+                                    <li>Empresas médias</li>
+                                    <li>Recursos avançados</li>
+                                </ul>
+                            </div>
+                            <div class="version-card enterprise">
+                                <h4>Enterprise</h4>
+                                <p>Máximo desempenho</p>
+                                <ul>
+                                    <li>Grandes corporações</li>
+                                    <li>Todos os recursos</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>SQL Server Management Studio (SSMS)</h3>
+                        <p>Ferramenta principal para administração e desenvolvimento:</p>
+                        <div class="ssms-features">
+                            <div class="feature-item">
+                                <i class="fas fa-edit"></i>
+                                <span>Editor de Consultas</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Planos de Execução</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-database"></i>
+                                <span>Gerenciamento de Objetos</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Segurança</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção 2: Conceitos Fundamentais -->
+    <section id="conceitos" class="content-section alt-bg">
+        <div class="container">
+            <h2 class="section-title">1.2 Conceitos Fundamentais</h2>
+            
+            <div class="concepts-grid">
+                <div class="concept-card" data-concept="relacional">
+                    <div class="concept-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Bancos Relacionais</h3>
+                    <p>Dados organizados em tabelas relacionadas através de chaves</p>
+                    <div class="concept-visual">
+                        <div class="table-representation">
+                            <div class="table-header">Clientes</div>
+                            <div class="table-row">ID | Nome | Email</div>
+                        </div>
+                        <div class="relation-arrow">→</div>
+                        <div class="table-representation">
+                            <div class="table-header">Pedidos</div>
+                            <div class="table-row">ID | ClienteID | Data</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="concept-card" data-concept="tabelas">
+                    <div class="concept-icon">
+                        <i class="fas fa-table"></i>
+                    </div>
+                    <h3>Tabelas, Linhas e Colunas</h3>
+                    <p>Estrutura básica de armazenamento de dados</p>
+                    <div class="table-demo">
+                        <table class="demo-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Idade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>João</td>
+                                    <td>30</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Maria</td>
+                                    <td>25</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="concept-card" data-concept="chaves">
+                    <div class="concept-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3>Chaves Primárias e Estrangeiras</h3>
+                    <p>Garantem integridade e relacionamentos entre dados</p>
+                    <div class="keys-demo">
+                        <div class="key-type primary">
+                            <span class="key-label">PK</span>
+                            <span>Chave Primária</span>
+                        </div>
+                        <div class="key-type foreign">
+                            <span class="key-label">FK</span>
+                            <span>Chave Estrangeira</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="concept-card" data-concept="indices">
+                    <div class="concept-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Índices Básicos</h3>
+                    <p>Estruturas que aceleram consultas aos dados</p>
+                    <div class="index-visualization">
+                        <div class="index-tree">
+                            <div class="tree-node root">Raiz</div>
+                            <div class="tree-level">
+                                <div class="tree-node">A-M</div>
+                                <div class="tree-node">N-Z</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="concept-card" data-concept="schemas">
+                    <div class="concept-icon">
+                        <i class="fas fa-folder-tree"></i>
+                    </div>
+                    <h3>Schemas e Objetos</h3>
+                    <p>Organização lógica dos objetos do banco</p>
+                    <div class="schema-tree">
+                        <div class="schema-item">📁 dbo</div>
+                        <div class="schema-item">📁 vendas</div>
+                        <div class="schema-item">📁 rh</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção 3: Tipos de Dados -->
+    <section id="tipos-dados" class="content-section">
+        <div class="container">
+            <h2 class="section-title">1.3 Tipos de Dados</h2>
+            
+            <div class="data-types-container">
+                <div class="type-category" data-category="numericos">
+                    <h3><i class="fas fa-calculator"></i> Tipos Numéricos</h3>
+                    <div class="types-grid">
+                        <div class="type-item">
+                            <h4>INT</h4>
+                            <p>Números inteiros de -2,147,483,648 a 2,147,483,647</p>
+                            <div class="type-example">Exemplo: 42, -100, 0</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>BIGINT</h4>
+                            <p>Números inteiros grandes</p>
+                            <div class="type-example">Exemplo: 9223372036854775807</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>DECIMAL</h4>
+                            <p>Números com precisão fixa</p>
+                            <div class="type-example">Exemplo: 123.45, 999.99</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>FLOAT</h4>
+                            <p>Números de ponto flutuante</p>
+                            <div class="type-example">Exemplo: 3.14159, 2.71828</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="type-category" data-category="texto">
+                    <h3><i class="fas fa-font"></i> Tipos de Texto</h3>
+                    <div class="types-grid">
+                        <div class="type-item">
+                            <h4>VARCHAR</h4>
+                            <p>Texto variável (até 8000 caracteres)</p>
+                            <div class="type-example">Exemplo: 'João Silva'</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>NVARCHAR</h4>
+                            <p>Texto Unicode variável</p>
+                            <div class="type-example">Exemplo: N'José María'</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>CHAR</h4>
+                            <p>Texto fixo (até 8000 caracteres)</p>
+                            <div class="type-example">Exemplo: 'BR' (código país)</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>TEXT</h4>
+                            <p>Texto longo (até 2GB)</p>
+                            <div class="type-example">Exemplo: Documentos grandes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="type-category" data-category="data">
+                    <h3><i class="fas fa-calendar"></i> Tipos de Data</h3>
+                    <div class="types-grid">
+                        <div class="type-item">
+                            <h4>DATE</h4>
+                            <p>Apenas data (YYYY-MM-DD)</p>
+                            <div class="type-example">Exemplo: 2024-01-15</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>DATETIME</h4>
+                            <p>Data e hora completa</p>
+                            <div class="type-example">Exemplo: 2024-01-15 14:30:00</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>DATETIME2</h4>
+                            <p>Data e hora com maior precisão</p>
+                            <div class="type-example">Exemplo: 2024-01-15 14:30:00.123</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>TIME</h4>
+                            <p>Apenas hora (HH:MM:SS)</p>
+                            <div class="type-example">Exemplo: 14:30:00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="type-category" data-category="especiais">
+                    <h3><i class="fas fa-star"></i> Tipos Especiais</h3>
+                    <div class="types-grid">
+                        <div class="type-item">
+                            <h4>BIT</h4>
+                            <p>Valores booleanos (0 ou 1)</p>
+                            <div class="type-example">Exemplo: 1 (verdadeiro), 0 (falso)</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>UNIQUEIDENTIFIER</h4>
+                            <p>Identificador único global (GUID)</p>
+                            <div class="type-example">Exemplo: 6F9619FF-8B86-D011-B42D-00C04FC964FF</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>XML</h4>
+                            <p>Dados estruturados em XML</p>
+                            <div class="type-example">Exemplo: &lt;pessoa&gt;&lt;nome&gt;João&lt;/nome&gt;&lt;/pessoa&gt;</div>
+                        </div>
+                        <div class="type-item">
+                            <h4>JSON</h4>
+                            <p>Dados em formato JSON (SQL Server 2016+)</p>
+                            <div class="type-example">Exemplo: {"nome": "João", "idade": 30}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Prática -->
+    <section id="pratica" class="content-section alt-bg">
+        <div class="container">
+            <h2 class="section-title">💻 Prática Interativa</h2>
+            
+            <div class="practice-container">
+                <div class="sql-editor">
+                    <div class="editor-header">
+                        <span class="editor-title">Editor SQL</span>
+                        <button class="run-button" onclick="runSQL()">▶ Executar</button>
+                    </div>
+                    <textarea id="sql-input" placeholder="-- Digite seu código SQL aqui\nSELECT 'Olá, SQL Server!' AS Mensagem;">
+-- Exemplo: Criando uma tabela simples
+CREATE TABLE Funcionarios (
+    ID INT PRIMARY KEY,
+    Nome NVARCHAR(100) NOT NULL,
+    Salario DECIMAL(10,2),
+    DataAdmissao DATE
+);
+
+-- Inserindo dados
+INSERT INTO Funcionarios VALUES 
+(1, 'João Silva', 5000.00, '2024-01-15'),
+(2, 'Maria Santos', 6000.00, '2024-01-20');
+
+-- Consultando dados
+SELECT * FROM Funcionarios;</textarea>
+                </div>
+                
+                <div class="results-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">Resultados</span>
+                    </div>
+                    <div id="sql-results" class="results-content">
+                        <p class="placeholder-text">Execute uma consulta para ver os resultados aqui...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-exercises">
+                <h3>🎯 Exercícios Práticos</h3>
+                <div class="exercises-grid">
+                    <div class="exercise-card">
+                        <h4>Exercício 1: Tipos de Dados</h4>
+                        <p>Crie uma tabela 'Produtos' com os seguintes campos:</p>
+                        <ul>
+                            <li>ID (INT, chave primária)</li>
+                            <li>Nome (VARCHAR(100))</li>
+                            <li>Preco (DECIMAL(10,2))</li>
+                            <li>Ativo (BIT)</li>
+                        </ul>
+                        <button class="exercise-button" onclick="loadExercise(1)">Carregar Exercício</button>
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <h4>Exercício 2: Inserção de Dados</h4>
+                        <p>Insira 3 produtos na tabela criada no exercício anterior.</p>
+                        <button class="exercise-button" onclick="loadExercise(2)">Carregar Exercício</button>
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <h4>Exercício 3: Consulta Básica</h4>
+                        <p>Faça uma consulta que retorne apenas os produtos ativos.</p>
+                        <button class="exercise-button" onclick="loadExercise(3)">Carregar Exercício</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Módulo 1 Concluído!</h3>
+                    <p>Parabéns! Você aprendeu os fundamentos do SQL Server.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Próximo Módulo</h3>
+                    <p>Módulo 2: Consultas Básicas - SELECT, WHERE, ORDER BY</p>
+                    <button class="next-module-button">Ir para Módulo 2 →</button>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Curso SQL Server Completo. Tempo Estimado: 4-6 horas | Nível: Iniciante</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

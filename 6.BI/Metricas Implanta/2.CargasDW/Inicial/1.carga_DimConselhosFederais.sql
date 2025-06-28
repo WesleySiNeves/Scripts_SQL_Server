@@ -1,0 +1,74 @@
+
+DROP TABLE IF EXISTS #tempConselhosCategoria
+-- Criação da tabela temporária no SQL Server
+CREATE TABLE #tempConselhosCategoria (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Categoria VARCHAR(50) NOT NULL,
+    NomeRazaoSocial VARCHAR(100) NOT NULL,
+    Sigla VARCHAR(20) NOT NULL
+);
+
+-- Inserção dos dados com associação categoria-conselho
+INSERT INTO #tempConselhosCategoria (Categoria, NomeRazaoSocial, Sigla) VALUES
+('VETERINÁRIA', 'Conselho Federal de Medicina Veterinária', 'CFMV'),
+('QUÍMICA', 'Conselho Federal de Química', 'CFQ'),
+('ODONTOLOGIA', 'Conselho Federal de Odontologia', 'CFO'),
+('TECNICOS AGRICOLAS', 'Conselho Federal dos Técnicos Agrícolas', 'CFTA'),
+('REL. PÚBLICAS', 'Conselho Federal de Profissionais de Relações Públicas', 'CONFERP'),
+('FONOAUDIOLOGIA', 'Conselho Federal de Fonoaudiologia', 'COFFITO'),
+('FISIOTERAPIA', 'Conselho Federal de Fisioterapia e Terapia Ocupacional', 'CFFA'),
+('BIOMEDICINA', 'Conselho Federal de Biomedicina', 'CFBM'),
+('PSICOLOGIA', 'Conselho Federal de Psicologia', 'CFP'),
+('TECNICOS INDUSTRIAIS', 'Conselho Federal de Técnicos', 'CFT'),
+('MEDICINA', 'Conselho Federal de Medicina', 'CFM'),
+('MEDICINA', 'Conselho Regional de Medicina', 'CRM'),
+('ADMINISTRAÇÃO', 'Conselho Federal de Administração', 'CFA'),
+('NUTRICIONISTAS', 'Conselho Federal de Nutrição', 'CFN'),
+('ENFERMAGEM', 'Conselho Federal de Enfermagem', 'COFEN'),
+('SERVIÇO SOCIAL', 'Conselho Federal de Serviço Social', 'CFESS'),
+('REPRESENTANTES', 'Conselho Federal de Representantes Comerciais', 'CONFERE'),
+('ESTATÍSTICA', 'Conselho Federal de Estatística', 'CONFE'),
+('EDUCAÇÃO FÍSICA', 'Conselho Federal de Educação Física', 'CONFEF'),
+('ARQUITETURA', 'Conselho de Arquitetura e Urbanismo do Brasil', 'CAU/BR'),
+('FARMÁCIA', 'Conselho Federal de Farmácia', 'CFF'),
+('RADIOLOGIA', 'Conselho Nacional dos Técnicos em Radiologia', 'CONTER'),
+('ENGENHARIA', 'Conselho Federal de Engenharia', 'CONFEA');
+
+
+
+-- Inserção dos conselhos adicionais que não estavam mapeados nas categorias originais
+INSERT INTO #tempConselhosCategoria (Categoria, NomeRazaoSocial, Sigla) VALUES
+('BIOLOGIA', 'Conselho Federal de Biologia', 'CFBio'),
+('CONTABILIDADE', 'Conselho Federal de Contabilidade', 'CFC'),
+('DESIGNERS', 'Conselho Federal de Designers de Interiores', 'CFDD'),
+('EDUCAÇÃO', 'Conselho Federal de Educação', 'CFED'),
+('CORRETORES', 'Conselho Federal de Corretores de Imóveis', 'COFECI'),
+('ECONOMIA', 'Conselho Federal de Economia', 'COFECON'),
+('OFTALMOLOGIA', 'Conselho Brasileiro de Oftalmologia', 'CBO'),
+('MUSEOLOGIA', 'Conselho de Museologia', 'COFEM'),
+('BIBLIOTECÁRIO', 'Conselho Federal de Biblioteconomia', 'CFB');
+
+ 
+ INSERT INTO Shared.DimConselhosFederais
+ (
+     IdConselhoFederal,
+     NomeRazaoSocial,
+     Sigla,
+     Ativo,
+     Categoria,
+     DataCarga,
+     DataAtualizacao
+ )
+
+SELECT conf.IdConselhoFederal,
+       conf.NomeRazaoSocial,
+       conf.Sigla,
+	   1 AS Ativo,
+	   ISNULL(tem.Categoria,'Não Informado') AS Categoria,
+	   GETDATE() AS DataCarga,
+	   GETDATE() AS DataAtualizacao
+	   FROM Implanta.ConselhosFederais conf
+	   LEFT JOIN #tempConselhosCategoria tem ON tem.Sigla = conf.Sigla
+
+
+	   
