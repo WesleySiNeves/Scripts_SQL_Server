@@ -1,6 +1,6 @@
 /*
 =============================================
-Autor: Wesley David Santos
+Autor: Wesley Neves
 Data de Criação: 2024-12-19
 Descrição: PROCEDURE MASTER DE DIAGNÓSTICO - What's the Problem?
            Executa análise completa integrando uspAnaliseWaitsComAcoes com funcionalidades avançadas

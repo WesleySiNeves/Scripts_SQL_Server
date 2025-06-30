@@ -1,6 +1,6 @@
 /*
 =============================================
-Autor: Wesley David Santos
+Autor: Wesley Neves
 Data de Criação: 2024-12-19
 Descrição: PROCEDURE ESPECIALISTA EM TUNING - Análise Completa de Waits
            Diagnóstico avançado e recomendações específicas para otimização

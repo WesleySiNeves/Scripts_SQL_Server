@@ -29,8 +29,8 @@ https://techcommunity.microsoft.com/t5/Premier-Field-Engineering/Three-Usage-Sce
 */
 
 -- Execução: 
--- exec HealthCheck.uspIndexDesfrag_Optimized 1,15,2000,0  -- Simulação
--- exec HealthCheck.uspIndexDesfrag_Optimized @Efetivar = 1 -- Execução real
+-- exec [HealthCheck].[uspIndexDesfrag]   -- Simulação
+-- exec [HealthCheck].[uspIndexDesfrag] @Efetivar = 1 ,@MostrarIndices  = 0 -- Execução real
 
 CREATE OR ALTER PROCEDURE [HealthCheck].[uspIndexDesfrag]
 (
@@ -40,12 +40,23 @@ CREATE OR ALTER PROCEDURE [HealthCheck].[uspIndexDesfrag]
     @Efetivar BIT = 0,
     @MaxCpuUsage TINYINT = 80,     -- Limite de CPU para execução
     @MaxDurationMinutes INT = 240, -- Limite de tempo total (4 horas)
-    @PriorityFilter TINYINT = 4    -- 1=Crítico, 2=Alto, 3=Médio, 4=Todos
+    @PriorityFilter TINYINT = 4,   -- 1=Crítico, 2=Alto, 3=Médio, 4=Todos
+    @Force BIT = 0                 -- Se 1, permite execução em qualquer horário
 )
 AS
 BEGIN
     SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
     SET NOCOUNT ON;
+
+	   --  DECLARE @MostrarIndices BIT = 1,
+    --@MinFrag SMALLINT = 15,        -- Mais conservador
+    --@MinPageCount SMALLINT = 2000, -- Focar em índices maiores
+    --@Efetivar BIT = 0,
+    --@MaxCpuUsage TINYINT = 80,     -- Limite de CPU para execução
+    --@MaxDurationMinutes INT = 240, -- Limite de tempo total (4 horas)
+    --@PriorityFilter TINYINT = 4;    -- 1=Crítico, 2=Alto, 3=Médio, 4=Todos
+
+
 
     -- Declaração de variáveis de controle
     DECLARE @SqlServerVersion VARCHAR(100) =
@@ -214,12 +225,54 @@ BEGIN
     );
 
     -- ========================================
-    -- COLETA DE DADOS DE FRAGMENTAÇÃO OTIMIZADA
+    -- COLETA DE DADOS DE FRAGMENTAÇÃO OTIMIZADA - VERSÃO RÁPIDA
     -- ========================================
 
-    RAISERROR('🔍 Coletando dados de fragmentação...', 0, 1) WITH NOWAIT;
+    RAISERROR('🔍 Coletando dados de fragmentação (versão otimizada)...', 0, 1) WITH NOWAIT;
 
-    -- Inserir dados de fragmentação com filtros otimizados
+    -- Criar tabela temporária para filtros pré-aplicados (melhora performance)
+    DROP TABLE IF EXISTS #ValidIndexes;
+    CREATE TABLE #ValidIndexes (
+        object_id INT NOT NULL,
+        index_id INT NOT NULL,
+        index_type TINYINT NOT NULL,
+        schema_name SYSNAME NOT NULL,
+        table_name SYSNAME NOT NULL,
+        index_name SYSNAME NOT NULL,
+        PRIMARY KEY (object_id, index_id)
+    );
+
+    -- Pré-filtrar índices válidos (reduz drasticamente o dataset para sys.dm_db_index_physical_stats)
+    INSERT INTO #ValidIndexes
+    SELECT DISTINCT 
+        i.object_id,
+        i.index_id,
+        i.type,
+        s.name AS schema_name,
+        t.name AS table_name,
+        i.name AS index_name
+    FROM sys.indexes i WITH (NOLOCK)
+        INNER JOIN sys.tables t WITH (NOLOCK) ON i.object_id = t.object_id
+        INNER JOIN sys.schemas s WITH (NOLOCK) ON t.schema_id = s.schema_id
+    WHERE i.type IN (1, 2, 5, 6) -- Clustered, Non-clustered, ColumnStore
+          AND i.is_disabled = 0
+          AND i.is_hypothetical = 0
+          AND t.is_ms_shipped = 0
+          AND OBJECTPROPERTY(i.object_id, 'IsSystemTable') = 0
+          AND s.name NOT IN (SELECT SchemaName COLLATE DATABASE_DEFAULT FROM @SchemasExcecao)
+          AND t.name NOT IN (SELECT TableName COLLATE DATABASE_DEFAULT FROM @TableExcecao)
+          -- Filtro adicional: apenas tabelas com dados significativos
+          AND EXISTS (
+              SELECT 1 FROM sys.partitions p WITH (NOLOCK)
+              WHERE p.object_id = i.object_id 
+                AND p.index_id = i.index_id
+                AND p.rows > 1000 -- Apenas índices com dados relevantes
+          );
+
+    DECLARE @ValidIndexCount INT = @@ROWCOUNT;
+    RAISERROR('INFO: Pré-filtrados %d índices válidos para análise detalhada.', 0, 1, @ValidIndexCount) WITH NOWAIT;
+
+    -- Inserir dados de fragmentação APENAS para índices pré-filtrados (MUITO mais rápido)
     INSERT INTO #Fragmentacao
     (
         ObjectId,
@@ -230,6 +283,7 @@ BEGIN
         [avg_fragment_size_in_pages],
         PageCount
     )
+    -- Parte 1: Índices Row-Store (Clustered e Non-Clustered)
     SELECT A.object_id,
            A.index_id,
            A.index_type_desc,
@@ -237,88 +291,56 @@ BEGIN
            A.fragment_count,
            A.avg_fragment_size_in_pages,
            A.page_count
-    FROM sys.dm_db_index_physical_stats(DB_ID(), NULL, NULL, NULL, 'SAMPLED') AS A -- SAMPLED para melhor performance
-        INNER JOIN sys.indexes ix
-            ON ix.object_id = A.object_id
-               AND ix.index_id = A.index_id
-        INNER JOIN sys.tables t
-            ON t.object_id = A.object_id
-        INNER JOIN sys.schemas s
-            ON s.schema_id = t.schema_id
-    WHERE A.alloc_unit_type_desc = 'IN_ROW_DATA' -- Apenas dados in-row
-          AND ix.type IN ( 1, 2 ) -- Clustered e Non-clustered apenas
-          AND ix.is_disabled = 0 -- Excluir índices desabilitados
-          AND ix.is_hypothetical = 0 -- Excluir índices hipotéticos
+    FROM #ValidIndexes vi
+        CROSS APPLY sys.dm_db_index_physical_stats(DB_ID(), vi.object_id, vi.index_id, NULL, 'LIMITED') AS A
+        -- LIMITED é mais rápido que SAMPLED para análise inicial
+    WHERE vi.index_type IN (1, 2) -- Apenas Row-Store
+          AND A.alloc_unit_type_desc = 'IN_ROW_DATA'
           AND A.page_count > @MinPageCount
           AND A.avg_fragmentation_in_percent >= @MinFrag
-          AND s.name NOT IN
-              (
-                  SELECT SE.SchemaName COLLATE DATABASE_DEFAULT FROM @SchemasExcecao AS SE
-              )
-          AND t.name NOT IN
-              (
-                  SELECT TE.TableName COLLATE DATABASE_DEFAULT FROM @TableExcecao AS TE
-              )
-          AND t.is_ms_shipped = 0 -- Excluir tabelas do sistema
-          AND OBJECTPROPERTY(A.object_id, 'IsSystemTable') = 0
     
     UNION ALL
     
-    -- Adicionar índices ColumnStore para análise
+    -- Parte 2: Índices ColumnStore (análise simplificada e mais rápida)
     SELECT 
-        i.object_id,
-        i.index_id,
-        CASE i.type 
+        vi.object_id,
+        vi.index_id,
+        CASE vi.index_type 
             WHEN 5 THEN 'CLUSTERED COLUMNSTORE'
             WHEN 6 THEN 'NONCLUSTERED COLUMNSTORE'
         END AS index_type_desc,
-        ISNULL(
-            (SELECT AVG(CAST(deleted_rows AS FLOAT) / NULLIF(total_rows, 0) * 100)
-             FROM sys.dm_db_column_store_row_group_physical_stats 
-             WHERE object_id = i.object_id AND index_id = i.index_id), 0
+        -- Cálculo otimizado de fragmentação ColumnStore
+        COALESCE(
+            (SELECT TOP 1 
+                CAST(SUM(deleted_rows) AS FLOAT) / NULLIF(SUM(total_rows), 0) * 100
+             FROM sys.dm_db_column_store_row_group_physical_stats rg WITH (NOLOCK)
+             WHERE rg.object_id = vi.object_id 
+               AND rg.index_id = vi.index_id
+               AND rg.total_rows > 0
+            ), 0
         ) AS avg_fragmentation_in_percent,
-        0 AS fragment_count, -- N/A para ColumnStore
-        0 AS avg_fragment_size_in_pages, -- N/A para ColumnStore
-        ISNULL(
-            (SELECT SUM(total_rows) / 128 -- Estimativa de páginas baseada em rows
-             FROM sys.dm_db_column_store_row_group_physical_stats 
-             WHERE object_id = i.object_id AND index_id = i.index_id), 0
+        0 AS fragment_count,
+        0 AS avg_fragment_size_in_pages,
+        -- Estimativa rápida de páginas para ColumnStore
+        COALESCE(
+            (SELECT SUM(total_rows) / 128 
+             FROM sys.dm_db_column_store_row_group_physical_stats rg WITH (NOLOCK)
+             WHERE rg.object_id = vi.object_id AND rg.index_id = vi.index_id
+            ), 0
         ) AS page_count
-    FROM sys.indexes i
-        INNER JOIN sys.tables t ON i.object_id = t.object_id
-        INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
-    WHERE i.type IN (5, 6) -- ColumnStore indexes (5=Clustered, 6=NonClustered)
-          AND i.is_disabled = 0
-          AND i.is_hypothetical = 0
-          AND s.name NOT IN
-              (
-                  SELECT SE.SchemaName COLLATE DATABASE_DEFAULT FROM @SchemasExcecao AS SE
-              )
-          AND t.name NOT IN
-              (
-                  SELECT TE.TableName COLLATE DATABASE_DEFAULT FROM @TableExcecao AS TE
-              )
-          AND t.is_ms_shipped = 0
-          AND OBJECTPROPERTY(i.object_id, 'IsSystemTable') = 0
-          AND (
-              -- Critérios específicos para ColumnStore
-              EXISTS (
-                  SELECT 1 
-                  FROM sys.dm_db_column_store_row_group_physical_stats rg
-                  WHERE rg.object_id = i.object_id 
-                    AND rg.index_id = i.index_id
-                    AND (rg.deleted_rows > 0 OR rg.state <> 3) -- Tem linhas deletadas ou não está comprimido
-              )
-              OR 
-              -- Fragmentação baseada em linhas deletadas > 10%
-              ISNULL(
-                  (SELECT AVG(CAST(deleted_rows AS FLOAT) / NULLIF(total_rows, 0) * 100)
-                   FROM sys.dm_db_column_store_row_group_physical_stats 
-                   WHERE object_id = i.object_id AND index_id = i.index_id), 0
-              ) >= 10
-          );
+    FROM #ValidIndexes vi
+    WHERE vi.index_type IN (5, 6) -- Apenas ColumnStore
+          -- Verificação rápida se há fragmentação significativa
+          AND EXISTS (
+              SELECT 1 
+              FROM sys.dm_db_column_store_row_group_physical_stats rg WITH (NOLOCK)
+              WHERE rg.object_id = vi.object_id 
+                AND rg.index_id = vi.index_id
+                AND (rg.deleted_rows > rg.total_rows * 0.1 OR rg.state <> 3)
+          )
+    OPTION (MAXDOP 4, RECOMPILE); -- Forçar paralelismo limitado e recompilação
 
-    -- Coletar estatísticas de uso dos índices
+    -- Coletar estatísticas de uso dos índices (otimizado com JOIN)
     INSERT INTO #IndexUsageStats
     SELECT st.object_id,
            st.index_id,
@@ -330,15 +352,15 @@ BEGIN
            st.last_user_scan,
            st.last_user_lookup,
            st.last_user_update
-    FROM sys.dm_db_index_usage_stats st
-    WHERE database_id = DB_ID()
-          AND EXISTS
-    (
-        SELECT *
-        FROM #Fragmentacao f
-        WHERE f.ObjectId = st.object_id
-              AND st.index_id = f.IndexId
-    );
+    FROM #Fragmentacao f
+        INNER JOIN sys.dm_db_index_usage_stats st WITH (NOLOCK)
+            ON st.object_id = f.ObjectId
+               AND st.index_id = f.IndexId
+               AND st.database_id = DB_ID()
+    OPTION (HASH JOIN); -- Forçar HASH JOIN para melhor performance
+
+    -- Limpar tabela temporária de índices válidos (liberar memória)
+    DROP TABLE IF EXISTS #ValidIndexes;
 
     DECLARE @FragmentedIndexes INT =
             (
@@ -399,6 +421,17 @@ BEGIN
                 ON US.ObjectId = F.ObjectId
                    AND US.IndexId = F.IndexId
         OPTION (MAXDOP 0);
+
+		;WITH Duplicates AS (
+		
+		SELECT RN = ROW_NUMBER() OVER(PARTITION BY SchemaName,TableName,IndexName ORDER BY(AvgFragmentationInPercent) DESC),*
+		 FROM #IndicesDesfragmentar
+		--WHERE  TableName ='LogsJson'
+		)
+		DELETE R FROM Duplicates R
+		WHERE R.RN > 1
+
+
 
         -- ========================================
         -- NORMALIZAÇÃO E CÁLCULO DE FILL FACTOR
@@ -538,6 +571,7 @@ BEGIN
                          @MaxDurationMinutes
                      );
         END;
+		-- Execute por partes (evita timeout):
 
         -- ========================================
         -- GERAÇÃO DE SCRIPTS OTIMIZADOS
@@ -555,13 +589,12 @@ BEGIN
                                             QUOTENAME(FRAG.SchemaName),
                                             '.',
                                             QUOTENAME(FRAG.TableName),
-                                            ' REBUILD WITH (MAXDOP = ',
-                                            FRAG.OptimalMaxDop,
-                                            ');'
+                                            ' REORGANIZE WITH (COMPRESS_ALL_ROW_GROUPS =  ON);'
+                                            
                                         )
                               -- REBUILD para fragmentação alta (>30%) ou índices críticos
                               WHEN FRAG.AvgFragmentationInPercent > 30
-                                   OR FRAG.Priority <= 2 THEN
+                                   OR FRAG.Priority <= 2  AND F.index_type_desc NOT LIKE '%COLUMNSTORE%' THEN
                                   CONCAT(
                                             'ALTER INDEX ',
                                             QUOTENAME(FRAG.IndexName),
@@ -586,15 +619,15 @@ BEGIN
         FROM #IndicesDesfragmentar FRAG
         INNER JOIN #Fragmentacao F ON F.ObjectId = (
             SELECT object_id FROM sys.objects 
-            WHERE SCHEMA_NAME(schema_id) = FRAG.SchemaName 
-            AND name = FRAG.TableName
+            WHERE SCHEMA_NAME(schema_id) = FRAG.SchemaName  COLLATE DATABASE_DEFAULT
+            AND name = FRAG.TableName COLLATE DATABASE_DEFAULT
         ) AND F.IndexId = (
             SELECT index_id FROM sys.indexes 
             WHERE object_id = (
                 SELECT object_id FROM sys.objects 
-                WHERE SCHEMA_NAME(schema_id) = FRAG.SchemaName 
-                AND name = FRAG.TableName
-            ) AND name = FRAG.IndexName
+                WHERE SCHEMA_NAME(schema_id) = FRAG.SchemaName  COLLATE DATABASE_DEFAULT
+                AND name = FRAG.TableName COLLATE DATABASE_DEFAULT
+            ) AND name = FRAG.IndexName COLLATE DATABASE_DEFAULT
         );
 
         -- Adicionar opções WITH para operações REBUILD (exceto ColumnStore que já têm configurações específicas)
@@ -620,18 +653,19 @@ BEGIN
         FROM #IndicesDesfragmentar FRAG
         INNER JOIN #Fragmentacao F ON F.ObjectId = (
             SELECT object_id FROM sys.objects 
-            WHERE SCHEMA_NAME(schema_id) = FRAG.SchemaName 
-            AND name = FRAG.TableName
+            WHERE SCHEMA_NAME(schema_id) = FRAG.SchemaName  COLLATE DATABASE_DEFAULT
+            AND name = FRAG.TableName COLLATE DATABASE_DEFAULT
         ) AND F.IndexId = (
             SELECT index_id FROM sys.indexes 
             WHERE object_id = (
                 SELECT object_id FROM sys.objects 
-                WHERE SCHEMA_NAME(schema_id) = FRAG.SchemaName 
-                AND name = FRAG.TableName
-            ) AND name = FRAG.IndexName
+                WHERE SCHEMA_NAME(schema_id) = FRAG.SchemaName  COLLATE DATABASE_DEFAULT
+                AND name = FRAG.TableName COLLATE DATABASE_DEFAULT
+            ) AND name = FRAG.IndexName COLLATE DATABASE_DEFAULT
         )
         WHERE FRAG.AvgFragmentationInPercent > 30 -- Apenas para REBUILD
         AND F.index_type_desc NOT LIKE '%COLUMNSTORE%';
+
 
         -- ========================================
         -- EXECUÇÃO COM CONTROLE INTELIGENTE
@@ -662,6 +696,21 @@ BEGIN
                      @PriorityFilter
                  ) WITH NOWAIT;
 
+        -- Verificação de horário para desfragmentação de índices (apenas entre 20:00 e 05:00)
+        DECLARE @HorarioAtual TIME = CAST(GETDATE() AS TIME);
+        DECLARE @HorarioPermitido BIT = 0;
+        
+        -- Verifica se está no horário permitido (20:00 às 05:00) ou se @Force = 1
+        IF (@HorarioAtual >= '20:00:00' OR @HorarioAtual <= '05:00:00') OR @Force = 1
+            SET @HorarioPermitido = 1;
+        
+        -- Log do horário atual
+        DECLARE @LogHorario NVARCHAR(200) = CONCAT('Horário atual: ', FORMAT(@HorarioAtual, 'HH:mm:ss'), 
+                                                  ' - Desfragmentação permitida: ', 
+                                                  CASE WHEN @HorarioPermitido = 1 THEN 'SIM' ELSE 'NÃO' END,
+                                                  CASE WHEN @Force = 1 THEN ' (FORÇADO)' ELSE '' END);
+        RAISERROR(@LogHorario, 0, 1) WITH NOWAIT;
+
         -- Executar manutenção se solicitado
         IF EXISTS
         (
@@ -670,6 +719,7 @@ BEGIN
             WHERE Priority <= @PriorityFilter
         )
            AND @Efetivar = 1
+           AND @HorarioPermitido = 1
         BEGIN
             RAISERROR('🚀 Iniciando execução da manutenção...', 0, 1) WITH NOWAIT;
 
@@ -775,7 +825,7 @@ BEGIN
                         = CONCAT(
                                     'SUCESSO [',
                                     FORMAT(@ProgressPct, 'N1'),
-                                    '%] ',
+                                    '%%] ',
                                     '(',
                                     @ProcessedCount,
                                     '/',
@@ -818,6 +868,10 @@ BEGIN
         ELSE IF @Efetivar = 0
         BEGIN
             RAISERROR('INFO: Modo simulação ativo. Use @Efetivar = 1 para executar.', 0, 1) WITH NOWAIT;
+        END;
+        ELSE IF @Efetivar = 1 AND @HorarioPermitido = 0
+        BEGIN
+            RAISERROR('INFO: Desfragmentação de índices só é permitida entre 20:00 e 05:00. Horário atual fora do período permitido.', 0, 1) WITH NOWAIT;
         END;
     END;
     ELSE

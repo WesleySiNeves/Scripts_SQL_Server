@@ -1,6 +1,4 @@
 
-
-
 CREATE OR ALTER PROCEDURE HealthCheck.uspExpurgarLogs
 ( 
     @ProcessarApenasUmaFase BIT = 1, -- 0 = Todas as fases, 1 = Apenas uma fase
@@ -10,7 +8,7 @@ CREATE OR ALTER PROCEDURE HealthCheck.uspExpurgarLogs
 AS
 BEGIN
 
-    -- Configurações otimizadas para Azure SQL Database
+     -- Configurações otimizadas para Azure SQL Database
     SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
     SET LOCK_TIMEOUT 1800000; -- 30 minutos
     SET DEADLOCK_PRIORITY LOW;
@@ -107,16 +105,37 @@ BEGIN
 
 
     IF (
-           DATEDIFF(DAY, GETDATE(), @DataUltimaExecucaoExpurgo) > 0
-           AND @quantidadeLogsDeletarLogs = 0
+            @quantidadeLogsDeletarLogs = 0
            AND @quantidadeLogsMigrarLogs = 0
            AND @quantidadeLogsDeletarExpurgo = 0
        )
     BEGIN
 
-        SELECT 'Nenhum processamento necessário. ainda não passou o tempo de 30 dias da ultima execução';
+        SELECT 'Nenhum processamento necessário.';
         RETURN;
-    END;
+    END
+	ELSE
+	BEGIN
+
+	DECLARE @Mensagemtexto VARCHAR(500)  ='';
+
+	 IF @quantidadeLogsDeletarLogs > 0
+	 BEGIN
+		SELECT @Mensagemtexto =  '🗑️ FASE 1 - Quantidade: ' + CAST(@quantidadeLogsDeletarLogs AS VARCHAR(10)) + '';	
+	 END
+	   IF @quantidadeLogsMigrarLogs > 0
+	 BEGIN
+		SELECT @Mensagemtexto =  '🗑️ FASE 2 - Quantidade: ' + CAST(@quantidadeLogsMigrarLogs AS VARCHAR(10)) + '';	
+	 END
+	  IF @quantidadeLogsDeletarExpurgo > 0
+	 BEGIN
+		SELECT @Mensagemtexto =  '🗑️ FASE 3 - Quantidade: ' + CAST(@quantidadeLogsDeletarExpurgo AS VARCHAR(10)) + '';	
+	 END
+
+       RAISERROR(@Mensagemtexto, 0, 1) WITH NOWAIT;
+		
+
+	END
     -- Determinar fase automaticamente se não especificado
     IF @ProcessarApenasUmaFase = 0
     BEGIN
@@ -167,7 +186,7 @@ BEGIN
         IdLog INT NOT NULL PRIMARY KEY
     );
 
-    BEGIN TRY
+		BEGIN TRY
         DECLARE @RowsAffected INT = 1;
         DECLARE @TotalProcessadoFase INT = 0;
         DECLARE @TempoInicio DATETIME2 = GETDATE();
@@ -199,16 +218,16 @@ BEGIN
                 IdLog INT NOT NULL PRIMARY KEY
             );
 
-            -- Buscar IDs para deletar (limitado)
+            ---- Buscar IDs para deletar (limitado)
             INSERT INTO #LogsParaDeletar
             (
                 IdLog
             )
-            SELECT DISTINCT TOP (@LimiteMaximoPorFase)
+			SELECT DISTINCT TOP (@LimiteMaximoPorFase)
                    IdLog
             FROM Log.LogsJson
             WHERE Data < @DataTheSholdDeleteExpurgo
-            ORDER BY IdLog;
+		
 
             DECLARE @TotalParaDeletar INT = @@ROWCOUNT;
             DECLARE @MsgSelecao VARCHAR(100)

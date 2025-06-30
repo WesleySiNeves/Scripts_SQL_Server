@@ -1,6 +1,6 @@
 /*
 =============================================
-Autor: Wesley David Santos
+Autor: Wesley Neves
 Data de Criação: 2024-12-19
 Descrição: PROCEDURE ESPECIALISTA EM TUNING - Análise de Waits com Ações Automáticas
            Executa análise completa e gera plano de ação específico para Azure SQL Database

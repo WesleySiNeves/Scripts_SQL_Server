@@ -1,7 +1,7 @@
-    -- =============================================
+-- =============================================
     -- Procedure: HealthCheck.uspAllIndex (OTIMIZADA)
     -- Descrição: Análise completa de índices com performance melhorada
-    -- Autor: Wesley David Santos (Otimizada)
+    -- Autor: Wesley Neves (Otimizada)
     -- =============================================
 
     CREATE OR ALTER PROCEDURE HealthCheck.uspAllIndex

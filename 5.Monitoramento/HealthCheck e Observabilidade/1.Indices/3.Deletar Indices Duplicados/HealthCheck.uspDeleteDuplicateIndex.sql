@@ -1,5 +1,5 @@
-SET QUOTED_IDENTIFIER ON
-SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
 GO
 
 /*
@@ -98,7 +98,7 @@ COMPATIBILIDADE:
 =============================================
 */
 
---EXEC HealthCheck.uspDeleteDuplicateIndex @Efetivar = 0, -- bit
+--EXEC HealthCheck.uspDeleteDuplicateIndex @Efetivar = 1, -- bit
 --                                         @MostrarIndicesDuplicados = 1, -- bit
 --                                         @MostrarIndicesMarcadosParaDeletar = 1, -- bit
 --                                         @QuantidadeDiasAnalizados = 1, -- tinyint
@@ -111,25 +111,27 @@ COMPATIBILIDADE:
 --                                         @LimiteROI = 0.1, -- decimal (NOVO)
 --                                         @GerarScriptBackup = 1 -- bit (NOVO)
 
-CREATE OR ALTER PROCEDURE HealthCheck.uspDeleteDuplicateIndex (
+CREATE OR ALTER PROCEDURE HealthCheck.uspDeleteDuplicateIndex
+(
     @Efetivar BIT = 0,
     @MostrarIndicesDuplicados BIT = 1,
     @MostrarIndicesMarcadosParaDeletar BIT = 1,
     @TableName VARCHAR(128) = NULL,
     @QuantidadeDiasAnalizados TINYINT = 7,
     @TaxaDeSeguranca TINYINT = 10,
-    @Debug BIT = 0,  -- Parâmetro para logs detalhados
-    @MostrarResumoExecutivo BIT = 1,  -- Parâmetro para resumo executivo
-    @SimularImpacto BIT = 0,  -- NOVO: Simular impacto antes da remoção
-    @AnalisarSobreposicao BIT = 1,  -- NOVO: Analisar sobreposição parcial
-    @UsarQueryStore BIT = 1,  -- NOVO: Integrar com Query Store
-    @LimiteROI DECIMAL(10,2) = 0.1,  -- NOVO: Limite mínimo de ROI
-    @GerarScriptBackup BIT = 1)  -- NOVO: Gerar script de backup dos índices
+    @Debug BIT = 0,                  -- Parâmetro para logs detalhados
+    @MostrarResumoExecutivo BIT = 1, -- Parâmetro para resumo executivo
+    @SimularImpacto BIT = 0,         -- NOVO: Simular impacto antes da remoção
+    @AnalisarSobreposicao BIT = 1,   -- NOVO: Analisar sobreposição parcial
+    @UsarQueryStore BIT = 1,         -- NOVO: Integrar com Query Store
+    @LimiteROI DECIMAL(10, 2) = 0.1, -- NOVO: Limite mínimo de ROI
+    @GerarScriptBackup BIT = 1
+) -- NOVO: Gerar script de backup dos índices
 AS
 BEGIN
     SET NOCOUNT ON;
     SET TRAN ISOLATION LEVEL READ UNCOMMITTED;
-    
+
     -- Variáveis para controle de tempo e logs
     DECLARE @StartTime DATETIME2 = GETDATE();
     DECLARE @StepTime DATETIME2;
@@ -138,19 +140,45 @@ BEGIN
     DECLARE @EspacoLiberadoKB BIGINT = 0;
     DECLARE @ErrorCount INT = 0;
     DECLARE @SuccessCount INT = 0;
-    
+
     -- NOVAS variáveis para melhorias
     DECLARE @TotalSobreposicaoParcial INT = 0;
     DECLARE @TotalComBaixoROI INT = 0;
     DECLARE @QueryStoreEnabled BIT = 0;
-    DECLARE @BackupScript NVARCHAR(MAX) = '';
-    DECLARE @SimulationResults NVARCHAR(MAX) = '';
-    
+    DECLARE @BackupScript NVARCHAR(MAX) = N'';
+    DECLARE @SimulationResults NVARCHAR(MAX) = N'';
+
+    --DECLARE @Efetivar BIT = 1,
+    -- @MostrarIndicesDuplicados BIT = 1,
+    -- @MostrarIndicesMarcadosParaDeletar BIT = 1,
+    -- @TableName VARCHAR(128) = NULL,
+    -- @QuantidadeDiasAnalizados TINYINT = 7,
+    -- @TaxaDeSeguranca TINYINT = 10,
+    -- @Debug BIT = 0,  -- Parâmetro para logs detalhados
+    -- @MostrarResumoExecutivo BIT = 1,  -- Parâmetro para resumo executivo
+    -- @SimularImpacto BIT = 0,  -- NOVO: Simular impacto antes da remoção
+    -- @AnalisarSobreposicao BIT = 1,  -- NOVO: Analisar sobreposição parcial
+    -- @UsarQueryStore BIT = 1,  -- NOVO: Integrar com Query Store
+    -- @LimiteROI DECIMAL(10,2) = 0.1,  -- NOVO: Limite mínimo de ROI
+    -- @GerarScriptBackup BIT = 1 ; -- NOVO: Gerar script de backup dos índices
+
     -- Log inicial
     IF @Debug = 1
     BEGIN
         PRINT CONCAT('=== INÍCIO ANÁLISE ÍNDICES DUPLICADOS - ', FORMAT(@StartTime, 'dd/MM/yyyy HH:mm:ss'), ' ===');
-        PRINT CONCAT('Parâmetros: TaxaSegurança=', @TaxaDeSeguranca, '%, Dias=', @QuantidadeDiasAnalizados, ', Efetivar=', CASE WHEN @Efetivar = 1 THEN 'SIM' ELSE 'NÃO' END);
+        PRINT CONCAT(
+                        'Parâmetros: TaxaSegurança=',
+                        @TaxaDeSeguranca,
+                        '%, Dias=',
+                        @QuantidadeDiasAnalizados,
+                        ', Efetivar=',
+                        CASE
+                            WHEN @Efetivar = 1 THEN
+                                'SIM'
+                            ELSE
+                                'NÃO'
+                        END
+                    );
         IF @TableName IS NOT NULL
             PRINT CONCAT('Tabela específica: ', @TableName);
         PRINT '';
@@ -165,13 +193,14 @@ BEGIN
     DROP TABLE IF EXISTS #Duplicates;
     DROP TABLE IF EXISTS #IndicesResumo;
     DROP TABLE IF EXISTS #ValidationErrors;
-    DROP TABLE IF EXISTS #SobreposicaoParcial;  -- NOVA tabela
-    DROP TABLE IF EXISTS #QueryStoreData;  -- NOVA tabela
-    DROP TABLE IF EXISTS #ROIAnalysis;  -- NOVA tabela
-    DROP TABLE IF EXISTS #BackupScripts;  -- NOVA tabela
+    DROP TABLE IF EXISTS #SobreposicaoParcial; -- NOVA tabela
+    DROP TABLE IF EXISTS #QueryStoreData; -- NOVA tabela
+    DROP TABLE IF EXISTS #ROIAnalysis; -- NOVA tabela
+    DROP TABLE IF EXISTS #BackupScripts; -- NOVA tabela
 
     -- Tabela temporária otimizada com índices para melhor performance
-    CREATE TABLE #Duplicates (
+    CREATE TABLE #Duplicates
+    (
         ObjectId INT,
         [ObjectName] VARCHAR(128),
         [IndexName] VARCHAR(128),
@@ -192,16 +221,18 @@ BEGIN
         [Deletar] VARCHAR(1),
         QuantidadeColunasNaChave SMALLINT,
         QuantidadeColunasIncluidas SMALLINT,
-        IndexRank INT,  -- Nova coluna para ranking
-        IndexSizeKB BIGINT DEFAULT 0,  -- Nova coluna para tamanho
-        -- Índices para otimização
+        IndexRank INT, -- Nova coluna para ranking
+        IndexSizeKB BIGINT
+            DEFAULT 0, -- Nova coluna para tamanho
+                       -- Índices para otimização
         INDEX IX_Duplicates_ObjectId_PrimeiraChave (ObjectId, PrimeiraChave),
         INDEX IX_Duplicates_PercAproveitamento (PercAproveitamento),
         INDEX IX_Duplicates_Deletar (Deletar)
     );
 
-    CREATE TABLE #MarcadosParaDeletar (
-        RowNum INT IDENTITY(1,1),  -- Nova coluna para controle de loop
+    CREATE TABLE #MarcadosParaDeletar
+    (
+        RowNum INT IDENTITY(1, 1), -- Nova coluna para controle de loop
         ObjectId INT,
         [ObjectName] VARCHAR(128),
         [IndexName] VARCHAR(128),
@@ -220,12 +251,14 @@ BEGIN
         IsUniqueConstraint BIT,
         DescTipo VARCHAR(40),
         IndexId SMALLINT,
-        IndexSizeKB BIGINT DEFAULT 0  -- Nova coluna
+        IndexSizeKB BIGINT
+            DEFAULT 0              -- Nova coluna
     );
 
     -- Tabela temporária otimizada com índices
-    CREATE TABLE #IndicesResumo (
-        RowId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    CREATE TABLE #IndicesResumo
+    (
+        RowId INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
         ObjectId INT,
         [ObjectName] VARCHAR(300),
         [IndexName] VARCHAR(128),
@@ -243,7 +276,8 @@ BEGIN
         INDEX IX_IndicesResumo_Chave (Chave)
     );
 
-    CREATE TABLE #Indices (
+    CREATE TABLE #Indices
+    (
         [ObjectId] INT,
         [ObjectName] VARCHAR(300),
         [RowsInTable] INT,
@@ -277,50 +311,55 @@ BEGIN
     );
 
     -- Tabela para validações de segurança
-    CREATE TABLE #ValidationErrors (
+    CREATE TABLE #ValidationErrors
+    (
         ErrorType VARCHAR(50),
         ObjectName VARCHAR(128),
         IndexName VARCHAR(128),
         ErrorMessage VARCHAR(500)
     );
-    
+
     -- NOVA: Tabela para análise de sobreposição parcial
-    CREATE TABLE #SobreposicaoParcial (
+    CREATE TABLE #SobreposicaoParcial
+    (
         ObjectId INT,
         BaseIndexName VARCHAR(128),
         OverlappingIndexName VARCHAR(128),
-        SimilarityScore DECIMAL(5,2),  -- Coeficiente Jaccard
-        OverlapType VARCHAR(20),  -- 'PARTIAL', 'SUBSET', 'SUPERSET'
+        SimilarityScore DECIMAL(5, 2), -- Coeficiente Jaccard
+        OverlapType VARCHAR(20),       -- 'PARTIAL', 'SUBSET', 'SUPERSET'
         RecommendedAction VARCHAR(50),
         INDEX IX_Sobreposicao_ObjectId (ObjectId),
         INDEX IX_Sobreposicao_Score (SimilarityScore)
     );
-    
+
     -- NOVA: Tabela para dados do Query Store
-    CREATE TABLE #QueryStoreData (
+    CREATE TABLE #QueryStoreData
+    (
         ObjectId INT,
         IndexId SMALLINT,
         QueryCount BIGINT,
-        AvgDuration DECIMAL(18,2),
+        AvgDuration DECIMAL(18, 2),
         TotalReads BIGINT,
         LastExecution DATETIME2,
         INDEX IX_QueryStore_ObjectId_IndexId (ObjectId, IndexId)
     );
-    
+
     -- NOVA: Tabela para análise de ROI
-    CREATE TABLE #ROIAnalysis (
+    CREATE TABLE #ROIAnalysis
+    (
         ObjectId INT,
         IndexId SMALLINT,
         IndexName VARCHAR(128),
         MaintenanceCostKB BIGINT,
-        QueryBenefitScore DECIMAL(10,2),
+        QueryBenefitScore DECIMAL(10, 2),
         ROI_Score AS (QueryBenefitScore / NULLIF(MaintenanceCostKB, 0)),
         IsLowROI BIT,
         INDEX IX_ROI_Score (ROI_Score)
     );
-    
+
     -- NOVA: Tabela para scripts de backup
-    CREATE TABLE #BackupScripts (
+    CREATE TABLE #BackupScripts
+    (
         ObjectName VARCHAR(128),
         IndexName VARCHAR(128),
         CreateScript NVARCHAR(MAX),
@@ -330,66 +369,85 @@ BEGIN
     -- NOVA: Verificar se Query Store está habilitado
     IF @UsarQueryStore = 1
     BEGIN
-        SELECT @QueryStoreEnabled = CASE 
-            WHEN actual_state = 2 THEN 1  -- READ_write
-            ELSE 0 
-        END
+        SELECT @QueryStoreEnabled = CASE
+                                        WHEN actual_state = 2 THEN
+                                            1 -- READ_write
+                                        ELSE
+                                            0
+                                    END
         FROM sys.database_query_store_options;
-        
+
         -- OTIMIZAÇÃO: Verificar quantidade de índices para ajustar performance
         DECLARE @TotalIndicesDB INT;
-        SELECT @TotalIndicesDB = COUNT(*) FROM sys.indexes WHERE type > 0;
-        
+        SELECT @TotalIndicesDB = COUNT(*)
+        FROM sys.indexes
+        WHERE type > 0;
+
         -- Auto-ajuste de parâmetros para databases com muitos índices
         IF @TotalIndicesDB > 5000
         BEGIN
             IF @Debug = 1
-                PRINT CONCAT('⚠️ Database com muitos índices (', @TotalIndicesDB, '). Aplicando otimizações de performance...');
-            
+                PRINT CONCAT(
+                                '⚠️ Database com muitos índices (',
+                                @TotalIndicesDB,
+                                '). Aplicando otimizações de performance...'
+                            );
+
             -- Desabilitar análises custosas automaticamente
             IF @AnalisarSobreposicao = 1
             BEGIN
                 SET @AnalisarSobreposicao = 0;
                 IF @Debug = 1
                     PRINT '⚠️ Análise de sobreposição desabilitada automaticamente para melhor performance';
-            END
-            
+            END;
+
             IF @SimularImpacto = 1
             BEGIN
                 SET @SimularImpacto = 0;
                 IF @Debug = 1
                     PRINT '⚠️ Simulação de impacto desabilitada automaticamente para melhor performance';
-            END
-        END
-        
+            END;
+        END;
+
         IF @Debug = 1
-            PRINT CONCAT('Query Store Status: ', CASE WHEN @QueryStoreEnabled = 1 THEN 'Habilitado' ELSE 'Desabilitado' END);
-    END
-    
+            PRINT CONCAT(   'Query Store Status: ',
+                            CASE
+                                WHEN @QueryStoreEnabled = 1 THEN
+                                    'Habilitado'
+                                ELSE
+                                    'Desabilitado'
+                            END
+                        );
+    END;
+
     -- Log de progresso
     IF @Debug = 1
     BEGIN
         SET @StepTime = GETDATE();
         PRINT CONCAT('⏳ Carregando dados de índices... - ', FORMAT(@StepTime, 'HH:mm:ss'));
     END;
-    
+
     INSERT INTO #Indices
     /*Faz uma analise completa de todos os indices*/
-    EXEC HealthCheck.uspAllIndex @typeIndex = NULL, -- varchar(30)
-                                 @SomenteUsado = NULL, -- bit
-                                 @TableIsEmpty = 0, -- bit
-                                 @ObjectName = @TableName, -- varchar(128) - Usar parâmetro
-                                 @BadIndex = NULL, -- bit
+    EXEC HealthCheck.uspAllIndex @typeIndex = NULL,                -- varchar(30)
+                                 @SomenteUsado = NULL,             -- bit
+                                 @TableIsEmpty = 0,                -- bit
+                                 @ObjectName = @TableName,         -- varchar(128) - Usar parâmetro
+                                 @BadIndex = NULL,                 -- bit
                                  @percentualAproveitamento = NULL; -- smallint
-    
+
     IF @Debug = 1
     BEGIN
-        DECLARE @IndicesCount INT = (SELECT COUNT(*) FROM #Indices);
-        PRINT CONCAT('✓ Carregados ', @IndicesCount, ' índices em ', 
-                    DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
+        DECLARE @IndicesCount INT =
+                (
+                    SELECT COUNT(*)FROM #Indices
+                );
+        PRINT CONCAT('✓ Carregados ', @IndicesCount, ' índices em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
     END;
-    
-    DELETE  FROM #Indices WHERE RowsInTable = 0 OR IsprimaryKey =1
+
+    DELETE FROM #Indices
+    WHERE RowsInTable = 0
+          OR IsprimaryKey = 1;
 
     -- OTIMIZADA: Carregar dados de uso de índices (substituindo Query Store problemático)
     IF @UsarQueryStore = 1
@@ -397,28 +455,33 @@ BEGIN
         SET @StepTime = GETDATE();
         IF @Debug = 1
             PRINT 'Carregando dados de uso de índices...';
-        
+
         -- Usar sys.dm_db_index_usage_stats que é muito mais rápido que Query Store
-        INSERT INTO #QueryStoreData (ObjectId, IndexId, QueryCount, AvgDuration, TotalReads, LastExecution)
-        SELECT 
-            idx.ObjectId,
-            idx.IndexId,
-            ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) as QueryCount,
-            0 as AvgDuration,  -- Não disponível em usage_stats, mas não crítico
-            ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) as TotalReads,
-            ISNULL(ius.last_user_seek, 
-                   ISNULL(ius.last_user_scan, 
-                          ISNULL(ius.last_user_lookup, '1900-01-01'))) as LastExecution
+        INSERT INTO #QueryStoreData
+        (
+            ObjectId,
+            IndexId,
+            QueryCount,
+            AvgDuration,
+            TotalReads,
+            LastExecution
+        )
+        SELECT idx.ObjectId,
+               idx.IndexId,
+               ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) AS QueryCount,
+               0 AS AvgDuration, -- Não disponível em usage_stats, mas não crítico
+               ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) AS TotalReads,
+               ISNULL(ius.last_user_seek, ISNULL(ius.last_user_scan, ISNULL(ius.last_user_lookup, '1900-01-01'))) AS LastExecution
         FROM #Indices idx
-        LEFT JOIN sys.dm_db_index_usage_stats ius 
-            ON idx.ObjectId = ius.object_id 
-            AND idx.IndexId = ius.index_id
-            AND ius.database_id = DB_ID()
+            LEFT JOIN sys.dm_db_index_usage_stats ius
+                ON idx.ObjectId = ius.object_id
+                   AND idx.IndexId = ius.index_id
+                   AND ius.database_id = DB_ID()
         WHERE idx.ObjectId IS NOT NULL;
-        
+
         IF @Debug = 1
             PRINT CONCAT('✓ Dados de uso carregados em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
-    END
+    END;
 
     INSERT INTO #IndicesResumo
     SELECT X.ObjectId,
@@ -437,7 +500,7 @@ BEGIN
            X.IsUniqueConstraint
     FROM #Indices X
     WHERE X.ObjectName NOT LIKE '%HangFire%'
-      AND [X].[Chave] IS NOT NULL;
+          AND [X].[Chave] IS NOT NULL;
 
     -- Log de progresso
     IF @Debug = 1
@@ -445,10 +508,11 @@ BEGIN
         SET @StepTime = GETDATE();
         PRINT CONCAT('⏳ Identificando índices duplicados... - ', FORMAT(@StepTime, 'HH:mm:ss'));
     END;
-    
+
     -- CTE otimizada com ranking para identificar duplicatas
-    ;WITH Duplicates AS (
-        SELECT I.ObjectId,
+    ;
+    WITH Duplicates
+    AS (SELECT I.ObjectId,
                I.ObjectName,
                I.IndexName,
                I.PercAproveitamento,
@@ -459,10 +523,12 @@ BEGIN
                MaximaChave = MAX(LEN(I.Chave)) OVER (PARTITION BY I.ObjectId, I.PrimeiraChave),
                MaximaCInclude = ISNULL(MAX(LEN(I.ColunasIncluidas)) OVER (PARTITION BY I.ObjectId, I.PrimeiraChave), 0),
                -- Otimização: usar COUNT em vez de EXISTS
-               MesmaPrimeiraChave = CASE 
-                   WHEN COUNT(*) OVER (PARTITION BY I.ObjectId, I.PrimeiraChave) > 1 THEN 'S'
-                   ELSE 'N' 
-               END,
+               MesmaPrimeiraChave = CASE
+                                        WHEN COUNT(*) OVER (PARTITION BY I.ObjectId, I.PrimeiraChave) > 1 THEN
+                                            'S'
+                                        ELSE
+                                            'N'
+                                    END,
                I.ColunasIncluidas,
                I.IsUnique,
                I.IsPrimaryKey,
@@ -471,22 +537,23 @@ BEGIN
                I.IndexId,
                [Deletar] = NULL,
                -- Ranking para identificar qual índice manter (melhor aproveitamento, menor tamanho)
-               ROW_NUMBER() OVER (
-                   PARTITION BY I.ObjectId, I.PrimeiraChave 
-                   ORDER BY I.PercAproveitamento DESC, 
-                           LEN(I.Chave) ASC,
-                           I.IsUnique DESC,
-                           I.IndexId ASC
-               ) AS IndexRank
+               ROW_NUMBER() OVER (PARTITION BY I.ObjectId,
+                                               I.PrimeiraChave
+                                  ORDER BY I.PercAproveitamento DESC,
+                                           LEN(I.Chave) ASC,
+                                           I.IsUnique DESC,
+                                           I.IndexId ASC
+                                 ) AS IndexRank
         FROM #IndicesResumo AS I
-        WHERE EXISTS (
+        WHERE EXISTS
+        (
             SELECT 1
             FROM #IndicesResumo DU
             WHERE DU.ObjectId = I.ObjectId
-              AND DU.PrimeiraChave = I.PrimeiraChave
-              AND DU.RowId <> I.RowId  -- Garantir que há duplicatas
+                  AND DU.PrimeiraChave = I.PrimeiraChave
+                  AND DU.RowId <> I.RowId -- Garantir que há duplicatas
         )
-          AND I.IndexId > 1  -- Não é PK
+              AND I.IndexId > 1 -- Não é PK
     )
     INSERT INTO #Duplicates
     SELECT DU.ObjectId,
@@ -507,113 +574,184 @@ BEGIN
            DU.type_index,
            DU.IndexId,
            DU.Deletar,
-           -- Calcular quantidade de colunas na chave
-           CASE WHEN DU.Chave IS NOT NULL 
-                THEN (LEN(DU.Chave) - LEN(REPLACE(DU.Chave, ',', ''))) + 1 
-                ELSE 0 END,
-           -- Calcular quantidade de colunas incluídas
-           CASE WHEN DU.ColunasIncluidas IS NOT NULL 
-                THEN (LEN(DU.ColunasIncluidas) - LEN(REPLACE(DU.ColunasIncluidas, ',', ''))) + 1 
-                ELSE 0 END,
+             -- Calcular quantidade de colunas na chave
+           CASE
+               WHEN DU.Chave IS NOT NULL THEN
+           (LEN(DU.Chave) - LEN(REPLACE(DU.Chave, ',', ''))) + 1
+               ELSE
+                   0
+           END,
+             -- Calcular quantidade de colunas incluídas
+           CASE
+               WHEN DU.ColunasIncluidas IS NOT NULL THEN
+           (LEN(DU.ColunasIncluidas) - LEN(REPLACE(DU.ColunasIncluidas, ',', ''))) + 1
+               ELSE
+                   0
+           END,
            DU.IndexRank,
-           0  -- IndexSizeKB será atualizado depois
+           0 -- IndexSizeKB será atualizado depois
     FROM Duplicates DU;
-    
+
     -- Atualizar tamanho dos índices para cálculo de espaço liberado
     UPDATE D
     SET D.IndexSizeKB = ISNULL(I.IndexsizeKB, 0)
     FROM #Duplicates D
-    INNER JOIN #Indices I ON D.ObjectId = I.ObjectId AND D.IndexId = I.IndexId;
-    
+        INNER JOIN #Indices I
+            ON D.ObjectId = I.ObjectId
+               AND D.IndexId = I.IndexId;
+
     -- OTIMIZADA: Análise de sobreposição parcial (limitada para performance)
-    IF @AnalisarSobreposicao = 1 AND (SELECT COUNT(*) FROM #Duplicates) < 1000  -- Limitar para evitar produto cartesiano massivo
+    IF @AnalisarSobreposicao = 1
+       AND
+       (
+           SELECT COUNT(*)FROM #Duplicates
+       ) < 1000 -- Limitar para evitar produto cartesiano massivo
     BEGIN
         SET @StepTime = GETDATE();
         IF @Debug = 1
             PRINT 'Analisando sobreposição parcial entre índices...';
-        
+
         -- Análise otimizada apenas para índices da mesma tabela com primeira chave similar
-        INSERT INTO #SobreposicaoParcial (ObjectId, BaseIndexName, OverlappingIndexName, SimilarityScore, OverlapType, RecommendedAction)
-        SELECT TOP 500  -- Limitar resultados para performance
-            i1.ObjectId,
-            i1.IndexName as BaseIndexName,
-            i2.IndexName as OverlappingIndexName,
-            -- Coeficiente simplificado mais rápido
-            CASE 
-                WHEN i1.Chave = i2.Chave THEN 100.0
-                WHEN i1.PrimeiraChave = i2.PrimeiraChave THEN 75.0
-                ELSE 25.0
-            END as SimilarityScore,
-            CASE 
-                WHEN i1.Chave = i2.Chave THEN 'IDENTICAL'
-                WHEN i1.Chave LIKE i2.Chave + '%' THEN 'SUPERSET'
-                WHEN i2.Chave LIKE i1.Chave + '%' THEN 'SUBSET'
-                ELSE 'PARTIAL'
-            END as OverlapType,
-            CASE 
-                WHEN i1.Chave = i2.Chave THEN 'REMOVE_DUPLICATE'
-                WHEN i1.PrimeiraChave = i2.PrimeiraChave THEN 'CONSIDER_MERGE'
-                ELSE 'ANALYZE_USAGE'
-            END as RecommendedAction
+        INSERT INTO #SobreposicaoParcial
+        (
+            ObjectId,
+            BaseIndexName,
+            OverlappingIndexName,
+            SimilarityScore,
+            OverlapType,
+            RecommendedAction
+        )
+        SELECT TOP 500 -- Limitar resultados para performance
+               i1.ObjectId,
+               i1.IndexName AS BaseIndexName,
+               i2.IndexName AS OverlappingIndexName,
+               -- Coeficiente simplificado mais rápido
+               CASE
+                   WHEN i1.Chave = i2.Chave THEN
+                       100.0
+                   WHEN i1.PrimeiraChave = i2.PrimeiraChave THEN
+                       75.0
+                   ELSE
+                       25.0
+               END AS SimilarityScore,
+               CASE
+                   WHEN i1.Chave = i2.Chave THEN
+                       'IDENTICAL'
+                   WHEN i1.Chave LIKE i2.Chave + '%' THEN
+                       'SUPERSET'
+                   WHEN i2.Chave LIKE i1.Chave + '%' THEN
+                       'SUBSET'
+                   ELSE
+                       'PARTIAL'
+               END AS OverlapType,
+               CASE
+                   WHEN i1.Chave = i2.Chave THEN
+                       'REMOVE_DUPLICATE'
+                   WHEN i1.PrimeiraChave = i2.PrimeiraChave THEN
+                       'CONSIDER_MERGE'
+                   ELSE
+                       'ANALYZE_USAGE'
+               END AS RecommendedAction
         FROM #Duplicates i1
-        INNER JOIN #Duplicates i2 ON i1.ObjectId = i2.ObjectId 
-            AND i1.PrimeiraChave = i2.PrimeiraChave  -- Otimização: apenas mesma primeira chave
-            AND i1.IndexId < i2.IndexId  -- Evitar duplicatas
-        WHERE LEN(ISNULL(i1.Chave, '')) > 0 AND LEN(ISNULL(i2.Chave, '')) > 0;
-        
-        SELECT @TotalSobreposicaoParcial = COUNT(*) FROM #SobreposicaoParcial;
-        
+            INNER JOIN #Duplicates i2
+                ON i1.ObjectId = i2.ObjectId
+                   AND i1.PrimeiraChave = i2.PrimeiraChave -- Otimização: apenas mesma primeira chave
+                   AND i1.IndexId < i2.IndexId -- Evitar duplicatas
+        WHERE LEN(ISNULL(i1.Chave, '')) > 0
+              AND LEN(ISNULL(i2.Chave, '')) > 0;
+
+        SELECT @TotalSobreposicaoParcial = COUNT(*)
+        FROM #SobreposicaoParcial;
+
         IF @Debug = 1
-            PRINT CONCAT('✓ Análise de sobreposição concluída em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms. Total: ', @TotalSobreposicaoParcial);
-    END
+            PRINT CONCAT(
+                            '✓ Análise de sobreposição concluída em ',
+                            DATEDIFF(MILLISECOND, @StepTime, GETDATE()),
+                            'ms. Total: ',
+                            @TotalSobreposicaoParcial
+                        );
+    END;
     ELSE IF @AnalisarSobreposicao = 1
     BEGIN
         IF @Debug = 1
             PRINT '⚠️ Análise de sobreposição pulada (muitos índices - otimização de performance)';
         SET @TotalSobreposicaoParcial = 0;
-    END
-    
+    END;
+
     -- OTIMIZADA: Análise de ROI (Return on Investment) - Simplificada
-    IF (SELECT COUNT(*) FROM #Duplicates) < 2000  -- Limitar para performance
+    IF
+    (
+        SELECT COUNT(*)FROM #Duplicates
+    ) < 2000 -- Limitar para performance
     BEGIN
         SET @StepTime = GETDATE();
         IF @Debug = 1
             PRINT 'Calculando ROI dos índices...';
-        
-        INSERT INTO #ROIAnalysis (ObjectId, IndexId, IndexName, MaintenanceCostKB, QueryBenefitScore, IsLowROI)
-        SELECT TOP 1000  -- Limitar para performance
-            d.ObjectId,
-            d.IndexId,
-            d.IndexName,
-            d.IndexSizeKB as MaintenanceCostKB,
-            -- Cálculo simplificado de benefício
-            ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) as QueryBenefitScore,
-            CASE 
-                WHEN d.IndexSizeKB > 10240 AND ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) = 0 THEN 1  -- Índices grandes não usados
-                WHEN d.IndexSizeKB > 1024 AND ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) < 10 THEN 1   -- Índices médios pouco usados
-                ELSE 0
-            END as IsLowROI
+
+        INSERT INTO #ROIAnalysis
+        (
+            ObjectId,
+            IndexId,
+            IndexName,
+            MaintenanceCostKB,
+            QueryBenefitScore,
+            IsLowROI
+        )
+        SELECT TOP 1000 -- Limitar para performance
+               d.ObjectId,
+               d.IndexId,
+               d.IndexName,
+               d.IndexSizeKB AS MaintenanceCostKB,
+               -- Cálculo simplificado de benefício
+               ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) AS QueryBenefitScore,
+               CASE
+                   WHEN d.IndexSizeKB > 10240
+                        AND ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) = 0 THEN
+                       1 -- Índices grandes não usados
+                   WHEN d.IndexSizeKB > 1024
+                        AND ISNULL(ius.user_seeks + ius.user_scans + ius.user_lookups, 0) < 10 THEN
+                       1 -- Índices médios pouco usados
+                   ELSE
+                       0
+               END AS IsLowROI
         FROM #Duplicates d
-        LEFT JOIN sys.dm_db_index_usage_stats ius ON d.ObjectId = ius.object_id AND d.IndexId = ius.index_id
-            AND ius.database_id = DB_ID();
-        
-        SELECT @TotalComBaixoROI = COUNT(*) FROM #ROIAnalysis WHERE IsLowROI = 1;
-        
+            LEFT JOIN sys.dm_db_index_usage_stats ius
+                ON d.ObjectId = ius.object_id
+                   AND d.IndexId = ius.index_id
+                   AND ius.database_id = DB_ID();
+
+        SELECT @TotalComBaixoROI = COUNT(*)
+        FROM #ROIAnalysis
+        WHERE IsLowROI = 1;
+
         IF @Debug = 1
-            PRINT CONCAT('✓ Análise de ROI concluída em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms. Índices com baixo ROI: ', @TotalComBaixoROI);
-    END
+            PRINT CONCAT(
+                            '✓ Análise de ROI concluída em ',
+                            DATEDIFF(MILLISECOND, @StepTime, GETDATE()),
+                            'ms. Índices com baixo ROI: ',
+                            @TotalComBaixoROI
+                        );
+    END;
     ELSE
     BEGIN
         IF @Debug = 1
             PRINT '⚠️ Análise de ROI pulada (muitos índices - otimização de performance)';
         SET @TotalComBaixoROI = 0;
-    END
-    
+    END;
+
     IF @Debug = 1
     BEGIN
-        SET @TotalIndicesDuplicados = (SELECT COUNT(*) FROM #Duplicates);
-        PRINT CONCAT('✓ Identificados ', @TotalIndicesDuplicados, ' índices duplicados em ', 
-                    DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
+        SET @TotalIndicesDuplicados =
+        (
+            SELECT COUNT(*)FROM #Duplicates
+        );
+        PRINT CONCAT(
+                        '✓ Identificados ',
+                        @TotalIndicesDuplicados,
+                        ' índices duplicados em ',
+                        DATEDIFF(MILLISECOND, @StepTime, GETDATE()),
+                        'ms'
+                    );
     END;
 
     IF (EXISTS (SELECT 1 FROM #Duplicates AS D))
@@ -624,44 +762,85 @@ BEGIN
             SET @StepTime = GETDATE();
             PRINT CONCAT('⏳ Aplicando critérios de marcação para deleção... - ', FORMAT(@StepTime, 'HH:mm:ss'));
         END;
-        
+
         -- OTIMIZADA: Gerar scripts de backup (limitado para performance)
-        IF @GerarScriptBackup = 1 AND (SELECT COUNT(*) FROM #Duplicates) < 500
+        IF @GerarScriptBackup = 1
+           AND
+           (
+               SELECT COUNT(*)FROM #Duplicates
+           ) < 500
         BEGIN
             SET @StepTime = GETDATE();
             IF @Debug = 1
                 PRINT 'Gerando scripts de backup...';
-            
-            INSERT INTO #BackupScripts (ObjectName, IndexName, CreateScript, DropScript)
-            SELECT TOP 200  -- Limitar para performance
-                OBJECT_NAME(d.ObjectId) as ObjectName,
-                d.IndexName,
-                -- Script de criação (simplificado)
-                CONCAT(
-                    'CREATE ', 
-                    CASE WHEN d.IsUnique = 1 THEN 'UNIQUE ' ELSE '' END,
-                    CASE WHEN d.DescTipo = 1 THEN 'CLUSTERED ' ELSE 'NONCLUSTERED ' END,
-                    'INDEX [', d.IndexName, '] ON [', OBJECT_SCHEMA_NAME(d.ObjectId), '].[', OBJECT_NAME(d.ObjectId), '] (',
-                    ISNULL(d.Chave, ''), ')',
-                    CASE WHEN LEN(ISNULL(d.ColunasIncluidas, '')) > 0 THEN CONCAT(' INCLUDE (', d.ColunasIncluidas, ')') ELSE '' END,
-                    ';'
-                ) as CreateScript,
-                -- Script de remoção
-                CONCAT('DROP INDEX [', d.IndexName, '] ON [', OBJECT_SCHEMA_NAME(d.ObjectId), '].[', OBJECT_NAME(d.ObjectId), '];') as DropScript
+
+            INSERT INTO #BackupScripts
+            (
+                ObjectName,
+                IndexName,
+                CreateScript,
+                DropScript
+            )
+            SELECT TOP 200 -- Limitar para performance
+                   OBJECT_NAME(d.ObjectId) AS ObjectName,
+                   d.IndexName,
+                   -- Script de criação (simplificado) com compressão PAGE
+                   CONCAT(
+                             'CREATE ',
+                             CASE
+                                 WHEN d.IsUnique = 1 THEN
+                                     'UNIQUE '
+                                 ELSE
+                                     ''
+                             END,
+                             CASE
+                                 WHEN d.DescTipo = 1 THEN
+                                     'CLUSTERED '
+                                 ELSE
+                                     'NONCLUSTERED '
+                             END,
+                             'INDEX [',
+                             d.IndexName,
+                             '] ON [',
+                             OBJECT_SCHEMA_NAME(d.ObjectId),
+                             '].[',
+                             OBJECT_NAME(d.ObjectId),
+                             '] (',
+                             ISNULL(d.Chave, ''),
+                             ')',
+                             CASE
+                                 WHEN LEN(ISNULL(d.ColunasIncluidas, '')) > 0 THEN
+                                     CONCAT(' INCLUDE (', d.ColunasIncluidas, ')')
+                                 ELSE
+                                     ''
+                             END,
+                             ' WITH (DATA_COMPRESSION = PAGE) ON [PRIMARY];' -- Adicionar compressão PAGE
+                         ) AS CreateScript,
+                   -- Script de remoção
+                   CONCAT(
+                             'DROP INDEX [',
+                             d.IndexName,
+                             '] ON [',
+                             OBJECT_SCHEMA_NAME(d.ObjectId),
+                             '].[',
+                             OBJECT_NAME(d.ObjectId),
+                             '];'
+                         ) AS DropScript
             FROM #Duplicates d;
-            
+
             -- Script consolidado simplificado (sem STRING_AGG para performance)
-            SET @BackupScript = '-- Scripts de backup gerados em ' + CONVERT(VARCHAR, GETDATE(), 120) + CHAR(13) + CHAR(10);
-            
+            SET @BackupScript
+                = N'-- Scripts de backup gerados em ' + CONVERT(VARCHAR, GETDATE(), 120) + CHAR(13) + CHAR(10);
+
             IF @Debug = 1
                 PRINT CONCAT('✓ Scripts de backup gerados em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
-        END
+        END;
         ELSE IF @GerarScriptBackup = 1
         BEGIN
             IF @Debug = 1
                 PRINT '⚠️ Geração de scripts pulada (muitos índices - otimização de performance)';
-        END
-        
+        END;
+
         -- Validações de segurança antes da marcação
         INSERT INTO #ValidationErrors
         SELECT 'FOREIGN_KEY_DEPENDENCY' AS ErrorType,
@@ -669,57 +848,96 @@ BEGIN
                i.name AS IndexName,
                'Índice referenciado por Foreign Key: ' + fk.name AS ErrorMessage
         FROM #Duplicates d
-        INNER JOIN sys.indexes i ON d.ObjectId = i.object_id AND d.IndexId = i.index_id
-        INNER JOIN sys.foreign_keys fk ON fk.referenced_object_id = d.ObjectId;
-        
+            INNER JOIN sys.indexes i
+                ON d.ObjectId = i.object_id
+                   AND d.IndexId = i.index_id
+            INNER JOIN sys.foreign_keys fk
+                ON fk.referenced_object_id = d.ObjectId;
+
         -- NOVA: Validação adicional para índices com baixo ROI
-        INSERT INTO #ValidationErrors (ErrorType, ObjectName, IndexName, ErrorMessage)
-        SELECT 
-            'LOW_ROI_WARNING',
-            OBJECT_NAME(roi.ObjectId),
-            roi.IndexName,
-            CONCAT('Índice com baixo ROI: ', FORMAT(roi.ROI_Score, 'N4'), ' (limite: ', @LimiteROI, ')')
+        INSERT INTO #ValidationErrors
+        (
+            ErrorType,
+            ObjectName,
+            IndexName,
+            ErrorMessage
+        )
+        SELECT 'LOW_ROI_WARNING',
+               OBJECT_NAME(roi.ObjectId),
+               roi.IndexName,
+               CONCAT('Índice com baixo ROI: ', FORMAT(roi.ROI_Score, 'N4'), ' (limite: ', @LimiteROI, ')')
         FROM #ROIAnalysis roi
         WHERE roi.IsLowROI = 1;
-        
+
         -- OTIMIZADA: Simulação de impacto (limitada para performance)
-        IF @SimularImpacto = 1 AND (SELECT COUNT(*) FROM #Duplicates) < 300
+        IF @SimularImpacto = 1
+           AND
+           (
+               SELECT COUNT(*)FROM #Duplicates
+           ) < 300
         BEGIN
             SET @StepTime = GETDATE();
             IF @Debug = 1
                 PRINT 'Executando simulação de impacto...';
-            
+
             -- Simulação simplificada sem STRING_AGG
-            DECLARE @ImpactoAlto INT = 0, @ImpactoMedio INT = 0, @ImpactoBaixo INT = 0;
-            
-            SELECT 
-                @ImpactoAlto = COUNT(CASE WHEN roi.QueryBenefitScore > 100 THEN 1 END),
-                @ImpactoMedio = COUNT(CASE WHEN roi.QueryBenefitScore BETWEEN 11 AND 100 THEN 1 END),
-                @ImpactoBaixo = COUNT(CASE WHEN roi.QueryBenefitScore <= 10 THEN 1 END)
+            DECLARE @ImpactoAlto INT = 0,
+                    @ImpactoMedio INT = 0,
+                    @ImpactoBaixo INT = 0;
+
+            SELECT @ImpactoAlto = COUNT(   CASE
+                                               WHEN roi.QueryBenefitScore > 100 THEN
+                                                   1
+                                           END
+                                       ),
+                   @ImpactoMedio = COUNT(   CASE
+                                                WHEN roi.QueryBenefitScore
+                                                     BETWEEN 11 AND 100 THEN
+                                                    1
+                                            END
+                                        ),
+                   @ImpactoBaixo = COUNT(   CASE
+                                                WHEN roi.QueryBenefitScore <= 10 THEN
+                                                    1
+                                            END
+                                        )
             FROM #Duplicates d
-            INNER JOIN #ROIAnalysis roi ON d.ObjectId = roi.ObjectId AND d.IndexId = roi.IndexId
+                INNER JOIN #ROIAnalysis roi
+                    ON d.ObjectId = roi.ObjectId
+                       AND d.IndexId = roi.IndexId
             WHERE d.IndexRank > 1;
-            
-            SET @SimulationResults = CONCAT(
-                'Impacto ALTO: ', @ImpactoAlto, ' índices', CHAR(13), CHAR(10),
-                'Impacto MÉDIO: ', @ImpactoMedio, ' índices', CHAR(13), CHAR(10),
-                'Impacto BAIXO: ', @ImpactoBaixo, ' índices'
-            );
-            
+
+            SET @SimulationResults
+                = CONCAT(
+                            'Impacto ALTO: ',
+                            @ImpactoAlto,
+                            ' índices',
+                            CHAR(13),
+                            CHAR(10),
+                            'Impacto MÉDIO: ',
+                            @ImpactoMedio,
+                            ' índices',
+                            CHAR(13),
+                            CHAR(10),
+                            'Impacto BAIXO: ',
+                            @ImpactoBaixo,
+                            ' índices'
+                        );
+
             IF @Debug = 1
             BEGIN
                 PRINT CONCAT('✓ Simulação concluída em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
                 PRINT 'Resumo da simulação:';
                 PRINT @SimulationResults;
-            END
-        END
+            END;
+        END;
         ELSE IF @SimularImpacto = 1
         BEGIN
             IF @Debug = 1
                 PRINT '⚠️ Simulação de impacto pulada (muitos índices - otimização de performance)';
-            SET @SimulationResults = 'Simulação pulada por otimização de performance';
-        END
-        
+            SET @SimulationResults = N'Simulação pulada por otimização de performance';
+        END;
+
         -- Lógica APRIMORADA para marcar índices para deleção
         -- Critério 1: Manter apenas o melhor índice de cada grupo (IndexRank = 1)
         -- Critério 2: Considerar PercAproveitamento, ROI e tipo de índice
@@ -728,51 +946,90 @@ BEGIN
         UPDATE D
         SET D.Deletar = 'S'
         FROM #Duplicates AS D
-        LEFT JOIN #ROIAnalysis roi ON D.ObjectId = roi.ObjectId AND D.IndexId = roi.IndexId
-        LEFT JOIN #SobreposicaoParcial sp ON D.ObjectId = sp.ObjectId 
-            AND (D.IndexName = sp.BaseIndexName OR D.IndexName = sp.OverlappingIndexName)
+            LEFT JOIN #ROIAnalysis roi
+                ON D.ObjectId = roi.ObjectId
+                   AND D.IndexId = roi.IndexId
+            LEFT JOIN #SobreposicaoParcial sp
+                ON D.ObjectId = sp.ObjectId
+                   AND
+                   (
+                       D.IndexName = sp.BaseIndexName
+                       OR D.IndexName = sp.OverlappingIndexName
+                   )
         WHERE (
-            -- Critérios originais aprimorados
-            (D.IndexRank > 1 AND D.PercAproveitamento < @TaxaDeSeguranca) OR
-            (D.IndexRank > 1 AND D.DescTipo = 2 AND D.IsUnique = 0) OR
-            (D.IndexRank > 2) OR  -- Manter pelo menos os 2 melhores
-            -- NOVOS critérios
-            (roi.IsLowROI = 1 AND D.IndexRank > 1) OR
-            (sp.RecommendedAction = 'REMOVE_DUPLICATE') OR
-            (roi.IsLowROI = 1 AND roi.QueryBenefitScore < 1)  -- ROI muito baixo
-        )
-        AND D.IsPrimaryKey = 0  -- Não é Primary Key
-        AND D.IsUniqueConstraint = 0  -- Não é Unique Constraint
-        AND D.IsUnique = 0  -- Não é índice único
-        AND NOT EXISTS (  -- Não tem dependências críticas (exceto warnings de ROI)
-            SELECT 1 FROM #ValidationErrors ve 
-            WHERE ve.ObjectName = D.ObjectName AND ve.IndexName = D.IndexName
-            AND ve.ErrorType <> 'LOW_ROI_WARNING'
+                  -- Critérios originais aprimorados
+                  (
+                      D.IndexRank > 1
+                      AND D.PercAproveitamento < @TaxaDeSeguranca
+                  )
+                  OR
+                  (
+                      D.IndexRank > 1
+                      AND D.DescTipo = 2
+                      AND D.IsUnique = 0
+                  )
+                  OR (D.IndexRank > 2)
+                  OR -- Manter pelo menos os 2 melhores
+                     -- NOVOS critérios
+                  (
+                      roi.IsLowROI = 1
+                      AND D.IndexRank > 1
+                  )
+                  OR (sp.RecommendedAction = 'REMOVE_DUPLICATE')
+                  OR
+                  (
+                      roi.IsLowROI = 1
+                      AND roi.QueryBenefitScore < 1
+                  ) -- ROI muito baixo
+              )
+              AND D.IsPrimaryKey = 0 -- Não é Primary Key
+              AND D.IsUniqueConstraint = 0 -- Não é Unique Constraint
+              AND D.IsUnique = 0 -- Não é índice único
+              AND NOT EXISTS
+        (   -- Não tem dependências críticas (exceto warnings de ROI)
+            SELECT 1
+            FROM #ValidationErrors ve
+            WHERE ve.ObjectName = D.ObjectName
+                  AND ve.IndexName = D.IndexName
+                  AND ve.ErrorType <> 'LOW_ROI_WARNING'
         );
-        
+
         -- Critério 2: Índices órfãos com baixo aproveitamento
         UPDATE D
         SET D.Deletar = 'S'
         FROM #Duplicates AS D
-        LEFT JOIN #ROIAnalysis roi ON D.ObjectId = roi.ObjectId AND D.IndexId = roi.IndexId
-        WHERE D.ObjectId IN (
-            SELECT d2.ObjectId
-            FROM #Duplicates AS d2
-            GROUP BY d2.ObjectId, d2.PrimeiraChave
-            HAVING COUNT(*) = 1  -- Aparece apenas uma vez no grupo
-        )
-        AND (D.PercAproveitamento < (@TaxaDeSeguranca / 2) OR roi.IsLowROI = 1)  -- Critério mais rigoroso ou baixo ROI
-        AND D.IsPrimaryKey = 0
-        AND D.IsUniqueConstraint = 0
-        AND NOT EXISTS (
-            SELECT 1 FROM #ValidationErrors ve 
-            WHERE ve.ObjectName = D.ObjectName AND ve.IndexName = D.IndexName
-            AND ve.ErrorType <> 'LOW_ROI_WARNING'
+            LEFT JOIN #ROIAnalysis roi
+                ON D.ObjectId = roi.ObjectId
+                   AND D.IndexId = roi.IndexId
+        WHERE D.ObjectId IN
+              (
+                  SELECT d2.ObjectId
+                  FROM #Duplicates AS d2
+                  GROUP BY d2.ObjectId,
+                           d2.PrimeiraChave
+                  HAVING COUNT(*) = 1 -- Aparece apenas uma vez no grupo
+              )
+              AND
+              (
+                  D.PercAproveitamento < (@TaxaDeSeguranca / 2)
+                  OR roi.IsLowROI = 1
+              ) -- Critério mais rigoroso ou baixo ROI
+              AND D.IsPrimaryKey = 0
+              AND D.IsUniqueConstraint = 0
+              AND NOT EXISTS
+        (
+            SELECT 1
+            FROM #ValidationErrors ve
+            WHERE ve.ObjectName = D.ObjectName
+                  AND ve.IndexName = D.IndexName
+                  AND ve.ErrorType <> 'LOW_ROI_WARNING'
         );
-        
+
+        DROP TABLE IF EXISTS #MergeScripts;
         -- NOVA: Processamento de MERGE para índices com RecommendedAction = 'CONSIDER_MERGE'
         -- Tabela para armazenar scripts de merge
-        CREATE TABLE #MergeScripts (
+        CREATE TABLE #MergeScripts
+        (
             ObjectId INT,
             ObjectName VARCHAR(128),
             BaseIndexName VARCHAR(128),
@@ -781,467 +1038,952 @@ BEGIN
             CreateMergedScript NVARCHAR(MAX),
             DropBaseScript NVARCHAR(MAX),
             DropOverlappingScript NVARCHAR(MAX),
-            EstimatedBenefit VARCHAR(100)
+            EstimatedBenefit VARCHAR(300),
+            MergeType VARCHAR(50)
+                DEFAULT 'SOBREPOSICAO' -- NOVO: Tipo do merge
         );
-        
-        IF EXISTS (SELECT 1 FROM #SobreposicaoParcial WHERE RecommendedAction = 'CONSIDER_MERGE')
-        BEGIN
-            SET @StepTime = GETDATE();
-            IF @Debug = 1
-                PRINT 'Processando merge de índices sobrepostos...';
-            
-            -- Gerar scripts de merge para índices que devem ser consolidados
-            INSERT INTO #MergeScripts (ObjectId, ObjectName, BaseIndexName, OverlappingIndexName, MergedIndexName, CreateMergedScript, DropBaseScript, DropOverlappingScript, EstimatedBenefit)
-            SELECT 
-                sp.ObjectId,
-                OBJECT_NAME(sp.ObjectId) as ObjectName,
-                sp.BaseIndexName,
-                sp.OverlappingIndexName,
-                -- Nome do índice merged
-                CONCAT('IX_MERGED_', 
-                       REPLACE(REPLACE(sp.BaseIndexName, 'IX_', ''), 'IDX_', ''), 
-                       '_', 
-                       RIGHT(REPLACE(REPLACE(sp.OverlappingIndexName, 'IX_', ''), 'IDX_', ''), 20)) as MergedIndexName,
-                -- Script de criação do índice merged (combinando colunas)
-                CONCAT(
-                    'CREATE NONCLUSTERED INDEX [IX_MERGED_', 
-                    REPLACE(REPLACE(sp.BaseIndexName, 'IX_', ''), 'IDX_', ''), 
-                    '_', 
-                    RIGHT(REPLACE(REPLACE(sp.OverlappingIndexName, 'IX_', ''), 'IDX_', ''), 20),
-                    '] ON [', OBJECT_SCHEMA_NAME(sp.ObjectId), '].[', OBJECT_NAME(sp.ObjectId), '] (',
-                    -- Combinar chaves dos dois índices (base + colunas adicionais do overlapping)
-                    d1.Chave,
-                    CASE 
-                        WHEN LEN(ISNULL(d2.Chave, '')) > LEN(ISNULL(d1.Chave, '')) 
-                        THEN CONCAT(', ', SUBSTRING(d2.Chave, LEN(d1.Chave) + 2, LEN(d2.Chave)))
-                        ELSE ''
-                    END,
-                    ')',
-                    -- Incluir colunas de ambos os índices
-                    CASE 
-                        WHEN LEN(ISNULL(d1.ColunasIncluidas, '')) > 0 OR LEN(ISNULL(d2.ColunasIncluidas, '')) > 0
-                        THEN CONCAT(' INCLUDE (', 
-                                   ISNULL(d1.ColunasIncluidas, ''),
-                                   CASE WHEN LEN(ISNULL(d1.ColunasIncluidas, '')) > 0 AND LEN(ISNULL(d2.ColunasIncluidas, '')) > 0 THEN ', ' ELSE '' END,
-                                   ISNULL(d2.ColunasIncluidas, ''),
-                                   ')')
-                        ELSE ''
-                    END,
-                    ';'
-                ) as CreateMergedScript,
-                -- Scripts de remoção dos índices originais
-                CONCAT('DROP INDEX [', sp.BaseIndexName, '] ON [', OBJECT_SCHEMA_NAME(sp.ObjectId), '].[', OBJECT_NAME(sp.ObjectId), '];') as DropBaseScript,
-                CONCAT('DROP INDEX [', sp.OverlappingIndexName, '] ON [', OBJECT_SCHEMA_NAME(sp.ObjectId), '].[', OBJECT_NAME(sp.ObjectId), '];') as DropOverlappingScript,
-                -- Benefício estimado
-                CONCAT('Redução de ', FORMAT((d1.IndexSizeKB + d2.IndexSizeKB) / 1024.0, 'N1'), ' MB para ~', 
-                       FORMAT((GREATEST(d1.IndexSizeKB, d2.IndexSizeKB) * 1.2) / 1024.0, 'N1'), ' MB') as EstimatedBenefit
-            FROM #SobreposicaoParcial sp
-            INNER JOIN #Duplicates d1 ON sp.ObjectId = d1.ObjectId AND sp.BaseIndexName = d1.IndexName
-            INNER JOIN #Duplicates d2 ON sp.ObjectId = d2.ObjectId AND sp.OverlappingIndexName = d2.IndexName
-            WHERE sp.RecommendedAction = 'CONSIDER_MERGE'
-            AND d1.IsPrimaryKey = 0 AND d1.IsUniqueConstraint = 0
-            AND d2.IsPrimaryKey = 0 AND d2.IsUniqueConstraint = 0;
-            
-            -- Marcar índices originais para deleção após merge
-            UPDATE D
-            SET D.Deletar = 'M'  -- 'M' = Merge (será processado diferente)
-            FROM #Duplicates D
-            INNER JOIN #MergeScripts ms ON D.ObjectId = ms.ObjectId 
-                AND (D.IndexName = ms.BaseIndexName OR D.IndexName = ms.OverlappingIndexName);
-            
-            IF @Debug = 1
-            BEGIN
-                DECLARE @MergeCount INT = (SELECT COUNT(*) FROM #MergeScripts);
-                PRINT CONCAT('✓ Identificados ', @MergeCount, ' grupos de índices para merge em ', 
-                            DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
-            END;
-        END
-        
-        SET @TotalMarcadosParaDeletar = (SELECT COUNT(*) FROM #Duplicates WHERE Deletar = 'S');
-        SET @EspacoLiberadoKB = (SELECT ISNULL(SUM(IndexSizeKB), 0) FROM #Duplicates WHERE Deletar = 'S');
-        
-        IF @Debug = 1
-        BEGIN
-            PRINT CONCAT('✓ Marcados ', @TotalMarcadosParaDeletar, ' índices para deleção em ', 
-                        DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
-            PRINT CONCAT('💾 Espaço estimado a ser liberado: ', FORMAT(@EspacoLiberadoKB / 1024.0, 'N2'), ' MB');
-            
-            IF EXISTS (SELECT 1 FROM #ValidationErrors)
-            BEGIN
-                PRINT '⚠️  Avisos de validação encontrados:';
-                SELECT * FROM #ValidationErrors;
-            END;
-        END;
 
-        -- =============================================
-        -- SEÇÃO 6: EXECUÇÃO - MERGE E REMOÇÃO DE ÍNDICES
-        -- =============================================
-        
-        -- SUBSECTION 6.1: PROCESSAMENTO DE MERGES
-        IF @Efetivar = 1 AND EXISTS (SELECT 1 FROM #MergeScripts)
+        DROP TABLE IF EXISTS #ROIMergeScripts;
+        -- NOVA: Tabela para merge baseado em ROI
+        CREATE TABLE #ROIMergeScripts
+        (
+            ObjectId INT,
+            ObjectName VARCHAR(128),
+            GoodROIIndexName VARCHAR(128),
+            BadROIIndexName VARCHAR(128),
+            MergedIndexName VARCHAR(128),
+            CreateMergedScript NVARCHAR(MAX),
+            DropBadROIScript NVARCHAR(MAX),
+            EstimatedBenefit VARCHAR(100),
+            INDEX IX_ROIMerge_ObjectId (ObjectId)
+        );
+
+        -- VERSÃO SIMPLIFICADA COM CURSOR PARA MERGE DE ÍNDICES
+        IF EXISTS
+        (
+            SELECT *
+            FROM #SobreposicaoParcial
+            WHERE RecommendedAction = 'CONSIDER_MERGE'
+        )
         BEGIN
             SET @StepTime = GETDATE();
             IF @Debug = 1
-                PRINT 'Executando merge de índices sobrepostos...';
-            
-            DECLARE @MergeObjectId INT, @MergeObjectName VARCHAR(128), @MergeBaseIndex VARCHAR(128), @MergeOverlapIndex VARCHAR(128);
-            DECLARE @CreateMergedSQL NVARCHAR(MAX), @DropBaseSQL NVARCHAR(MAX), @DropOverlapSQL NVARCHAR(MAX);
-            DECLARE @MergeSuccessCount INT = 0, @MergeErrorCount INT = 0;
-            
+                PRINT 'Processando merge de índices sobrepostos com cursor...';
+
+
+            -- Variáveis para o cursor
+            DECLARE @CursorObjectId INT,
+                    @CursorBaseIndex VARCHAR(128),
+                    @CursorOverlapIndex VARCHAR(128);
+            DECLARE @BaseChave VARCHAR(998),
+                    @BaseInclude VARCHAR(998),
+                    @BasePercAprov DECIMAL(18, 2);
+            DECLARE @OverlapChave VARCHAR(998),
+                    @OverlapInclude VARCHAR(998),
+                    @OverlapPercAprov DECIMAL(18, 2);
+            DECLARE @MergedChave VARCHAR(998),
+                    @MergedInclude VARCHAR(998);
+            DECLARE @CreateScript NVARCHAR(MAX),
+                    @DropScript1 NVARCHAR(MAX),
+                    @DropScript2 NVARCHAR(MAX);
+            DECLARE @ObjectName VARCHAR(128),
+                    @SchemaName VARCHAR(128);
+
+            -- Cursor para percorrer índices que devem ser merged
             DECLARE merge_cursor CURSOR FAST_FORWARD FOR
-            SELECT ObjectId, ObjectName, BaseIndexName, OverlappingIndexName, 
-                   CreateMergedScript, DropBaseScript, DropOverlappingScript
-            FROM #MergeScripts
-            ORDER BY ObjectName;
-            
+            SELECT sp.ObjectId,
+                   sp.BaseIndexName,
+                   sp.OverlappingIndexName
+            FROM #SobreposicaoParcial sp
+            WHERE sp.RecommendedAction = 'CONSIDER_MERGE';
+
             OPEN merge_cursor;
-            FETCH NEXT FROM merge_cursor INTO @MergeObjectId, @MergeObjectName, @MergeBaseIndex, @MergeOverlapIndex,
-                                              @CreateMergedSQL, @DropBaseSQL, @DropOverlapSQL;
-            
+            FETCH NEXT FROM merge_cursor
+            INTO @CursorObjectId,
+                 @CursorBaseIndex,
+                 @CursorOverlapIndex;
+
             WHILE @@FETCH_STATUS = 0
             BEGIN
-                BEGIN TRY
-                    -- 1. Criar o índice merged
-                    EXEC sp_executesql @CreateMergedSQL;
-                    
-                    -- 2. Remover os índices originais
-                    EXEC sp_executesql @DropBaseSQL;
-                    EXEC sp_executesql @DropOverlapSQL;
-                    
-                    SET @MergeSuccessCount = @MergeSuccessCount + 1;
-                    
-                    IF @Debug = 1
-                        PRINT CONCAT('✓ Merge realizado: ', @MergeObjectName, ' (', @MergeBaseIndex, ' + ', @MergeOverlapIndex, ')');
-                END TRY
-                BEGIN CATCH
-                    SET @MergeErrorCount = @MergeErrorCount + 1;
-                    IF @Debug = 1
-                        PRINT CONCAT('✗ Erro no merge ', @MergeObjectName, ': ', ERROR_MESSAGE());
-                END CATCH
-                
-                FETCH NEXT FROM merge_cursor INTO @MergeObjectId, @MergeObjectName, @MergeBaseIndex, @MergeOverlapIndex,
-                                                  @CreateMergedSQL, @DropBaseSQL, @DropOverlapSQL;
-            END
-            
+                -- Recuperar todos os dados necessários em uma única consulta
+                SELECT @BaseChave = base.Chave,
+                       @BaseInclude = base.ColunasIncluidas,
+                       @BasePercAprov = base.PercAproveitamento,
+                       @OverlapChave = overlap.Chave,
+                       @OverlapInclude = overlap.ColunasIncluidas,
+                       @OverlapPercAprov = overlap.PercAproveitamento,
+                       @ObjectName = OBJECT_NAME(@CursorObjectId),
+                       @SchemaName = OBJECT_SCHEMA_NAME(@CursorObjectId)
+                FROM #Duplicates base
+                    INNER JOIN #Duplicates overlap
+                        ON overlap.ObjectId = @CursorObjectId
+                           AND overlap.IndexName = @CursorOverlapIndex
+                WHERE base.ObjectId = @CursorObjectId
+                      AND base.IndexName = @CursorBaseIndex;
+
+                -- Escolher a melhor chave
+                SET @MergedChave = CASE
+                                       WHEN @BasePercAprov > @OverlapPercAprov THEN
+                                           @BaseChave
+                                       WHEN @OverlapPercAprov > @BasePercAprov THEN
+                                           @OverlapChave
+                                       WHEN LEN(ISNULL(@BaseChave, '')) >= LEN(ISNULL(@OverlapChave, '')) THEN
+                                           @BaseChave
+                                       ELSE
+                                           @OverlapChave
+                                   END;
+
+                -- Combinar colunas incluídas removendo duplicatas e colunas já na chave
+                WITH AllIncludeCols
+                AS (
+                   -- Colunas do índice base
+                   SELECT LTRIM(RTRIM(value)) AS col_value
+                   FROM STRING_SPLIT(ISNULL(@BaseInclude, ''), ',')
+                   WHERE LTRIM(RTRIM(value)) <> ''
+                   UNION
+
+                   -- Colunas do índice overlap
+                   SELECT LTRIM(RTRIM(value)) AS col_value
+                   FROM STRING_SPLIT(ISNULL(@OverlapInclude, ''), ',')
+                   WHERE LTRIM(RTRIM(value)) <> ''),
+                     KeyCols
+                AS (
+                   -- Colunas da chave merged para exclusão
+                   SELECT LTRIM(RTRIM(value)) AS key_col
+                   FROM STRING_SPLIT(@MergedChave, ',')
+                   WHERE LTRIM(RTRIM(value)) <> ''),
+                     FilteredCols
+                AS (
+                   -- Colunas que não estão na chave
+                   SELECT col_value
+                   FROM AllIncludeCols a
+                   WHERE NOT EXISTS
+                   (
+                       SELECT 1 FROM KeyCols k WHERE k.key_col = a.col_value
+                   ) )
+                SELECT @MergedInclude = STRING_AGG(col_value, ', ')WITHIN GROUP(ORDER BY col_value)
+                FROM FilteredCols;
+
+                -- Gerar scripts
+                SET @CreateScript
+                    = CONCAT(
+                                'CREATE NONCLUSTERED INDEX [IX_MERGED_',
+                                REPLACE(REPLACE(@CursorBaseIndex, 'IX_', ''), 'IDX_', ''),
+                                '_',
+                                RIGHT(REPLACE(REPLACE(@CursorOverlapIndex, 'IX_', ''), 'IDX_', ''), 20),
+                                '] ON [',
+                                @SchemaName,
+                                '].[',
+                                @ObjectName,
+                                '] (',
+                                @MergedChave,
+                                ')',
+                                CASE
+                                    WHEN LEN(ISNULL(@MergedInclude, '')) > 0 THEN
+                                        CONCAT(' INCLUDE (', @MergedInclude, ')')
+                                    ELSE
+                                        ''
+                                END,
+                                ' WITH (DATA_COMPRESSION = PAGE) ON [PRIMARY];'
+                            );
+
+                SET @DropScript1
+                    = CONCAT('DROP INDEX [', @CursorBaseIndex, '] ON [', @SchemaName, '].[', @ObjectName, '];');
+                SET @DropScript2
+                    = CONCAT('DROP INDEX [', @CursorOverlapIndex, '] ON [', @SchemaName, '].[', @ObjectName, '];');
+
+                -- Inserir na tabela de scripts de merge
+                INSERT INTO #MergeScripts
+                (
+                    ObjectId,
+                    ObjectName,
+                    BaseIndexName,
+                    OverlappingIndexName,
+                    MergedIndexName,
+                    CreateMergedScript,
+                    DropBaseScript,
+                    DropOverlappingScript,
+                    EstimatedBenefit
+                )
+                VALUES
+                (@CursorObjectId, @ObjectName, @CursorBaseIndex, @CursorOverlapIndex,
+                 CONCAT(
+                           'IX_MERGED_',
+                           REPLACE(REPLACE(@CursorBaseIndex, 'IX_', ''), 'IDX_', ''),
+                           '_',
+                           RIGHT(REPLACE(REPLACE(@CursorOverlapIndex, 'IX_', ''), 'IDX_', ''), 20)
+                       ), @CreateScript, @DropScript1, @DropScript2,
+                 CONCAT('Merge de ', @CursorBaseIndex, ' + ', @CursorOverlapIndex));
+
+                FETCH NEXT FROM merge_cursor
+                INTO @CursorObjectId,
+                     @CursorBaseIndex,
+                     @CursorOverlapIndex;
+            END;
+
             CLOSE merge_cursor;
             DEALLOCATE merge_cursor;
-            
+
+
+            -- Marcar índices originais para deleção após merge
+            UPDATE D
+            SET D.Deletar = 'M' -- 'M' = Merge (será processado diferente)
+            FROM #Duplicates D
+                INNER JOIN #MergeScripts ms
+                    ON D.ObjectId = ms.ObjectId
+                       AND
+                       (
+                           D.IndexName = ms.BaseIndexName
+                           OR D.IndexName = ms.OverlappingIndexName
+                       );
+
             IF @Debug = 1
-                PRINT CONCAT('✓ Merge concluído: ', @MergeSuccessCount, ' sucessos, ', @MergeErrorCount, ' erros em ', 
-                            DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
-        END
-        
-        -- SUBSECTION 6.2: INSERIR ÍNDICES MARCADOS PARA DELEÇÃO (exceto os já processados no merge)
-        INSERT INTO #MarcadosParaDeletar
-        SELECT F1.ObjectId,
-               F1.ObjectName,
-               F1.IndexName,
-               F1.PercAproveitamento,
-               F1.PrimeiraChave,
-               F1.MesmaPrimeiraChave,
-               F1.Chave,
-               F1.Deletar,
-               F1.ColunasIncluidas,
-               F1.TamanhoChave,
-               F1.MaximaChave,
-               F1.TamanhoCInclude,
-               F1.MaximaCInclude,
-               F1.IsUnique,
-               F1.IsPrimaryKey,
-               F1.IsUniqueConstraint,
-               CASE F1.DescTipo 
-                   WHEN 1 THEN 'CLUSTERED'
-                   WHEN 2 THEN 'NONCLUSTERED'
-                   WHEN 3 THEN 'XML'
-                   WHEN 4 THEN 'SPATIAL'
-                   WHEN 5 THEN 'CLUSTERED COLUMNSTORE'
-                   WHEN 6 THEN 'NONCLUSTERED COLUMNSTORE'
-                   WHEN 7 THEN 'NONCLUSTERED HASH'
-                   ELSE 'UNKNOWN'
-               END,
-               F1.IndexId,
-               F1.IndexSizeKB
-        FROM #Duplicates F1
-        WHERE F1.Deletar = 'S'  -- Apenas índices marcados para deleção simples (não merge)
-        ORDER BY F1.ObjectId,
-                 F1.PrimeiraChave,
-                 F1.PercAproveitamento ASC;  -- Deletar primeiro os de menor aproveitamento
-                  
-        -- SUBSECTION 6.3: REMOÇÃO DE ÍNDICES DUPLICADOS RESTANTES
-        IF (EXISTS (SELECT 1 FROM #MarcadosParaDeletar AS MPD) AND @Efetivar = 1)
-        BEGIN
+            BEGIN
+                DECLARE @MergeCount INT =
+                        (
+                            SELECT COUNT(*)FROM #MergeScripts
+                        );
+                PRINT CONCAT(
+                                '✓ Identificados ',
+                                @MergeCount,
+                                ' grupos de índices para merge em ',
+                                DATEDIFF(MILLISECOND, @StepTime, GETDATE()),
+                                'ms'
+                            );
+            END;
+
+
+
+
+            SET @TotalMarcadosParaDeletar =
+            (
+                SELECT COUNT(*)FROM #Duplicates WHERE Deletar IN ( 'S', 'R' )
+            );
+            SET @EspacoLiberadoKB =
+            (
+                SELECT ISNULL(SUM(IndexSizeKB), 0)FROM #Duplicates WHERE Deletar = 'S'
+            );
+
             IF @Debug = 1
+            BEGIN
+                PRINT CONCAT(
+                                '✓ Marcados ',
+                                @TotalMarcadosParaDeletar,
+                                ' índices para deleção em ',
+                                DATEDIFF(MILLISECOND, @StepTime, GETDATE()),
+                                'ms'
+                            );
+                PRINT CONCAT('💾 Espaço estimado a ser liberado: ', FORMAT(@EspacoLiberadoKB / 1024.0, 'N2'), ' MB');
+
+                IF EXISTS (SELECT 1 FROM #ValidationErrors)
+                BEGIN
+                    PRINT '⚠️  Avisos de validação encontrados:';
+                    SELECT *
+                    FROM #ValidationErrors;
+                END;
+            END;
+
+            -- =============================================
+            -- SEÇÃO 6: EXECUÇÃO - MERGE E REMOÇÃO DE ÍNDICES
+            -- =============================================
+
+            -- SUBSECTION 6.1: PROCESSAMENTO DE MERGES
+            IF @Efetivar = 1 AND EXISTS (SELECT 1 FROM #MergeScripts)
             BEGIN
                 SET @StepTime = GETDATE();
-                PRINT CONCAT('⏳ Iniciando remoção de índices... - ', FORMAT(@StepTime, 'HH:mm:ss'));
+                IF @Debug = 1
+                    PRINT 'Executando merge de índices sobrepostos...';
+
+                DECLARE @MergeObjectId INT,
+                        @MergeObjectName VARCHAR(128),
+                        @MergeBaseIndex VARCHAR(128),
+                        @MergeOverlapIndex VARCHAR(128);
+                DECLARE @CreateMergedSQL NVARCHAR(MAX),
+                        @DropBaseSQL NVARCHAR(MAX),
+                        @DropOverlapSQL NVARCHAR(MAX);
+                DECLARE @MergeSuccessCount INT = 0,
+                        @MergeErrorCount INT = 0;
+
+                DECLARE merge_cursor CURSOR FAST_FORWARD FOR
+                SELECT ObjectId,
+                       ObjectName,
+                       BaseIndexName,
+                       OverlappingIndexName,
+                       CreateMergedScript,
+                       DropBaseScript,
+                       DropOverlappingScript
+                FROM #MergeScripts
+                ORDER BY ObjectName;
+
+                OPEN merge_cursor;
+                FETCH NEXT FROM merge_cursor
+                INTO @MergeObjectId,
+                     @MergeObjectName,
+                     @MergeBaseIndex,
+                     @MergeOverlapIndex,
+                     @CreateMergedSQL,
+                     @DropBaseSQL,
+                     @DropOverlapSQL;
+
+                WHILE @@FETCH_STATUS = 0
+                BEGIN
+                    BEGIN TRY
+                        -- 1. Criar o índice merged
+                        EXEC sp_executesql @CreateMergedSQL;
+
+                        -- 2. Remover os índices originais
+                        EXEC sp_executesql @DropBaseSQL;
+                        EXEC sp_executesql @DropOverlapSQL;
+
+                        SET @MergeSuccessCount = @MergeSuccessCount + 1;
+
+                        IF @Debug = 1
+                            PRINT CONCAT(
+                                            '✓ Merge realizado: ',
+                                            @MergeObjectName,
+                                            ' (',
+                                            @MergeBaseIndex,
+                                            ' + ',
+                                            @MergeOverlapIndex,
+                                            ')'
+                                        );
+                    END TRY
+                    BEGIN CATCH
+                        SET @MergeErrorCount = @MergeErrorCount + 1;
+                        IF @Debug = 1
+                            PRINT CONCAT('✗ Erro no merge ', @MergeObjectName, ': ', ERROR_MESSAGE());
+                    END CATCH;
+
+                    FETCH NEXT FROM merge_cursor
+                    INTO @MergeObjectId,
+                         @MergeObjectName,
+                         @MergeBaseIndex,
+                         @MergeOverlapIndex,
+                         @CreateMergedSQL,
+                         @DropBaseSQL,
+                         @DropOverlapSQL;
+                END;
+
+                CLOSE merge_cursor;
+                DEALLOCATE merge_cursor;
+
+                IF @Debug = 1
+                    PRINT CONCAT(
+                                    '✓ Merge de sobreposição concluído: ',
+                                    @MergeSuccessCount,
+                                    ' sucessos, ',
+                                    @MergeErrorCount,
+                                    ' erros em ',
+                                    DATEDIFF(MILLISECOND, @StepTime, GETDATE()),
+                                    'ms'
+                                );
             END;
-            
-            DECLARE @RowCount INT = 1;
-            DECLARE @TotalRows INT;
-            DECLARE @CurrentObjectName VARCHAR(128);
-            DECLARE @CurrentIndexName VARCHAR(128);
-            DECLARE @Script NVARCHAR(1000);
-            DECLARE @ErrorMessage NVARCHAR(4000);
-            
-            SELECT @TotalRows = COUNT(*) FROM #MarcadosParaDeletar;
-            
-            WHILE @RowCount <= @TotalRows
+
+            -- Executar merges baseados em ROI
+            IF @Efetivar = 1 AND EXISTS (SELECT 1 FROM #ROIMergeScripts)
             BEGIN
-                SELECT @CurrentObjectName = ObjectName,
-                       @CurrentIndexName = IndexName
-                FROM #MarcadosParaDeletar
-                WHERE RowNum = @RowCount;
-                
-                BEGIN TRY
-                    SET @Script = CONCAT('DROP INDEX [', @CurrentIndexName, '] ON ', @CurrentObjectName);
-                    EXEC sys.sp_executesql @Script;
-                    
-                    SET @SuccessCount = @SuccessCount + 1;
-                    
-                    IF @Debug = 1
-                        PRINT CONCAT('✓ [', @RowCount, '/', @TotalRows, '] Índice removido: ', @CurrentIndexName, ' da tabela ', @CurrentObjectName);
-                        
-                END TRY
-                BEGIN CATCH
-                    SET @ErrorMessage = ERROR_MESSAGE();
-                    SET @ErrorCount = @ErrorCount + 1;
-                    
-                    IF @Debug = 1
-                        PRINT CONCAT('✗ [', @RowCount, '/', @TotalRows, '] Erro ao remover índice ', @CurrentIndexName, ': ', @ErrorMessage);
-                END CATCH
-                
-                SET @RowCount = @RowCount + 1;
+                SET @StepTime = GETDATE();
+                IF @Debug = 1
+                    PRINT '🔄 Executando merges baseados em ROI...';
+
+                DECLARE @ROIMergeSuccessCount INT = 0;
+                DECLARE @ROIMergeErrorCount INT = 0;
+
+                DECLARE @ROIObjectId INT,
+                        @ROIObjectName NVARCHAR(255),
+                        @ROIGoodIndexName NVARCHAR(255),
+                        @ROIBadIndexName NVARCHAR(255),
+                        @ROICreateMergedSQL NVARCHAR(MAX),
+                        @ROIDropBadSQL NVARCHAR(MAX);
+
+                DECLARE roi_merge_cursor CURSOR FOR
+                SELECT ObjectId,
+                       ObjectName,
+                       GoodROIIndexName,
+                       BadROIIndexName,
+                       CreateMergedScript,
+                       DropBadROIScript
+                FROM #ROIMergeScripts
+                ORDER BY ObjectName;
+
+                OPEN roi_merge_cursor;
+                FETCH NEXT FROM roi_merge_cursor
+                INTO @ROIObjectId,
+                     @ROIObjectName,
+                     @ROIGoodIndexName,
+                     @ROIBadIndexName,
+                     @ROICreateMergedSQL,
+                     @ROIDropBadSQL;
+
+                WHILE @@FETCH_STATUS = 0
+                BEGIN
+                    BEGIN TRY
+                        -- 1. Criar o índice merged (com chaves do bom ROI + colunas do baixo ROI)
+                        EXEC sp_executesql @ROICreateMergedSQL;
+
+                        -- 2. Remover o índice com baixo ROI
+                        EXEC sp_executesql @ROIDropBadSQL;
+
+                        SET @ROIMergeSuccessCount = @ROIMergeSuccessCount + 1;
+
+                        IF @Debug = 1
+                            PRINT CONCAT(
+                                            '✓ ROI Merge realizado: ',
+                                            @ROIObjectName,
+                                            ' (Mantido: ',
+                                            @ROIGoodIndexName,
+                                            ', Removido: ',
+                                            @ROIBadIndexName,
+                                            ')'
+                                        );
+                    END TRY
+                    BEGIN CATCH
+                        SET @ROIMergeErrorCount = @ROIMergeErrorCount + 1;
+                        IF @Debug = 1
+                            PRINT CONCAT('✗ Erro no ROI merge ', @ROIObjectName, ': ', ERROR_MESSAGE());
+                    END CATCH;
+
+                    FETCH NEXT FROM roi_merge_cursor
+                    INTO @ROIObjectId,
+                         @ROIObjectName,
+                         @ROIGoodIndexName,
+                         @ROIBadIndexName,
+                         @ROICreateMergedSQL,
+                         @ROIDropBadSQL;
+                END;
+
+                CLOSE roi_merge_cursor;
+                DEALLOCATE roi_merge_cursor;
+
+                IF @Debug = 1
+                    PRINT CONCAT(
+                                    '✓ ROI Merge concluído: ',
+                                    @ROIMergeSuccessCount,
+                                    ' sucessos, ',
+                                    @ROIMergeErrorCount,
+                                    ' erros em ',
+                                    DATEDIFF(MILLISECOND, @StepTime, GETDATE()),
+                                    'ms'
+                                );
             END;
-            
-            IF @Debug = 1
+
+            -- SUBSECTION 6.2: INSERIR ÍNDICES MARCADOS PARA DELEÇÃO (exceto os já processados no merge)
+            INSERT INTO #MarcadosParaDeletar
+            SELECT F1.ObjectId,
+                   F1.ObjectName,
+                   F1.IndexName,
+                   F1.PercAproveitamento,
+                   F1.PrimeiraChave,
+                   F1.MesmaPrimeiraChave,
+                   F1.Chave,
+                   F1.Deletar,
+                   F1.ColunasIncluidas,
+                   F1.TamanhoChave,
+                   F1.MaximaChave,
+                   F1.TamanhoCInclude,
+                   F1.MaximaCInclude,
+                   F1.IsUnique,
+                   F1.IsPrimaryKey,
+                   F1.IsUniqueConstraint,
+                   CASE F1.DescTipo
+                       WHEN 1 THEN
+                           'CLUSTERED'
+                       WHEN 2 THEN
+                           'NONCLUSTERED'
+                       WHEN 3 THEN
+                           'XML'
+                       WHEN 4 THEN
+                           'SPATIAL'
+                       WHEN 5 THEN
+                           'CLUSTERED COLUMNSTORE'
+                       WHEN 6 THEN
+                           'NONCLUSTERED COLUMNSTORE'
+                       WHEN 7 THEN
+                           'NONCLUSTERED HASH'
+                       ELSE
+                           'UNKNOWN'
+                   END,
+                   F1.IndexId,
+                   F1.IndexSizeKB
+            FROM #Duplicates F1
+            WHERE F1.Deletar = 'S' -- Apenas índices marcados para deleção simples (não merge)
+            ORDER BY F1.ObjectId,
+                     F1.PrimeiraChave,
+                     F1.PercAproveitamento ASC; -- Deletar primeiro os de menor aproveitamento
+
+            -- SUBSECTION 6.3: REMOÇÃO DE ÍNDICES DUPLICADOS RESTANTES
+            IF (EXISTS (SELECT 1 FROM #MarcadosParaDeletar AS MPD) AND @Efetivar = 1)
             BEGIN
-                PRINT CONCAT('✓ Processo concluído em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
-                PRINT CONCAT('📊 Sucessos: ', @SuccessCount, ' | Erros: ', @ErrorCount);
+                IF @Debug = 1
+                BEGIN
+                    SET @StepTime = GETDATE();
+                    PRINT CONCAT('⏳ Iniciando remoção de índices... - ', FORMAT(@StepTime, 'HH:mm:ss'));
+                END;
+
+                DECLARE @RowCount INT = 1;
+                DECLARE @TotalRows INT;
+                DECLARE @CurrentObjectName VARCHAR(128);
+                DECLARE @CurrentIndexName VARCHAR(128);
+                DECLARE @Script NVARCHAR(1000);
+                DECLARE @ErrorMessage NVARCHAR(4000);
+
+                SELECT @TotalRows = COUNT(*)
+                FROM #MarcadosParaDeletar;
+
+                WHILE @RowCount <= @TotalRows
+                BEGIN
+                    SELECT @CurrentObjectName = ObjectName,
+                           @CurrentIndexName = IndexName
+                    FROM #MarcadosParaDeletar
+                    WHERE RowNum = @RowCount;
+
+                    BEGIN TRY
+                        SET @Script = CONCAT('DROP INDEX [', @CurrentIndexName, '] ON ', @CurrentObjectName);
+                        EXEC sys.sp_executesql @Script;
+
+                        SET @SuccessCount = @SuccessCount + 1;
+
+                        IF @Debug = 1
+                            PRINT CONCAT(
+                                            '✓ [',
+                                            @RowCount,
+                                            '/',
+                                            @TotalRows,
+                                            '] Índice removido: ',
+                                            @CurrentIndexName,
+                                            ' da tabela ',
+                                            @CurrentObjectName
+                                        );
+
+                    END TRY
+                    BEGIN CATCH
+                        SET @ErrorMessage = ERROR_MESSAGE();
+                        SET @ErrorCount = @ErrorCount + 1;
+
+                        IF @Debug = 1
+                            PRINT CONCAT(
+                                            '✗ [',
+                                            @RowCount,
+                                            '/',
+                                            @TotalRows,
+                                            '] Erro ao remover índice ',
+                                            @CurrentIndexName,
+                                            ': ',
+                                            @ErrorMessage
+                                        );
+                    END CATCH;
+
+                    SET @RowCount = @RowCount + 1;
+                END;
+
+                IF @Debug = 1
+                BEGIN
+                    PRINT CONCAT('✓ Processo concluído em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
+                    PRINT CONCAT('📊 Sucessos: ', @SuccessCount, ' | Erros: ', @ErrorCount);
+                END;
             END;
         END;
-    END;
 
-    -- Relatório executivo SUPER APRIMORADO
-    IF @MostrarResumoExecutivo = 1
-    BEGIN
-	DECLARE @quantidadeIndices INT = (SELECT COUNT(*) FROM #Indices);
-
-        PRINT ''
-        PRINT '═══════════════════════════════════════════════════════════════════════════════'
-        PRINT '                    RESUMO EXECUTIVO AVANÇADO - OTIMIZAÇÃO DE ÍNDICES'
-        PRINT '═══════════════════════════════════════════════════════════════════════════════'
-        PRINT CONCAT('🕒 Tempo total de execução: ', DATEDIFF(MILLISECOND, @StartTime, GETDATE()), 'ms')
-        PRINT CONCAT('📊 Total de índices analisados: ', (@quantidadeIndices))
-        PRINT CONCAT('🔍 Total de índices duplicados encontrados: ', @TotalIndicesDuplicados)
-        PRINT CONCAT('🎯 Total de índices marcados para deleção: ', @TotalMarcadosParaDeletar)
-        PRINT CONCAT('💾 Espaço estimado a ser liberado: ', FORMAT(@EspacoLiberadoKB / 1024.0, 'N2'), ' MB')
-        
-        -- NOVAS métricas
-        PRINT CONCAT('🔗 Sobreposições parciais identificadas: ', @TotalSobreposicaoParcial)
-        PRINT CONCAT('📉 Índices com baixo ROI: ', @TotalComBaixoROI)
-        PRINT CONCAT('🗄️ Query Store: ', CASE WHEN @QueryStoreEnabled = 1 THEN 'Habilitado e utilizado' ELSE 'Não disponível' END)
-        
-        -- Relatório de Merges
-        IF EXISTS (SELECT 1 FROM #MergeScripts)
+        -- Relatório executivo SUPER APRIMORADO
+        IF @MostrarResumoExecutivo = 1
         BEGIN
-            DECLARE @TotalMergesRealizados INT = (SELECT COUNT(*) FROM #MergeScripts);
-            PRINT CONCAT('🔀 Merges de índices realizados: ', @TotalMergesRealizados)
-            
-            IF @Debug = 1
+            DECLARE @quantidadeIndices INT =
+                    (
+                        SELECT COUNT(*)FROM #Indices
+                    );
+
+            PRINT '';
+            PRINT '═══════════════════════════════════════════════════════════════════════════════';
+            PRINT '                    RESUMO EXECUTIVO AVANÇADO - OTIMIZAÇÃO DE ÍNDICES';
+            PRINT '═══════════════════════════════════════════════════════════════════════════════';
+            PRINT CONCAT('🕒 Tempo total de execução: ', DATEDIFF(MILLISECOND, @StartTime, GETDATE()), 'ms');
+            PRINT CONCAT('📊 Total de índices analisados: ', (@quantidadeIndices));
+            PRINT CONCAT('🔍 Total de índices duplicados encontrados: ', @TotalIndicesDuplicados);
+            PRINT CONCAT('🎯 Total de índices marcados para deleção: ', @TotalMarcadosParaDeletar);
+            PRINT CONCAT('💾 Espaço estimado a ser liberado: ', FORMAT(@EspacoLiberadoKB / 1024.0, 'N2'), ' MB');
+
+            -- NOVAS métricas
+            PRINT CONCAT('🔗 Sobreposições parciais identificadas: ', @TotalSobreposicaoParcial);
+            PRINT CONCAT('📉 Índices com baixo ROI: ', @TotalComBaixoROI);
+            PRINT CONCAT(   '🗄️ Query Store: ',
+                            CASE
+                                WHEN @QueryStoreEnabled = 1 THEN
+                                    'Habilitado e utilizado'
+                                ELSE
+                                    'Não disponível'
+                            END
+                        );
+
+            -- Relatório de Merges
+            DECLARE @TotalMergesRealizados INT = 0;
+            DECLARE @TotalROIMerges INT = 0;
+
+            IF EXISTS (SELECT 1 FROM #MergeScripts)
             BEGIN
-                PRINT ''
-                PRINT '📋 DETALHES DOS MERGES REALIZADOS:'
-                
-                DECLARE @MergeDetails NVARCHAR(MAX) = '';
-                SELECT @MergeDetails = @MergeDetails + 
-                    CONCAT('  • ', ObjectName, ': ', BaseIndexName, ' + ', OverlappingIndexName, 
-                           ' → ', MergedIndexName, ' (', EstimatedBenefit, ')', CHAR(13) + CHAR(10))
-                FROM #MergeScripts;
-                
-                IF LEN(@MergeDetails) > 0
-                    PRINT @MergeDetails;
-            END
-        END
-        ELSE
-        BEGIN
-            PRINT '🔀 Merges de índices realizados: 0'
-        END
-        
-        IF @Efetivar = 1
-        BEGIN
-            PRINT ''
-            PRINT '✅ EXECUÇÃO EFETIVADA:'
-            PRINT CONCAT('  • Índices removidos com sucesso: ', @SuccessCount)
-            PRINT CONCAT('  • Erros durante remoção: ', @ErrorCount)
-            PRINT CONCAT('  • Taxa de sucesso: ', FORMAT((@SuccessCount * 100.0) / NULLIF(@TotalMarcadosParaDeletar, 0), 'N1'), '%')
-        END
-        ELSE
-        BEGIN
-            PRINT ''
-            PRINT '🔍 MODO SIMULAÇÃO - Nenhum índice foi efetivamente removido'
-            PRINT '  Para efetivar as alterações, execute com @Efetivar = 1'
-        END
-        
-        -- Análise de impacto se disponível
-        IF @SimularImpacto = 1 AND LEN(@SimulationResults) > 0
-        BEGIN
-            PRINT ''
-            PRINT '📈 ANÁLISE DE IMPACTO:'
-            PRINT @SimulationResults
-        END
-        
-        -- Scripts de backup se gerados
-        IF @GerarScriptBackup = 1 AND LEN(@BackupScript) > 0
-        BEGIN
-            PRINT ''
-            PRINT '💾 SCRIPTS DE BACKUP GERADOS (primeiros 500 caracteres):'
-            PRINT LEFT(@BackupScript, 500) + CASE WHEN LEN(@BackupScript) > 500 THEN '...' ELSE '' END
-        END
-        
-        PRINT '═══════════════════════════════════════════════════════════════════════════════'
-        
-        -- Relatórios tabulares complementares
-        SELECT 
-            '📊 RESUMO EXECUTIVO' AS Tipo,
-            @TotalIndicesDuplicados AS TotalIndicesDuplicados,
-            @TotalMarcadosParaDeletar AS IndicesTotalParaDeletar,
-            FORMAT(@EspacoLiberadoKB / 1024.0, 'N2') + ' MB' AS EspacoEstimadoLiberado,
-            FORMAT(AVG(CAST(D.PercAproveitamento AS FLOAT)), 'N2') + '%' AS MediaAproveitamento,
-            CASE WHEN @Efetivar = 1 THEN @SuccessCount ELSE 0 END AS IndicesRemovidosComSucesso,
-            CASE WHEN @Efetivar = 1 THEN @ErrorCount ELSE 0 END AS ErrosNaRemocao,
-            FORMAT(DATEDIFF(MILLISECOND, @StartTime, GETDATE()) / 1000.0, 'N2') + 's' AS TempoTotalExecucao
-        FROM #Duplicates D
-        WHERE EXISTS (SELECT 1 FROM #Duplicates);
-        
-        -- Análise por tabela
-        IF EXISTS (SELECT 1 FROM #Duplicates)
-        BEGIN
-            SELECT 
-                '📋 ANÁLISE POR TABELA' AS Tipo,
-                D.ObjectName AS NomeTabela,
-                COUNT(*) AS QtdIndicesDuplicados,
-                COUNT(CASE WHEN D.Deletar = 'S' THEN 1 END) AS QtdMarcadosParaDeletar,
-                FORMAT(SUM(CASE WHEN D.Deletar = 'S' THEN D.IndexSizeKB ELSE 0 END) / 1024.0, 'N2') + ' MB' AS EspacoLiberadoPorTabela,
-                FORMAT(AVG(CAST(D.PercAproveitamento AS FLOAT)), 'N2') + '%' AS MediaAproveitamentoTabela
+                SET @TotalMergesRealizados =
+                (
+                    SELECT COUNT(*)FROM #MergeScripts
+                );
+                PRINT CONCAT('🔀 Merges de sobreposição realizados: ', @TotalMergesRealizados);
+            END;
+
+            IF EXISTS (SELECT 1 FROM #ROIMergeScripts)
+            BEGIN
+                SET @TotalROIMerges =
+                (
+                    SELECT COUNT(*)FROM #ROIMergeScripts
+                );
+                PRINT CONCAT('💡 Merges baseados em ROI realizados: ', @TotalROIMerges);
+            END;
+
+            IF @TotalMergesRealizados > 0
+               OR @TotalROIMerges > 0
+            BEGIN
+                PRINT CONCAT('🔀 Total de merges realizados: ', (@TotalMergesRealizados + @TotalROIMerges));
+
+                IF @Debug = 1
+                BEGIN
+                    PRINT '';
+                    PRINT '📋 DETALHES DOS MERGES REALIZADOS:';
+
+                    -- Merges de sobreposição
+                    IF @TotalMergesRealizados > 0
+                    BEGIN
+                        PRINT '  🔀 Merges de Sobreposição:';
+                        DECLARE @MergeDetails NVARCHAR(MAX) = N'';
+                        SELECT @MergeDetails
+                            = @MergeDetails
+                              + CONCAT(
+                                          '    • ',
+                                          ObjectName,
+                                          ': ',
+                                          BaseIndexName,
+                                          ' + ',
+                                          OverlappingIndexName,
+                                          ' → ',
+                                          MergedIndexName,
+                                          ' (',
+                                          EstimatedBenefit,
+                                          ')',
+                                          CHAR(13) + CHAR(10)
+                                      )
+                        FROM #MergeScripts;
+
+                        IF LEN(@MergeDetails) > 0
+                            PRINT @MergeDetails;
+                    END;
+
+                    -- Merges baseados em ROI
+                    IF @TotalROIMerges > 0
+                    BEGIN
+                        PRINT '  💡 Merges baseados em ROI:';
+                        DECLARE @ROIMergeDetails NVARCHAR(MAX) = N'';
+                        SELECT @ROIMergeDetails
+                            = @ROIMergeDetails
+                              + CONCAT(
+                                          '    • ',
+                                          ObjectName,
+                                          ': Mantido ',
+                                          GoodROIIndexName,
+                                          ' + Removido ',
+                                          BadROIIndexName,
+                                          ' → ',
+                                          MergedIndexName,
+                                          CHAR(13) + CHAR(10)
+                                      )
+                        FROM #ROIMergeScripts;
+
+                        IF LEN(@ROIMergeDetails) > 0
+                            PRINT @ROIMergeDetails;
+                    END;
+                END;
+            END;
+            ELSE
+            BEGIN
+                PRINT '🔀 Merges de índices realizados: 0';
+            END;
+
+            IF @Efetivar = 1
+            BEGIN
+                PRINT '';
+                PRINT '✅ EXECUÇÃO EFETIVADA:';
+                PRINT CONCAT('  • Índices removidos com sucesso: ', @SuccessCount);
+                PRINT CONCAT('  • Erros durante remoção: ', @ErrorCount);
+                PRINT CONCAT(
+                                '  • Taxa de sucesso: ',
+                                FORMAT((@SuccessCount * 100.0) / NULLIF(@TotalMarcadosParaDeletar, 0), 'N1'),
+                                '%'
+                            );
+            END;
+            ELSE
+            BEGIN
+                PRINT '';
+                PRINT '🔍 MODO SIMULAÇÃO - Nenhum índice foi efetivamente removido';
+                PRINT '  Para efetivar as alterações, execute com @Efetivar = 1';
+            END;
+
+            -- Análise de impacto se disponível
+            IF @SimularImpacto = 1
+               AND LEN(@SimulationResults) > 0
+            BEGIN
+                PRINT '';
+                PRINT '📈 ANÁLISE DE IMPACTO:';
+                PRINT @SimulationResults;
+            END;
+
+            -- Scripts de backup se gerados
+            IF @GerarScriptBackup = 1
+               AND LEN(@BackupScript) > 0
+            BEGIN
+                PRINT '';
+                PRINT '💾 SCRIPTS DE BACKUP GERADOS (primeiros 500 caracteres):';
+                PRINT LEFT(@BackupScript, 500) + CASE
+                                                     WHEN LEN(@BackupScript) > 500 THEN
+                                                         '...'
+                                                     ELSE
+                                                         ''
+                                                 END;
+            END;
+
+            PRINT '═══════════════════════════════════════════════════════════════════════════════';
+
+            -- Relatórios tabulares complementares
+            SELECT '📊 RESUMO EXECUTIVO' AS Tipo,
+                   @TotalIndicesDuplicados AS TotalIndicesDuplicados,
+                   @TotalMarcadosParaDeletar AS IndicesTotalParaDeletar,
+                   FORMAT(@EspacoLiberadoKB / 1024.0, 'N2') + ' MB' AS EspacoEstimadoLiberado,
+                   FORMAT(AVG(CAST(D.PercAproveitamento AS FLOAT)), 'N2') + '%' AS MediaAproveitamento,
+                   CASE
+                       WHEN @Efetivar = 1 THEN
+                           @SuccessCount
+                       ELSE
+                           0
+                   END AS IndicesRemovidosComSucesso,
+                   CASE
+                       WHEN @Efetivar = 1 THEN
+                           @ErrorCount
+                       ELSE
+                           0
+                   END AS ErrosNaRemocao,
+                   FORMAT(DATEDIFF(MILLISECOND, @StartTime, GETDATE()) / 1000.0, 'N2') + 's' AS TempoTotalExecucao
             FROM #Duplicates D
-            GROUP BY D.ObjectName
-            ORDER BY COUNT(*) DESC;
-        END;
-        
-        -- NOVA: Relatório de sobreposição parcial
-        IF @AnalisarSobreposicao = 1 AND EXISTS (SELECT 1 FROM #SobreposicaoParcial)
-        BEGIN
-            SELECT 
-                '🔗 SOBREPOSIÇÃO PARCIAL' AS Tipo,
-                sp.BaseIndexName,
-                sp.OverlappingIndexName,
-                sp.SimilarityScore,
-                sp.OverlapType,
-                sp.RecommendedAction
-            FROM #SobreposicaoParcial sp
-            ORDER BY sp.SimilarityScore DESC;
-        END;
-        
-        -- NOVA: Relatório de ROI
-        IF EXISTS (SELECT 1 FROM #ROIAnalysis)
-        BEGIN
-            SELECT 
-                '📉 ANÁLISE DE ROI' AS Tipo,
-                roi.IndexName,
-                FORMAT(roi.ROI_Score, 'N4') AS ROI_Score,
-                roi.QueryBenefitScore,
-                FORMAT(roi.MaintenanceCostKB / 1024.0, 'N2') + ' MB' AS CustoManutencao,
-                CASE WHEN roi.IsLowROI = 1 THEN 'SIM' ELSE 'NÃO' END AS BaixoROI
-            FROM #ROIAnalysis roi
-            ORDER BY roi.ROI_Score ASC;
-        END;
-    END;
+            WHERE EXISTS
+            (
+                SELECT 1 FROM #Duplicates
+            );
 
-    -- Relatório CONSOLIDADO de índices duplicados e marcados para deleção
-    IF (@MostrarIndicesDuplicados = 1 OR @MostrarIndicesMarcadosParaDeletar = 1)
-    BEGIN
-        -- Resultado único consolidado
-        SELECT 
-            CASE 
-                WHEN D.Deletar = 'S' THEN 'A Deletar=>'
-                ELSE 'Duplicado=>'
-            END AS Descricao,
-            D.ObjectName,
-            D.IndexName,
-            D.PercAproveitamento,
-            D.PrimeiraChave,
-            D.MesmaPrimeiraChave,
-            D.Chave,
-            D.Deletar,
-            D.ColunasIncluidas,
-            D.TamanhoChave,
-            D.MaximaChave,
-            CASE D.DescTipo 
-                WHEN 1 THEN 'CLUSTERED'
-                WHEN 2 THEN 'NONCLUSTERED'
-                WHEN 3 THEN 'XML'
-                WHEN 4 THEN 'SPATIAL'
-                WHEN 5 THEN 'CLUSTERED COLUMNSTORE'
-                WHEN 6 THEN 'NONCLUSTERED COLUMNSTORE'
-                WHEN 7 THEN 'NONCLUSTERED HASH'
-                ELSE 'UNKNOWN'
-            END AS TipoIndice,
-            FORMAT(D.IndexSizeKB / 1024.0, 'N2') + ' MB' AS TamanhoIndice,
-            -- Informações de ROI se disponível
-            CASE 
-                WHEN roi.ROI_Score IS NOT NULL THEN FORMAT(roi.ROI_Score, 'N4')
-                ELSE 'N/A'
-            END AS ROI_Score,
-            CASE 
-                WHEN roi.IsLowROI = 1 THEN 'SIM'
-                WHEN roi.IsLowROI = 0 THEN 'NÃO'
-                ELSE 'N/A'
-            END AS BaixoROI
-        FROM #Duplicates AS D
-        LEFT JOIN #ROIAnalysis roi ON D.ObjectId = roi.ObjectId AND D.IndexId = roi.IndexId
-        WHERE (@MostrarIndicesDuplicados = 1) 
-           OR (@MostrarIndicesMarcadosParaDeletar = 1 AND D.Deletar = 'S')
-        ORDER BY D.ObjectId,
-                 D.PrimeiraChave,
-                 D.IndexRank;
+            -- Análise por tabela
+            IF EXISTS (SELECT 1 FROM #Duplicates)
+            BEGIN
+                SELECT '📋 ANÁLISE POR TABELA' AS Tipo,
+                       D.ObjectName AS NomeTabela,
+                       COUNT(*) AS QtdIndicesDuplicados,
+                       COUNT(   CASE
+                                    WHEN D.Deletar = 'S' THEN
+                                        1
+                                END
+                            ) AS QtdMarcadosParaDeletar,
+                       FORMAT(SUM(   CASE
+                                         WHEN D.Deletar = 'S' THEN
+                                             D.IndexSizeKB
+                                         ELSE
+                                             0
+                                     END
+                                 ) / 1024.0,
+                              'N2'
+                             ) + ' MB' AS EspacoLiberadoPorTabela,
+                       FORMAT(AVG(CAST(D.PercAproveitamento AS FLOAT)), 'N2') + '%' AS MediaAproveitamentoTabela
+                FROM #Duplicates D
+                GROUP BY D.ObjectName
+                ORDER BY COUNT(*) DESC;
+            END;
 
-        -- Scripts de deleção consolidados (apenas para índices marcados para deletar)
-        IF @MostrarIndicesMarcadosParaDeletar = 1 AND EXISTS (SELECT 1 FROM #Duplicates WHERE Deletar = 'S')
-        BEGIN
-            SELECT 
-                '🗑️ SCRIPTS DE DELEÇÃO' AS Tipo,
-                D.ObjectName,
-                D.IndexName,
-                CONCAT('DROP INDEX [', D.IndexName, '] ON ', D.ObjectName) AS ScriptDeleção,
-                FORMAT(D.IndexSizeKB / 1024.0, 'N2') + ' MB' AS EspacoLiberado
-            FROM #Duplicates D
-            WHERE D.Deletar = 'S'
-            ORDER BY D.ObjectName, D.IndexName;
+            -- NOVA: Relatório de sobreposição parcial
+            IF @AnalisarSobreposicao = 1
+               AND EXISTS
+            (
+                SELECT 1
+                FROM #SobreposicaoParcial
+            )
+            BEGIN
+                SELECT '🔗 SOBREPOSIÇÃO PARCIAL' AS Tipo,
+                       sp.BaseIndexName,
+                       sp.OverlappingIndexName,
+                       sp.SimilarityScore,
+                       sp.OverlapType,
+                       sp.RecommendedAction
+                FROM #SobreposicaoParcial sp
+                ORDER BY sp.SimilarityScore DESC;
+            END;
+
+            -- NOVA: Relatório de ROI
+            IF EXISTS (SELECT 1 FROM #ROIAnalysis)
+            BEGIN
+                SELECT '📉 ANÁLISE DE ROI' AS Tipo,
+                       roi.IndexName,
+                       FORMAT(roi.ROI_Score, 'N4') AS ROI_Score,
+                       roi.QueryBenefitScore,
+                       FORMAT(roi.MaintenanceCostKB / 1024.0, 'N2') + ' MB' AS CustoManutencao,
+                       CASE
+                           WHEN roi.IsLowROI = 1 THEN
+                               'SIM'
+                           ELSE
+                               'NÃO'
+                       END AS BaixoROI
+                FROM #ROIAnalysis roi
+                ORDER BY roi.ROI_Score ASC;
+            END;
         END;
-                 
-        -- Scripts de backup se gerados
-        IF @GerarScriptBackup = 1 AND EXISTS (SELECT 1 FROM #BackupScripts)
+
+        -- Relatório CONSOLIDADO de índices duplicados e marcados para deleção
+        IF (@MostrarIndicesDuplicados = 1 OR @MostrarIndicesMarcadosParaDeletar = 1)
         BEGIN
-            SELECT 
-                '💾 SCRIPTS DE BACKUP' AS Tipo,
-                bs.ObjectName,
-                bs.IndexName,
-                bs.CreateScript,
-                bs.DropScript
-            FROM #BackupScripts bs
-            ORDER BY bs.ObjectName, bs.IndexName;
+            -- Resultado único consolidado
+            SELECT CASE
+                       WHEN D.Deletar = 'S' THEN
+                           'A Deletar=>'
+                       ELSE
+                           'Duplicado=>'
+                   END AS Descricao,
+                   D.ObjectName,
+                   D.IndexName,
+                   D.PercAproveitamento,
+                   D.PrimeiraChave,
+                   D.MesmaPrimeiraChave,
+                   D.Chave,
+                   D.Deletar,
+                   D.ColunasIncluidas,
+                   D.TamanhoChave,
+                   D.MaximaChave,
+                   CASE D.DescTipo
+                       WHEN 1 THEN
+                           'CLUSTERED'
+                       WHEN 2 THEN
+                           'NONCLUSTERED'
+                       WHEN 3 THEN
+                           'XML'
+                       WHEN 4 THEN
+                           'SPATIAL'
+                       WHEN 5 THEN
+                           'CLUSTERED COLUMNSTORE'
+                       WHEN 6 THEN
+                           'NONCLUSTERED COLUMNSTORE'
+                       WHEN 7 THEN
+                           'NONCLUSTERED HASH'
+                       ELSE
+                           'UNKNOWN'
+                   END AS TipoIndice,
+                   FORMAT(D.IndexSizeKB / 1024.0, 'N2') + ' MB' AS TamanhoIndice,
+                   -- Informações de ROI se disponível
+                   CASE
+                       WHEN roi.ROI_Score IS NOT NULL THEN
+                           FORMAT(roi.ROI_Score, 'N4')
+                       ELSE
+                           'N/A'
+                   END AS ROI_Score,
+                   CASE
+                       WHEN roi.IsLowROI = 1 THEN
+                           'SIM'
+                       WHEN roi.IsLowROI = 0 THEN
+                           'NÃO'
+                       ELSE
+                           'N/A'
+                   END AS BaixoROI
+            FROM #Duplicates AS D
+                LEFT JOIN #ROIAnalysis roi
+                    ON D.ObjectId = roi.ObjectId
+                       AND D.IndexId = roi.IndexId
+            WHERE (@MostrarIndicesDuplicados = 1)
+                  OR
+                  (
+                      @MostrarIndicesMarcadosParaDeletar = 1
+                      AND D.Deletar = 'S'
+                  )
+            ORDER BY D.ObjectId,
+                     D.PrimeiraChave,
+                     D.IndexRank;
+
+            -- Scripts de deleção consolidados (apenas para índices marcados para deletar)
+            IF @MostrarIndicesMarcadosParaDeletar = 1
+               AND EXISTS
+            (
+                SELECT 1
+                FROM #Duplicates
+                WHERE Deletar = 'S'
+            )
+            BEGIN
+                SELECT '🗑️ SCRIPTS DE DELEÇÃO' AS Tipo,
+                       D.ObjectName,
+                       D.IndexName,
+                       CONCAT('DROP INDEX [', D.IndexName, '] ON ', D.ObjectName) AS ScriptDeleção,
+                       FORMAT(D.IndexSizeKB / 1024.0, 'N2') + ' MB' AS EspacoLiberado
+                FROM #Duplicates D
+                WHERE D.Deletar = 'S'
+                ORDER BY D.ObjectName,
+                         D.IndexName;
+            END;
+
+            -- Scripts de backup se gerados
+            IF @GerarScriptBackup = 1 AND EXISTS (SELECT 1 FROM #BackupScripts)
+            BEGIN
+                SELECT '💾 SCRIPTS DE BACKUP' AS Tipo,
+                       bs.ObjectName,
+                       bs.IndexName,
+                       bs.CreateScript,
+                       bs.DropScript
+                FROM #BackupScripts bs
+                ORDER BY bs.ObjectName,
+                         bs.IndexName;
+            END;
+
+            -- Scripts de merge de sobreposição
+            IF EXISTS (SELECT 1 FROM #MergeScripts)
+            BEGIN
+                SELECT '🔀 SCRIPTS DE MERGE - SOBREPOSIÇÃO' AS Tipo,
+                       ms.ObjectName,
+                       ms.BaseIndexName + ' + ' + ms.OverlappingIndexName AS IndicesOriginais,
+                       ms.MergedIndexName AS NovoIndice,
+                       ms.CreateMergedScript AS ScriptCriacao,
+                       ms.DropBaseScript AS ScriptRemocaoBase,
+                       ms.DropOverlappingScript AS ScriptRemocaoSobreposicao,
+                       ms.EstimatedBenefit AS BeneficioEstimado
+                FROM #MergeScripts ms
+                ORDER BY ms.ObjectName,
+                         ms.MergedIndexName;
+            END;
+
+            -- Scripts de merge baseados em ROI
+            IF EXISTS (SELECT 1 FROM #ROIMergeScripts)
+            BEGIN
+                SELECT '💡 SCRIPTS DE MERGE - ROI' AS Tipo,
+                       rms.ObjectName,
+                       'Mantido: ' + rms.GoodROIIndexName + ' | Removido: ' + rms.BadROIIndexName AS IndicesOriginais,
+                       rms.MergedIndexName AS NovoIndice,
+                       rms.CreateMergedScript AS ScriptCriacao,
+                       rms.DropBadROIScript AS ScriptRemocaoBaixoROI,
+                       rms.EstimatedBenefit AS BeneficioEstimado
+                FROM #ROIMergeScripts rms
+                ORDER BY rms.ObjectName,
+                         rms.MergedIndexName;
+            END;
         END;
-    END;
-    
-    -- Log final
-    IF @Debug = 1
-    BEGIN
-        PRINT '';
-        PRINT CONCAT('=== FIM ANÁLISE ÍNDICES DUPLICADOS - ', FORMAT(GETDATE(), 'dd/MM/yyyy HH:mm:ss'), ' ===');
-        PRINT CONCAT('⏱️  Tempo total de execução: ', DATEDIFF(MILLISECOND, @StartTime, GETDATE()), 'ms');
-        PRINT CONCAT('📊 Resumo: ', @TotalIndicesDuplicados, ' duplicados encontrados, ', @TotalMarcadosParaDeletar, ' marcados para deleção');
-        IF @Efetivar = 1
-            PRINT CONCAT('🗑️  Remoção: ', @SuccessCount, ' sucessos, ', @ErrorCount, ' erros');
+
+        -- Log final
+        IF @Debug = 1
+        BEGIN
+            PRINT '';
+            PRINT CONCAT('=== FIM ANÁLISE ÍNDICES DUPLICADOS - ', FORMAT(GETDATE(), 'dd/MM/yyyy HH:mm:ss'), ' ===');
+            PRINT CONCAT('⏱️  Tempo total de execução: ', DATEDIFF(MILLISECOND, @StartTime, GETDATE()), 'ms');
+            PRINT CONCAT(
+                            '📊 Resumo: ',
+                            @TotalIndicesDuplicados,
+                            ' duplicados encontrados, ',
+                            @TotalMarcadosParaDeletar,
+                            ' marcados para deleção'
+                        );
+            IF @Efetivar = 1
+                PRINT CONCAT('🗑️  Remoção: ', @SuccessCount, ' sucessos, ', @ErrorCount, ' erros');
+        END;
     END;
 END;
 GO

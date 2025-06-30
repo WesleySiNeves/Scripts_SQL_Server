@@ -1,4 +1,4 @@
---EXEC HealthCheck.uspAutoCreateIndex @Efetivar = 0,             -- bit
+--EXEC HealthCheck.uspAutoCreateIndex @Efetivar = 1,             -- bit
 --                                    @VisualizarMissing = 1,    -- bit
 --                                    @VisualizarCreate = 1,     -- bit
 --                                    @VisualizarAlteracoes = 1, -- bit
@@ -18,7 +18,8 @@ ALTER PROCEDURE HealthCheck.uspAutoCreateIndex
     @LimiteMemoriaMB      INT      = 500,    -- Limite de memória estimado em MB
     @TimeoutSegundos      INT      = 300,    -- Timeout em segundos
     @ModoDebug            BIT      = 0,      -- Modo debug para logs detalhados
-    @SomenteAnalise       BIT      = 0       -- Apenas análise, sem execução
+    @SomenteAnalise       BIT      = 0,      -- Apenas análise, sem execução
+    @Force                BIT      = 0       -- Se 1, permite execução em qualquer horário
 )
 AS
 BEGIN
@@ -628,24 +629,7 @@ BEGIN
                     END;
                 END;
             END; -- Fim do processamento de alterações
-
-
-
-            DECLARE @with VARCHAR(100) = CASE
-                                              WHEN @TipoVersao IN ( 'Azure', 'Enterprise' ) THEN
-                                                  'WITH(ONLINE =ON ,DATA_COMPRESSION =PAGE)'
-                                              WHEN @TipoVersao IN ( 'Standard' ) THEN
-                                                  'WITH(DATA_COMPRESSION =PAGE)'
-                                              ELSE
-                                                  ''
-                                          END;
-
-            UPDATE #NovosIndices
-            SET CreateIndex = CONCAT(ISNULL(CreateIndex, ''), SPACE(2), ISNULL(@with, ''));
-
-            UPDATE #Alteracoes
-            SET CreateIndex = CONCAT(ISNULL(CreateIndex, ''), SPACE(2), ISNULL(@with, ''));
-
+           
 
             -- ═══════════════════════════════════════════════════════════════
             -- 🔄 MERGE DE ÍNDICES ALTERADOS COM ÍNDICES EXISTENTES
@@ -995,9 +979,32 @@ BEGIN
 
          
 
+            -- Verificação de horário para criação de índices (apenas entre 20:00 e 05:00)
+            DECLARE @HorarioAtual TIME = CAST(GETDATE() AS TIME);
+            DECLARE @HorarioPermitido BIT = 0;
+            
+		-- Verifica se está no horário permitido (20:00 às 05:00) ou se @Force = 1 ou se é fim de semana (sábado ou domingo)
+		IF (
+			   @HorarioAtual >= '20:00:00'
+			   OR @HorarioAtual <= '05:00:00'
+		   )
+		   OR @Force = 1
+		   OR DATEPART(WEEKDAY, GETDATE()) IN ( 1, 7 ) -- 1 = Domingo, 7 = Sábado
+			SET @HorarioPermitido = 1;
+
+            -- Log do horário se modo debug ativo
+            IF @ModoDebug = 1
+            BEGIN
+                SET @LogMensagem = CONCAT('Horário atual: ', FORMAT(@HorarioAtual, 'HH:mm:ss'), 
+                                        ' - Criação permitida: ', CASE WHEN @HorarioPermitido = 1 THEN 'SIM' ELSE 'NÃO' END,
+                                        CASE WHEN @Force = 1 THEN ' (FORÇADO)' ELSE '' END);
+                RAISERROR(@LogMensagem, 0, 1) WITH NOWAIT;
+            END;
+
             -- Execução de criação de novos índices
             IF EXISTS (SELECT 1 FROM #NovosIndices)
                AND @Efetivar = 1
+               AND @HorarioPermitido = 1
             BEGIN
                 DECLARE @ContadorNovos INT = 1;
                 DECLARE @TotalNovos INT =
@@ -1038,6 +1045,7 @@ BEGIN
             -- Execução de alterações de índices existentes
             IF EXISTS (SELECT 1 FROM #Alteracoes)
                AND @Efetivar = 1
+               AND @HorarioPermitido = 1
             BEGIN
                 DECLARE @ContadorAlteracoes INT = 1;
                 DECLARE @TotalAlteracoes INT =
@@ -1082,6 +1090,13 @@ BEGIN
 
                     SET @ContadorAlteracoes = @ContadorAlteracoes + 1;
                 END;
+            END;
+            
+            -- Mensagem informativa se não estiver no horário permitido
+            IF @Efetivar = 1 AND @HorarioPermitido = 0
+            BEGIN
+                SET @LogMensagem = 'AVISO: Criação de índices não executada. Horário permitido: 20:00 às 05:00. Horário atual: ' + FORMAT(@HorarioAtual, 'HH:mm:ss');
+                RAISERROR(@LogMensagem, 0, 1) WITH NOWAIT;
             END;
         END;
 

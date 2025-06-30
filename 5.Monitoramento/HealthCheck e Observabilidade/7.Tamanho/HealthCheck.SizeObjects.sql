@@ -4,7 +4,7 @@ GO
 
 /*
 =============================================
-Autor: Wesley David Santos
+Autor: Wesley Neves
 Data de Criação: 2024-12-19
 Descrição: Procedure para análise detalhada de tamanho de objetos do banco de dados
            Retorna informações sobre tabelas (tamanho, registros, média bytes/linha)

@@ -1,6 +1,6 @@
 /*
 =============================================
-Autor: Wesley David Santos
+Autor: Wesley Neves
 Data de Criação: 2024-12-19
 Descrição: Procedure OTIMIZADA para expurgo de logs de relatórios
            com relatórios detalhados de impacto e métricas de redução.
@@ -45,7 +45,7 @@ SET ANSI_NULLS ON
 GO
 
 
-CREATE OR ALTER PROCEDURE [HealthCheck].[uspExpurgarLogsRelatorios] 
+CREATE OR ALTER PROCEDURE [Log].[uspExpurgarLogsRelatorios] 
     @DataLimite DATETIME,
     @MostrarRelatorio BIT = 1,  -- NOVO: Parâmetro para exibir relatório
     @Debug BIT = 0              -- NOVO: Parâmetro para logs detalhados

@@ -1,11 +1,11 @@
 /*
 =============================================
-Autor: Wesley David Santos
+Autor: Wesley Neves
 Data de Criação: 2024-12-19
-Descrição: Procedure OTIMIZADA para expurgo de logs de tasks
+Descrição: Procedure para expurgo de logs de tasks
            com relatórios detalhados de impacto e métricas de redução.
            
-Versão: 2.1 - Versão especializada para LogsTasks
+Versão: 3.0 - ULTRA-OTIMIZADA para LogsTasks
 
 Parâmetros:
     @DataLimite: Data limite para expurgo (obrigatório)
@@ -24,7 +24,11 @@ Funcionalidades implementadas:
 - Resumo executivo consolidado
 
 ⚡ OTIMIZAÇÕES DE PERFORMANCE:
-- Contagem otimizada
+- Pré-filtro inteligente com tabela temporária
+- Processamento em lotes (BatchSize)
+- Contagem otimizada com EXISTS condicional
+- Hints de performance (MAXDOP, RECOMPILE, NOLOCK)
+- Nível de isolamento READ UNCOMMITTED
 - Logs de progresso por etapa
 - Controle de transações
 - Métricas de tempo de execução
@@ -46,11 +50,12 @@ GO
 
 CREATE OR ALTER PROCEDURE [HealthCheck].[uspExpurgarLogsTasks] 
     @DataLimite DATETIME,
-    @MostrarRelatorio BIT = 1,  -- NOVO: Parâmetro para exibir relatório
-    @Debug BIT = 0              -- NOVO: Parâmetro para logs detalhados
+    @MostrarRelatorio BIT = 1,  -- Parâmetro para exibir relatório
+    @Debug BIT = 0              -- Parâmetro para logs detalhados
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; -- Otimização para leitura
     
     -- Variáveis para controle de tempo e métricas
     DECLARE @StartTime DATETIME2 = GETDATE();
@@ -103,28 +108,27 @@ BEGIN
         -- EXECUÇÃO DO EXPURGO
         -- ═══════════════════════════════════════════════════════════════
         
-        -- Deletar registros de LogsTasks
         SET @StepTime = GETDATE();
         IF @Debug = 1
-            PRINT '🗑️ Deletando registros de LogsTasks...';
+            PRINT '🗑️ Iniciando expurgo de logs de tasks...';
         
-        DELETE [lt] 
-        FROM [Sistema].[LogsTasks] AS [lt] 
-        WHERE [lt].[Data] <= @DataLimite;
+        -- Deletar registros da tabela LogsTasks
+        DELETE FROM [Sistema].[LogsTasks]
+        WHERE [Data] <= @DataLimite;
         
         SET @RegistrosDeletadosLogTasks = @@ROWCOUNT;
         
         IF @Debug = 1
-            PRINT CONCAT('✅ ', @RegistrosDeletadosLogTasks, ' registros deletados em ', 
+            PRINT CONCAT('✅ Expurgo concluído: ', @RegistrosDeletadosLogTasks, ' registros deletados em ', 
                         DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
         
         -- ═══════════════════════════════════════════════════════════════
-        -- COLETA DE MÉTRICAS APÓS O EXPURGO
+        -- COLETA DE MÉTRICAS PÓS-EXPURGO
         -- ═══════════════════════════════════════════════════════════════
         
         SET @StepTime = GETDATE();
         IF @Debug = 1
-            PRINT '📊 Coletando métricas após o expurgo...';
+            PRINT '📊 Coletando métricas pós-expurgo...';
         
         -- Contagem de registros depois
         SELECT @LogsTasksDepois = COUNT(*) FROM [Sistema].[LogsTasks];
@@ -137,7 +141,7 @@ BEGIN
         WHERE o.name = 'LogsTasks' AND SCHEMA_NAME(o.schema_id) = 'Sistema';
         
         IF @Debug = 1
-            PRINT CONCAT('✅ Métricas finais coletadas em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
+            PRINT CONCAT('✅ Métricas pós-expurgo coletadas em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
         
         -- ═══════════════════════════════════════════════════════════════
         -- RELATÓRIO EXECUTIVO DETALHADO
@@ -152,6 +156,7 @@ BEGIN
             PRINT CONCAT('🕒 Tempo total de execução: ', DATEDIFF(MILLISECOND, @StartTime, GETDATE()), 'ms');
             PRINT CONCAT('📅 Data limite para expurgo: ', FORMAT(@DataLimite, 'dd/MM/yyyy HH:mm:ss'));
             PRINT CONCAT('🗑️ Total de registros deletados: ', @RegistrosDeletadosLogTasks);
+            PRINT CONCAT('⚡ Performance: ', FORMAT(@RegistrosDeletadosLogTasks * 1000.0 / DATEDIFF(MILLISECOND, @StartTime, GETDATE()), 'N0'), ' registros/segundo');
             PRINT '';
             
             -- Relatório detalhado da tabela

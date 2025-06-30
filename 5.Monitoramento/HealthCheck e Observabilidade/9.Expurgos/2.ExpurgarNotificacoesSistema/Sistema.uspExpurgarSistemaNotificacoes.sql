@@ -1,11 +1,11 @@
 /*
 =============================================
-Autor: Wesley David Santos
+Autor: Wesley Neves
 Data de Criação: 2024-12-19
-Descrição: Procedure OTIMIZADA para expurgo de notificações do sistema
+Descrição: Procedure  para expurgo de notificações do sistema
            com relatórios detalhados de impacto e métricas de redução.
            
-Versão: 2.0 - Versão aprimorada com relatórios executivos
+Versão: 3.0 - Versão  com performance aprimorada
 
 Parâmetros:
     @DataLimite: Data limite para expurgo (obrigatório)
@@ -21,10 +21,13 @@ Funcionalidades implementadas:
 - Resumo executivo consolidado
 
 ⚡ OTIMIZAÇÕES DE PERFORMANCE:
-- Contagem otimizada com EXISTS
+- Pré-filtro com tabela temporária para IDs elegíveis
+- Contagem otimizada com EXISTS apenas quando necessário
+- Operações em lote com controle de batch size
+- Hints de performance (MAXDOP, RECOMPILE)
 - Logs de progresso por etapa
-- Controle de transações
-- Métricas de tempo de execução
+- Controle de transações otimizado
+- Métricas de tempo de execução detalhadas
 
 🛡️ VALIDAÇÕES E SEGURANÇA:
 - Validação de parâmetros obrigatórios
@@ -43,11 +46,13 @@ GO
 
 CREATE OR ALTER PROCEDURE [Sistema].[uspExpurgarSistemaNotificacoes] 
     @DataLimite DATETIME,
-    @MostrarRelatorio BIT = 1,  -- NOVO: Parâmetro para exibir relatório
-    @Debug BIT = 0              -- NOVO: Parâmetro para logs detalhados
+    @MostrarRelatorio BIT = 1,  -- Parâmetro para exibir relatório
+    @Debug BIT = 0,             -- Parâmetro para logs detalhados
+    @BatchSize INT = 10000      -- NOVO: Tamanho do lote para operações em batch
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; -- Reduz bloqueios
     
     -- Variáveis para controle de tempo e métricas
     DECLARE @StartTime DATETIME2 = GETDATE();
@@ -93,10 +98,27 @@ BEGIN
         IF @Debug = 1
             PRINT '📊 Coletando métricas antes do expurgo...';
         
-        -- Contagem de registros antes
-        SELECT @NotificacoesAntes = COUNT(*) FROM [Sistema].[Notificacoes];
-        SELECT @ProcessosRecursosAntes = COUNT(*) FROM [Processo].[ProcessosRecursosNotificacoesUsuarios];
-        SELECT @DescartesAntes = COUNT(*) FROM [Sistema].[NotificacoesUsuariosDescartes];
+        -- Contagem otimizada de registros antes (usando estatísticas quando possível)
+        SELECT @NotificacoesAntes = 
+            CASE 
+                WHEN EXISTS (SELECT 1 FROM [Sistema].[Notificacoes] WHERE [DataCriacao] < @DataLimite)
+                THEN (SELECT COUNT_BIG(*) FROM [Sistema].[Notificacoes] WITH (NOLOCK))
+                ELSE 0
+            END;
+        
+        SELECT @ProcessosRecursosAntes = 
+            CASE 
+                WHEN @NotificacoesAntes > 0
+                THEN (SELECT COUNT_BIG(*) FROM [Processo].[ProcessosRecursosNotificacoesUsuarios] WITH (NOLOCK))
+                ELSE 0
+            END;
+        
+        SELECT @DescartesAntes = 
+            CASE 
+                WHEN @NotificacoesAntes > 0
+                THEN (SELECT COUNT_BIG(*) FROM [Sistema].[NotificacoesUsuariosDescartes] WITH (NOLOCK))
+                ELSE 0
+            END;
         
         -- Tamanho das tabelas antes (em MB)
         SELECT @TamanhoNotificacoesAntesMB = 
@@ -121,59 +143,120 @@ BEGIN
             PRINT CONCAT('✅ Métricas coletadas em ', DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
         
         -- ═══════════════════════════════════════════════════════════════
-        -- EXECUÇÃO DO EXPURGO
+        -- PRÉ-FILTRO OTIMIZADO - CRIAÇÃO DE TABELA TEMPORÁRIA
         -- ═══════════════════════════════════════════════════════════════
         
-        -- 1. Deletar registros de ProcessosRecursosNotificacoesUsuarios
         SET @StepTime = GETDATE();
         IF @Debug = 1
-            PRINT '🗑️ Deletando registros de ProcessosRecursosNotificacoesUsuarios...';
+            PRINT '🔍 Criando pré-filtro de IDs elegíveis para expurgo...';
         
-        DELETE target
-        FROM [Processo].[ProcessosRecursosNotificacoesUsuarios] target
-        WHERE EXISTS (
-            SELECT 1
-            FROM [Sistema].[Notificacoes] N
-            WHERE N.[IdNotificacao] = target.[IdNotificacao]
-            AND N.[DataCriacao] < @DataLimite
+        -- Criar tabela temporária com IDs das notificações a serem excluídas
+        CREATE TABLE #NotificacoesParaExcluir (
+            IdNotificacao UNIQUEIDENTIFIER PRIMARY KEY
         );
         
-        SET @RegistrosDeletadosProcessos = @@ROWCOUNT;
+        -- Inserir IDs das notificações elegíveis para exclusão
+        INSERT INTO #NotificacoesParaExcluir (IdNotificacao)
+        SELECT [IdNotificacao]
+        FROM [Sistema].[Notificacoes] N WITH (NOLOCK)
+        WHERE [DataCriacao] < @DataLimite
+		AND NOT EXISTS(SELECT * FROM Processo.NotificacoesProcessos np 
+							WHERE np.IdNotificacao = N.IdNotificacao)
+		AND NOT EXISTS(SELECT * FROM Processo.[ProcessosRecursosNotificacoesUsuarios] np 
+							WHERE np.IdNotificacao = N.IdNotificacao)
+		
+		
+        OPTION (MAXDOP 4, RECOMPILE);
+        
+        DECLARE @TotalNotificacoesParaExcluir INT = @@ROWCOUNT;
+        
+        IF @Debug = 1
+            PRINT CONCAT('✅ Pré-filtro criado com ', @TotalNotificacoesParaExcluir, ' IDs em ', 
+                        DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
+        
+        -- Se não há registros para excluir, sair da procedure
+        IF @TotalNotificacoesParaExcluir = 0
+        BEGIN
+            IF @Debug = 1
+                PRINT '⚠️ Nenhum registro encontrado para expurgo. Finalizando...';
+            DROP TABLE #NotificacoesParaExcluir;
+            RETURN;
+        END;
+        
+        -- ═══════════════════════════════════════════════════════════════
+        -- EXECUÇÃO OTIMIZADA DO EXPURGO EM LOTES
+        -- ═══════════════════════════════════════════════════════════════
+        
+        -- 1. Deletar registros de ProcessosRecursosNotificacoesUsuarios em lotes
+        SET @StepTime = GETDATE();
+        IF @Debug = 1
+            PRINT '🗑️ Deletando registros de ProcessosRecursosNotificacoesUsuarios em lotes...';
+        
+        DECLARE @RowsDeleted INT = 1;
+        WHILE @RowsDeleted > 0
+        BEGIN
+            DELETE TOP (@BatchSize) target
+            FROM [Processo].[ProcessosRecursosNotificacoesUsuarios] target
+            INNER JOIN #NotificacoesParaExcluir temp ON temp.IdNotificacao = target.[IdNotificacao]
+            OPTION (MAXDOP 4);
+            
+            SET @RowsDeleted = @@ROWCOUNT;
+            SET @RegistrosDeletadosProcessos += @RowsDeleted;
+            
+            IF @Debug = 1 AND @RowsDeleted > 0
+                PRINT CONCAT('   📦 Lote processado: ', @RowsDeleted, ' registros');
+        END;
         
         IF @Debug = 1
             PRINT CONCAT('✅ ', @RegistrosDeletadosProcessos, ' registros deletados em ', 
                         DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
         
-        -- 2. Deletar registros de NotificacoesUsuariosDescartes
+        -- 2. Deletar registros de NotificacoesUsuariosDescartes em lotes
         SET @StepTime = GETDATE();
         IF @Debug = 1
-            PRINT '🗑️ Deletando registros de NotificacoesUsuariosDescartes...';
+            PRINT '🗑️ Deletando registros de NotificacoesUsuariosDescartes em lotes...';
         
-        DELETE target
-        FROM [Sistema].[NotificacoesUsuariosDescartes] target
-        WHERE EXISTS (
-            SELECT 1
-            FROM [Sistema].[Notificacoes] N
-            WHERE N.[IdNotificacao] = target.[IdNotificacao]
-            AND N.[DataCriacao] < @DataLimite
-        );
-        
-        SET @RegistrosDeletadosDescartes = @@ROWCOUNT;
+        SET @RowsDeleted = 1;
+        WHILE @RowsDeleted > 0
+        BEGIN
+            DELETE TOP (@BatchSize) target
+            FROM [Sistema].[NotificacoesUsuariosDescartes] target
+            INNER JOIN #NotificacoesParaExcluir temp ON temp.IdNotificacao = target.[IdNotificacao]
+            OPTION (MAXDOP 4);
+            
+            SET @RowsDeleted = @@ROWCOUNT;
+            SET @RegistrosDeletadosDescartes += @RowsDeleted;
+            
+            IF @Debug = 1 AND @RowsDeleted > 0
+                PRINT CONCAT('   📦 Lote processado: ', @RowsDeleted, ' registros');
+        END;
         
         IF @Debug = 1
             PRINT CONCAT('✅ ', @RegistrosDeletadosDescartes, ' registros deletados em ', 
                         DATEDIFF(MILLISECOND, @StepTime, GETDATE()), 'ms');
         
-        -- 3. Deletar notificações principais
+        -- 3. Deletar notificações principais em lotes
         SET @StepTime = GETDATE();
         IF @Debug = 1
-            PRINT '🗑️ Deletando notificações principais...';
+            PRINT '🗑️ Deletando notificações principais em lotes...';
         
-        DELETE [N]
-        FROM [Sistema].[Notificacoes] AS N
-        WHERE [N].[DataCriacao] < @DataLimite;
+        SET @RowsDeleted = 1;
+        WHILE @RowsDeleted > 0
+        BEGIN
+            DELETE TOP (@BatchSize) N
+            FROM [Sistema].[Notificacoes] N
+            INNER JOIN #NotificacoesParaExcluir temp ON temp.IdNotificacao = N.[IdNotificacao]
+            OPTION (MAXDOP 4);
+            
+            SET @RowsDeleted = @@ROWCOUNT;
+            SET @RegistrosDeletadosNotificacoes += @RowsDeleted;
+            
+            IF @Debug = 1 AND @RowsDeleted > 0
+                PRINT CONCAT('   📦 Lote processado: ', @RowsDeleted, ' registros');
+        END;
         
-        SET @RegistrosDeletadosNotificacoes = @@ROWCOUNT;
+        -- Limpar tabela temporária
+        DROP TABLE #NotificacoesParaExcluir;
         
         IF @Debug = 1
             PRINT CONCAT('✅ ', @RegistrosDeletadosNotificacoes, ' registros deletados em ', 
@@ -187,10 +270,10 @@ BEGIN
         IF @Debug = 1
             PRINT '📊 Coletando métricas após o expurgo...';
         
-        -- Contagem de registros depois
-        SELECT @NotificacoesDepois = COUNT(*) FROM [Sistema].[Notificacoes];
-        SELECT @ProcessosRecursosDepois = COUNT(*) FROM [Processo].[ProcessosRecursosNotificacoesUsuarios];
-        SELECT @DescartesDepois = COUNT(*) FROM [Sistema].[NotificacoesUsuariosDescartes];
+        -- Contagem otimizada de registros depois
+        SELECT @NotificacoesDepois = COUNT_BIG(*) FROM [Sistema].[Notificacoes] WITH (NOLOCK);
+        SELECT @ProcessosRecursosDepois = COUNT_BIG(*) FROM [Processo].[ProcessosRecursosNotificacoesUsuarios] WITH (NOLOCK);
+        SELECT @DescartesDepois = COUNT_BIG(*) FROM [Sistema].[NotificacoesUsuariosDescartes] WITH (NOLOCK);
         
         -- Tamanho das tabelas depois (em MB)
         SELECT @TamanhoNotificacoesDepoisMB = 
