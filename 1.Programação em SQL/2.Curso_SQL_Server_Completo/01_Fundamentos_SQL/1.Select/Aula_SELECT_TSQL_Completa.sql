@@ -6,6 +6,9 @@ Autor: Wesley Neves
 Data de Criação: 2024-12-19
 Descrição: Aula completa sobre comando SELECT em T-SQL
            Desde conceitos básicos até técnicas avançadas
+           Usando o banco de dados EcommerceDB
+
+Pré-requisito: Execute o script 2.CriacaoTabelas.sql antes desta aula
 
 Tópicos Abordados:
 1. Sintaxe Básica do SELECT
@@ -21,6 +24,10 @@ Tópicos Abordados:
 =============================================
 */
 
+-- Conectar ao banco de dados do curso
+USE EcommerceDB;
+GO
+
 -- ═══════════════════════════════════════════════════════════════
 -- 1. SINTAXE BÁSICA DO SELECT
 -- ═══════════════════════════════════════════════════════════════
@@ -35,72 +42,72 @@ FROM nome_da_tabela
 [ORDER BY colunas_ordenacao]
 */
 
--- Exemplo 1: Seleção simples
-SELECT * FROM Funcionarios;
+-- Exemplo 1: Seleção simples - Visualizar todos os produtos
+SELECT * FROM Produtos;
 
 -- Exemplo 2: Seleção de colunas específicas
-SELECT Nome, Sobrenome, Salario 
-FROM Funcionarios;
+SELECT NomeProduto, PrecoVenda, EstoqueAtual 
+FROM Produtos;
 
 -- Exemplo 3: Usando alias para colunas
 SELECT 
-    Nome AS PrimeiroNome,
-    Sobrenome AS UltimoNome,
-    Salario AS SalarioMensal
-FROM Funcionarios;
+    NomeProduto AS Produto,
+    PrecoVenda AS Preco,
+    EstoqueAtual AS Estoque
+FROM Produtos;
 
 -- Exemplo 4: Usando TOP para limitar resultados
-SELECT TOP 10 Nome, Salario 
-FROM Funcionarios;
+SELECT TOP 5 NomeProduto, PrecoVenda 
+FROM Produtos;
 
 -- Exemplo 5: Usando DISTINCT para valores únicos
-SELECT DISTINCT Departamento 
-FROM Funcionarios;
+SELECT DISTINCT StatusVenda 
+FROM Vendas;
 
 -- ═══════════════════════════════════════════════════════════════
 -- 2. FILTRAGEM COM WHERE
 -- ═══════════════════════════════════════════════════════════════
 
 -- Operadores de comparação: =, <>, !=, <, >, <=, >=
-SELECT Nome, Salario 
-FROM Funcionarios 
-WHERE Salario > 5000;
+SELECT NomeProduto, PrecoVenda 
+FROM Produtos 
+WHERE PrecoVenda > 500;
 
 -- Operadores lógicos: AND, OR, NOT
-SELECT Nome, Departamento, Salario 
-FROM Funcionarios 
-WHERE Departamento = 'TI' AND Salario > 4000;
+SELECT NomeProduto, CategoriaID, PrecoVenda 
+FROM Produtos 
+WHERE CategoriaID = 1 AND PrecoVenda > 1000;
 
 -- Operador IN para múltiplos valores
-SELECT Nome, Departamento 
-FROM Funcionarios 
-WHERE Departamento IN ('TI', 'Vendas', 'Marketing');
+SELECT NomeCompleto, TipoCliente 
+FROM Clientes 
+WHERE TipoCliente IN ('F', 'J');
 
 -- Operador BETWEEN para intervalos
-SELECT Nome, Salario 
-FROM Funcionarios 
-WHERE Salario BETWEEN 3000 AND 7000;
+SELECT NomeProduto, PrecoVenda 
+FROM Produtos 
+WHERE PrecoVenda BETWEEN 50 AND 500;
 
 -- Operador LIKE para busca de padrões
-SELECT Nome 
-FROM Funcionarios 
-WHERE Nome LIKE 'João%';  -- Nomes que começam com 'João'
+SELECT NomeProduto 
+FROM Produtos 
+WHERE NomeProduto LIKE 'Smartphone%';  -- Produtos que começam com 'Smartphone'
 
-SELECT Nome 
-FROM Funcionarios 
-WHERE Nome LIKE '%Silva'; -- Nomes que terminam com 'Silva'
+SELECT NomeCompleto 
+FROM Clientes 
+WHERE NomeCompleto LIKE '%Silva%'; -- Clientes que contêm 'Silva' no nome
 
-SELECT Nome 
-FROM Funcionarios 
-WHERE Nome LIKE '%Ana%';  -- Nomes que contêm 'Ana'
+SELECT NomeProduto 
+FROM Produtos 
+WHERE NomeProduto LIKE '%Nike%';  -- Produtos que contêm 'Nike'
 
 -- Verificação de valores NULL
-SELECT Nome, Email 
-FROM Funcionarios 
-WHERE Email IS NULL;
+SELECT NomeCompleto, CNPJ 
+FROM Clientes 
+WHERE CNPJ IS NULL;
 
-SELECT Nome, Email 
-FROM Funcionarios 
+SELECT NomeCompleto, Email 
+FROM Clientes 
 WHERE Email IS NOT NULL;
 
 -- ═══════════════════════════════════════════════════════════════
@@ -108,49 +115,49 @@ WHERE Email IS NOT NULL;
 -- ═══════════════════════════════════════════════════════════════
 
 -- Ordenação crescente (padrão)
-SELECT Nome, Salario 
-FROM Funcionarios 
-ORDER BY Salario;
+SELECT NomeProduto, PrecoVenda 
+FROM Produtos 
+ORDER BY PrecoVenda;
 
 -- Ordenação decrescente
-SELECT Nome, Salario 
-FROM Funcionarios 
-ORDER BY Salario DESC;
+SELECT NomeProduto, PrecoVenda 
+FROM Produtos 
+ORDER BY PrecoVenda DESC;
 
 -- Ordenação por múltiplas colunas
-SELECT Nome, Departamento, Salario 
-FROM Funcionarios 
-ORDER BY Departamento ASC, Salario DESC;
+SELECT NomeProduto, CategoriaID, PrecoVenda 
+FROM Produtos 
+ORDER BY CategoriaID ASC, PrecoVenda DESC;
 
 -- Ordenação por posição da coluna
-SELECT Nome, Departamento, Salario 
-FROM Funcionarios 
-ORDER BY 2, 3 DESC; -- Ordena pela 2ª coluna (Departamento) e depois pela 3ª (Salario)
+SELECT NomeProduto, CategoriaID, PrecoVenda 
+FROM Produtos 
+ORDER BY 2, 3 DESC; -- Ordena pela 2ª coluna (CategoriaID) e depois pela 3ª (PrecoVenda)
 
 -- ═══════════════════════════════════════════════════════════════
 -- 4. FUNÇÕES DE AGREGAÇÃO
 -- ═══════════════════════════════════════════════════════════════
 
 -- COUNT - Conta registros
-SELECT COUNT(*) AS TotalFuncionarios 
-FROM Funcionarios;
+SELECT COUNT(*) AS TotalProdutos 
+FROM Produtos;
 
-SELECT COUNT(Email) AS FuncionariosComEmail 
-FROM Funcionarios; -- Não conta valores NULL
+SELECT COUNT(ImagemURL) AS ProdutosComImagem 
+FROM Produtos; -- Não conta valores NULL
 
 -- SUM - Soma valores
-SELECT SUM(Salario) AS TotalFolhaPagamento 
-FROM Funcionarios;
+SELECT SUM(EstoqueAtual) AS TotalEstoque 
+FROM Produtos;
 
 -- AVG - Média dos valores
-SELECT AVG(Salario) AS SalarioMedio 
-FROM Funcionarios;
+SELECT AVG(PrecoVenda) AS PrecoMedio 
+FROM Produtos;
 
 -- MIN e MAX - Valores mínimo e máximo
 SELECT 
-    MIN(Salario) AS MenorSalario,
-    MAX(Salario) AS MaiorSalario
-FROM Funcionarios;
+    MIN(PrecoVenda) AS MenorPreco,
+    MAX(PrecoVenda) AS MaiorPreco
+FROM Produtos;
 
 -- ═══════════════════════════════════════════════════════════════
 -- 5. AGRUPAMENTO COM GROUP BY
@@ -158,29 +165,29 @@ FROM Funcionarios;
 
 -- Agrupamento básico
 SELECT 
-    Departamento,
-    COUNT(*) AS QuantidadeFuncionarios
-FROM Funcionarios 
-GROUP BY Departamento;
+    CategoriaID,
+    COUNT(*) AS QuantidadeProdutos
+FROM Produtos 
+GROUP BY CategoriaID;
 
 -- Múltiplas funções de agregação
 SELECT 
-    Departamento,
+    CategoriaID,
     COUNT(*) AS Quantidade,
-    AVG(Salario) AS SalarioMedio,
-    MIN(Salario) AS MenorSalario,
-    MAX(Salario) AS MaiorSalario
-FROM Funcionarios 
-GROUP BY Departamento;
+    AVG(PrecoVenda) AS PrecoMedio,
+    MIN(PrecoVenda) AS MenorPreco,
+    MAX(PrecoVenda) AS MaiorPreco
+FROM Produtos 
+GROUP BY CategoriaID;
 
 -- Agrupamento por múltiplas colunas
 SELECT 
-    Departamento,
-    Cargo,
+    CategoriaID,
+    FornecedorID,
     COUNT(*) AS Quantidade,
-    AVG(Salario) AS SalarioMedio
-FROM Funcionarios 
-GROUP BY Departamento, Cargo;
+    AVG(PrecoVenda) AS PrecoMedio
+FROM Produtos 
+GROUP BY CategoriaID, FornecedorID;
 
 -- ═══════════════════════════════════════════════════════════════
 -- 6. FILTRAGEM DE GRUPOS COM HAVING
@@ -188,60 +195,60 @@ GROUP BY Departamento, Cargo;
 
 -- HAVING é usado para filtrar grupos (após GROUP BY)
 SELECT 
-    Departamento,
-    COUNT(*) AS QuantidadeFuncionarios,
-    AVG(Salario) AS SalarioMedio
-FROM Funcionarios 
-GROUP BY Departamento
-HAVING COUNT(*) > 5; -- Apenas departamentos com mais de 5 funcionários
+    CategoriaID,
+    COUNT(*) AS QuantidadeProdutos,
+    AVG(PrecoVenda) AS PrecoMedio
+FROM Produtos 
+GROUP BY CategoriaID
+HAVING COUNT(*) > 1; -- Apenas categorias com mais de 1 produto
 
 -- Combinando WHERE e HAVING
 SELECT 
-    Departamento,
-    COUNT(*) AS QuantidadeFuncionarios,
-    AVG(Salario) AS SalarioMedio
-FROM Funcionarios 
-WHERE Salario > 3000  -- Filtra antes do agrupamento
-GROUP BY Departamento
-HAVING AVG(Salario) > 5000; -- Filtra após o agrupamento
+    CategoriaID,
+    COUNT(*) AS QuantidadeProdutos,
+    AVG(PrecoVenda) AS PrecoMedio
+FROM Produtos 
+WHERE PrecoVenda > 100  -- Filtra antes do agrupamento
+GROUP BY CategoriaID
+HAVING AVG(PrecoVenda) > 500; -- Filtra após o agrupamento
 
 -- ═══════════════════════════════════════════════════════════════
 -- 7. SUBCONSULTAS (SUBQUERIES)
 -- ═══════════════════════════════════════════════════════════════
 
 -- Subconsulta no WHERE
-SELECT Nome, Salario 
-FROM Funcionarios 
-WHERE Salario > (SELECT AVG(Salario) FROM Funcionarios);
+SELECT NomeProduto, PrecoVenda 
+FROM Produtos 
+WHERE PrecoVenda > (SELECT AVG(PrecoVenda) FROM Produtos);
 
 -- Subconsulta com IN
-SELECT Nome, Departamento 
-FROM Funcionarios 
-WHERE Departamento IN (
-    SELECT Departamento 
-    FROM Departamentos 
-    WHERE Orcamento > 100000
+SELECT NomeProduto, CategoriaID 
+FROM Produtos 
+WHERE CategoriaID IN (
+    SELECT CategoriaID 
+    FROM Categorias 
+    WHERE NomeCategoria LIKE '%Eletrônicos%'
 );
 
 -- Subconsulta correlacionada
 SELECT 
-    f1.Nome,
-    f1.Departamento,
-    f1.Salario
-FROM Funcionarios f1
-WHERE f1.Salario > (
-    SELECT AVG(f2.Salario)
-    FROM Funcionarios f2
-    WHERE f2.Departamento = f1.Departamento
+    p1.NomeProduto,
+    p1.CategoriaID,
+    p1.PrecoVenda
+FROM Produtos p1
+WHERE p1.PrecoVenda > (
+    SELECT AVG(p2.PrecoVenda)
+    FROM Produtos p2
+    WHERE p2.CategoriaID = p1.CategoriaID
 );
 
 -- Subconsulta no SELECT
 SELECT 
-    Nome,
-    Salario,
-    (SELECT AVG(Salario) FROM Funcionarios) AS SalarioMedioGeral,
-    Salario - (SELECT AVG(Salario) FROM Funcionarios) AS DiferencaMedia
-FROM Funcionarios;
+    NomeProduto,
+    PrecoVenda,
+    (SELECT AVG(PrecoVenda) FROM Produtos) AS PrecoMedioGeral,
+    PrecoVenda - (SELECT AVG(PrecoVenda) FROM Produtos) AS DiferencaMedia
+FROM Produtos;
 
 -- ═══════════════════════════════════════════════════════════════
 -- 8. JOINS - RELACIONANDO TABELAS
@@ -249,44 +256,45 @@ FROM Funcionarios;
 
 -- INNER JOIN - Retorna apenas registros que têm correspondência em ambas as tabelas
 SELECT 
-    f.Nome,
-    f.Sobrenome,
-    d.NomeDepartamento,
-    f.Salario
-FROM Funcionarios f
-INNER JOIN Departamentos d ON f.DepartamentoID = d.DepartamentoID;
+    p.NomeProduto,
+    p.PrecoVenda,
+    c.NomeCategoria,
+    f.NomeFornecedor
+FROM Produtos p
+INNER JOIN Categorias c ON p.CategoriaID = c.CategoriaID
+INNER JOIN Fornecedores f ON p.FornecedorID = f.FornecedorID;
 
 -- LEFT JOIN - Retorna todos os registros da tabela à esquerda
 SELECT 
-    f.Nome,
-    f.Sobrenome,
-    d.NomeDepartamento
-FROM Funcionarios f
-LEFT JOIN Departamentos d ON f.DepartamentoID = d.DepartamentoID;
+    p.NomeProduto,
+    p.PrecoVenda,
+    c.NomeCategoria
+FROM Produtos p
+LEFT JOIN Categorias c ON p.CategoriaID = c.CategoriaID;
 
 -- RIGHT JOIN - Retorna todos os registros da tabela à direita
 SELECT 
-    f.Nome,
-    d.NomeDepartamento
-FROM Funcionarios f
-RIGHT JOIN Departamentos d ON f.DepartamentoID = d.DepartamentoID;
+    p.NomeProduto,
+    c.NomeCategoria
+FROM Produtos p
+RIGHT JOIN Categorias c ON p.CategoriaID = c.CategoriaID;
 
 -- FULL OUTER JOIN - Retorna todos os registros de ambas as tabelas
 SELECT 
-    f.Nome,
-    d.NomeDepartamento
-FROM Funcionarios f
-FULL OUTER JOIN Departamentos d ON f.DepartamentoID = d.DepartamentoID;
+    p.NomeProduto,
+    c.NomeCategoria
+FROM Produtos p
+FULL OUTER JOIN Categorias c ON p.CategoriaID = c.CategoriaID;
 
 -- JOIN com múltiplas tabelas
 SELECT 
-    f.Nome,
-    d.NomeDepartamento,
-    c.NomeCargo,
-    f.Salario
-FROM Funcionarios f
-INNER JOIN Departamentos d ON f.DepartamentoID = d.DepartamentoID
-INNER JOIN Cargos c ON f.CargoID = c.CargoID;
+    p.NomeProduto,
+    c.NomeCategoria,
+    f.NomeFornecedor,
+    p.PrecoVenda
+FROM Produtos p
+INNER JOIN Categorias c ON p.CategoriaID = c.CategoriaID
+INNER JOIN Fornecedores f ON p.FornecedorID = f.FornecedorID;
 
 -- ═══════════════════════════════════════════════════════════════
 -- 9. FUNÇÕES DE JANELA (WINDOW FUNCTIONS)
@@ -294,110 +302,104 @@ INNER JOIN Cargos c ON f.CargoID = c.CargoID;
 
 -- ROW_NUMBER() - Numera as linhas
 SELECT 
-    Nome,
-    Departamento,
-    Salario,
-    ROW_NUMBER() OVER (ORDER BY Salario DESC) AS Ranking
-FROM Funcionarios;
+    NomeProduto,
+    CategoriaID,
+    PrecoVenda,
+    ROW_NUMBER() OVER (ORDER BY PrecoVenda DESC) AS Ranking
+FROM Produtos;
 
 -- RANK() e DENSE_RANK()
 SELECT 
-    Nome,
-    Departamento,
-    Salario,
-    RANK() OVER (ORDER BY Salario DESC) AS Rank_Normal,
-    DENSE_RANK() OVER (ORDER BY Salario DESC) AS Rank_Denso
-FROM Funcionarios;
+    NomeProduto,
+    CategoriaID,
+    PrecoVenda,
+    RANK() OVER (ORDER BY PrecoVenda DESC) AS Rank_Normal,
+    DENSE_RANK() OVER (ORDER BY PrecoVenda DESC) AS Rank_Denso
+FROM Produtos;
 
 -- Particionamento com PARTITION BY
 SELECT 
-    Nome,
-    Departamento,
-    Salario,
-    ROW_NUMBER() OVER (PARTITION BY Departamento ORDER BY Salario DESC) AS RankingDepartamento
-FROM Funcionarios;
+    NomeProduto,
+    CategoriaID,
+    PrecoVenda,
+    ROW_NUMBER() OVER (PARTITION BY CategoriaID ORDER BY PrecoVenda DESC) AS RankingCategoria
+FROM Produtos;
 
 -- Funções de agregação como Window Functions
 SELECT 
-    Nome,
-    Departamento,
-    Salario,
-    AVG(Salario) OVER (PARTITION BY Departamento) AS SalarioMedioDepartamento,
-    SUM(Salario) OVER (PARTITION BY Departamento) AS TotalSalarioDepartamento
-FROM Funcionarios;
+    NomeProduto,
+    CategoriaID,
+    PrecoVenda,
+    AVG(PrecoVenda) OVER (PARTITION BY CategoriaID) AS PrecoMedioCategoria,
+    COUNT(*) OVER (PARTITION BY CategoriaID) AS TotalProdutosCategoria
+FROM Produtos;
 
 -- LAG e LEAD - Acessar valores de linhas anteriores/posteriores
 SELECT 
-    Nome,
-    Salario,
-    LAG(Salario, 1) OVER (ORDER BY Salario) AS SalarioAnterior,
-    LEAD(Salario, 1) OVER (ORDER BY Salario) AS ProximoSalario
-FROM Funcionarios;
+    NomeProduto,
+    CategoriaID,
+    PrecoVenda,
+    LAG(PrecoVenda, 1) OVER (ORDER BY PrecoVenda) AS PrecoAnterior,
+    LEAD(PrecoVenda, 1) OVER (ORDER BY PrecoVenda) AS ProximoPreco
+FROM Produtos;
 
 -- ═══════════════════════════════════════════════════════════════
 -- 10. CTEs (COMMON TABLE EXPRESSIONS)
 -- ═══════════════════════════════════════════════════════════════
 
 -- CTE Simples
-WITH FuncionariosAltoSalario AS (
-    SELECT Nome, Departamento, Salario
-    FROM Funcionarios
-    WHERE Salario > 6000
+WITH ProdutosCaros AS (
+    SELECT 
+        NomeProduto,
+        CategoriaID,
+        PrecoVenda
+    FROM Produtos
+    WHERE PrecoVenda > 500
 )
-SELECT * FROM FuncionariosAltoSalario
-ORDER BY Salario DESC;
+SELECT * FROM ProdutosCaros
+ORDER BY PrecoVenda DESC;
 
 -- CTE com múltiplas definições
 WITH 
-EstatisticasDepartamento AS (
+EstatisticasCategoria AS (
     SELECT 
-        Departamento,
-        COUNT(*) AS TotalFuncionarios,
-        AVG(Salario) AS SalarioMedio
-    FROM Funcionarios
-    GROUP BY Departamento
+        CategoriaID,
+        COUNT(*) AS TotalProdutos,
+        AVG(PrecoVenda) AS PrecoMedio
+    FROM Produtos
+    GROUP BY CategoriaID
 ),
-DepartamentosGrandes AS (
-    SELECT Departamento
-    FROM EstatisticasDepartamento
-    WHERE TotalFuncionarios > 10
+CategoriasPopulares AS (
+    SELECT CategoriaID
+    FROM EstatisticasCategoria
+    WHERE TotalProdutos > 1
 )
 SELECT 
-    f.Nome,
-    f.Departamento,
-    f.Salario,
-    e.SalarioMedio
-FROM Funcionarios f
-INNER JOIN EstatisticasDepartamento e ON f.Departamento = e.Departamento
-INNER JOIN DepartamentosGrandes dg ON f.Departamento = dg.Departamento;
+    p.NomeProduto,
+    p.CategoriaID,
+    p.PrecoVenda,
+    e.PrecoMedio
+FROM Produtos p
+INNER JOIN EstatisticasCategoria e ON p.CategoriaID = e.CategoriaID
+INNER JOIN CategoriasPopulares cp ON p.CategoriaID = cp.CategoriaID;
 
--- CTE Recursiva (exemplo: hierarquia organizacional)
-WITH HierarquiaFuncionarios AS (
-    -- Âncora: funcionários sem gerente (nível mais alto)
-    SELECT 
-        FuncionarioID,
-        Nome,
-        GerenteID,
-        0 AS Nivel
-    FROM Funcionarios
-    WHERE GerenteID IS NULL
+-- CTE Recursiva (exemplo: sequência numérica)
+WITH SequenciaNumerica AS (
+    -- Âncora: valor inicial
+    SELECT 1 AS Numero
     
     UNION ALL
     
-    -- Parte recursiva: funcionários com gerente
-    SELECT 
-        f.FuncionarioID,
-        f.Nome,
-        f.GerenteID,
-        h.Nivel + 1
-    FROM Funcionarios f
-    INNER JOIN HierarquiaFuncionarios h ON f.GerenteID = h.FuncionarioID
+    -- Parte recursiva: incrementa até 10
+    SELECT Numero + 1
+    FROM SequenciaNumerica
+    WHERE Numero < 10
 )
 SELECT 
-    REPLICATE('  ', Nivel) + Nome AS NomeHierarquia,
-    Nivel
-FROM HierarquiaFuncionarios
-ORDER BY Nivel, Nome;
+    Numero,
+    'Produto ' + CAST(Numero AS VARCHAR(10)) AS NomeProdutoExemplo
+FROM SequenciaNumerica
+ORDER BY Numero;
 
 -- ═══════════════════════════════════════════════════════════════
 -- 11. FUNÇÕES ÚTEIS EM SELECT
@@ -436,36 +438,56 @@ FROM Funcionarios;
 
 -- Função CASE para lógica condicional
 SELECT 
-    Nome,
-    Salario,
+    NomeProduto,
+    PrecoVenda,
     CASE 
-        WHEN Salario < 3000 THEN 'Baixo'
-        WHEN Salario BETWEEN 3000 AND 6000 THEN 'Médio'
-        WHEN Salario > 6000 THEN 'Alto'
+        WHEN PrecoVenda < 100 THEN 'Barato'
+        WHEN PrecoVenda BETWEEN 100 AND 500 THEN 'Médio'
+        WHEN PrecoVenda > 500 THEN 'Caro'
         ELSE 'Não Definido'
-    END AS FaixaSalarial
-FROM Funcionarios;
+    END AS FaixaPreco
+FROM Produtos;
 
 -- Função COALESCE para tratar valores NULL
 SELECT 
-    Nome,
-    COALESCE(Email, 'email@naoinfo.com') AS EmailTratado,
-    COALESCE(Telefone, 'Não informado') AS TelefoneTratado
-FROM Funcionarios;
+    NomeProduto,
+    COALESCE(ImagemURL, 'Sem imagem') AS ImagemTratada,
+    COALESCE(Descricao, 'Descrição não disponível') AS DescricaoTratada
+FROM Produtos;
 
 -- ═══════════════════════════════════════════════════════════════
--- 12. TÉCNICAS AVANÇADAS
+-- 12. UNION E UNION ALL
 -- ═══════════════════════════════════════════════════════════════
 
--- PIVOT - Transformar linhas em colunas
+-- UNION - Combina resultados removendo duplicatas
+SELECT NomeProduto AS Nome, 'Produto' AS Tipo FROM Produtos
+UNION
+SELECT NomeCategoria, 'Categoria' AS Tipo FROM Categorias;
+
+-- UNION ALL - Combina resultados mantendo duplicatas
+SELECT NomeProduto AS Nome, 'Produto' AS Tipo FROM Produtos
+UNION ALL
+SELECT NomeFornecedor, 'Fornecedor' AS Tipo FROM Fornecedores;
+
+-- ═══════════════════════════════════════════════════════════════
+-- 13. TÉCNICAS AVANÇADAS
+-- ═══════════════════════════════════════════════════════════════
+
+-- PIVOT - Transformar linhas em colunas (exemplo com vendas por categoria)
 SELECT *
 FROM (
-    SELECT Departamento, Cargo, Salario
-    FROM Funcionarios
+    SELECT 
+        YEAR(v.DataVenda) AS Ano,
+        c.NomeCategoria,
+        iv.Quantidade
+    FROM Vendas v
+    INNER JOIN ItensVenda iv ON v.VendaID = iv.VendaID
+    INNER JOIN Produtos p ON iv.ProdutoID = p.ProdutoID
+    INNER JOIN Categorias c ON p.CategoriaID = c.CategoriaID
 ) AS SourceTable
 PIVOT (
-    AVG(Salario)
-    FOR Cargo IN ([Analista], [Gerente], [Diretor])
+    SUM(Quantidade)
+    FOR NomeCategoria IN ([Eletrônicos], [Roupas], [Casa])
 ) AS PivotTable;
 
 -- UNPIVOT - Transformar colunas em linhas
@@ -495,53 +517,58 @@ CROSS APPLY (
 -- 13. EXERCÍCIOS PRÁTICOS
 -- ═══════════════════════════════════════════════════════════════
 
--- Exercício 1: Encontre os 5 funcionários com maior salário
-SELECT TOP 5 Nome, Salario
-FROM Funcionarios
-ORDER BY Salario DESC;
+-- Exercício 1: Encontre os 5 produtos mais caros
+SELECT TOP 5 NomeProduto, PrecoVenda
+FROM Produtos
+ORDER BY PrecoVenda DESC;
 
--- Exercício 2: Calcule o salário médio por departamento, apenas para departamentos com mais de 3 funcionários
+-- Exercício 2: Calcule o preço médio por categoria, apenas para categorias com mais de 1 produto
 SELECT 
-    Departamento,
-    COUNT(*) AS TotalFuncionarios,
-    AVG(Salario) AS SalarioMedio
-FROM Funcionarios
-GROUP BY Departamento
-HAVING COUNT(*) > 3;
+    CategoriaID,
+    COUNT(*) AS TotalProdutos,
+    AVG(PrecoVenda) AS PrecoMedio
+FROM Produtos
+GROUP BY CategoriaID
+HAVING COUNT(*) > 1;
 
--- Exercício 3: Liste funcionários que ganham acima da média de seu departamento
+-- Exercício 3: Liste produtos que custam acima da média de sua categoria
 SELECT 
-    f1.Nome,
-    f1.Departamento,
-    f1.Salario,
+    p1.NomeProduto,
+    p1.CategoriaID,
+    p1.PrecoVenda,
     (
-        SELECT AVG(f2.Salario)
-        FROM Funcionarios f2
-        WHERE f2.Departamento = f1.Departamento
-    ) AS MediaDepartamento
-FROM Funcionarios f1
-WHERE f1.Salario > (
-    SELECT AVG(f2.Salario)
-    FROM Funcionarios f2
-    WHERE f2.Departamento = f1.Departamento
+        SELECT AVG(p2.PrecoVenda)
+        FROM Produtos p2
+        WHERE p2.CategoriaID = p1.CategoriaID
+    ) AS MediaCategoria
+FROM Produtos p1
+WHERE p1.PrecoVenda > (
+    SELECT AVG(p2.PrecoVenda)
+    FROM Produtos p2
+    WHERE p2.CategoriaID = p1.CategoriaID
 );
 
--- Exercício 4: Ranking de funcionários por salário dentro de cada departamento
+-- Exercício 4: Ranking de produtos por preço dentro de cada categoria
 SELECT 
-    Nome,
-    Departamento,
-    Salario,
-    RANK() OVER (PARTITION BY Departamento ORDER BY Salario DESC) AS RankingDepartamento
-FROM Funcionarios;
+    NomeProduto,
+    CategoriaID,
+    PrecoVenda,
+    RANK() OVER (PARTITION BY CategoriaID ORDER BY PrecoVenda DESC) AS RankingCategoria
+FROM Produtos;
 
--- Exercício 5: Funcionários admitidos nos últimos 2 anos
+-- Exercício 5: Produtos com baixo estoque (menos de 10 unidades)
 SELECT 
-    Nome,
-    DataAdmissao,
-    DATEDIFF(MONTH, DataAdmissao, GETDATE()) AS MesesEmpresa
-FROM Funcionarios
-WHERE DataAdmissao >= DATEADD(YEAR, -2, GETDATE())
-ORDER BY DataAdmissao DESC;
+    NomeProduto,
+    EstoqueAtual,
+    CASE 
+        WHEN EstoqueAtual = 0 THEN 'Sem Estoque'
+        WHEN EstoqueAtual < 5 THEN 'Estoque Crítico'
+        WHEN EstoqueAtual < 10 THEN 'Estoque Baixo'
+        ELSE 'Estoque OK'
+    END AS StatusEstoque
+FROM Produtos
+WHERE EstoqueAtual < 10
+ORDER BY EstoqueAtual ASC;
 
 -- ═══════════════════════════════════════════════════════════════
 -- 14. DICAS DE PERFORMANCE
@@ -555,27 +582,51 @@ DICAS IMPORTANTES PARA PERFORMANCE:
 3. Use EXISTS ao invés de IN para subconsultas quando possível
 4. Prefira JOINs a subconsultas correlacionadas quando possível
 5. Use UNION ALL ao invés de UNION quando não precisar eliminar duplicatas
-6. Cuidado com funções em colunas no WHERE - podem impedir uso de índices
+6. Cuidado com funções em colunas do WHERE - podem impedir uso de índices
 7. Use TOP ou OFFSET/FETCH para paginação
 8. Considere usar CTEs para melhorar legibilidade de queries complexas
 9. Monitore planos de execução para identificar gargalos
 10. Use hints apenas quando necessário e com conhecimento
 */
 
+-- ❌ EVITE: SELECT *
+-- SELECT * FROM Produtos;
+
+-- ✅ PREFIRA: Especificar colunas
+-- SELECT NomeProduto, PrecoVenda FROM Produtos;
+
+-- ❌ EVITE: Funções em WHERE
+-- SELECT * FROM Vendas WHERE YEAR(DataVenda) = 2024;
+
+-- ✅ PREFIRA: Filtros diretos
+-- SELECT * FROM Vendas WHERE DataVenda >= '2024-01-01' AND DataVenda < '2025-01-01';
+
+-- ❌ EVITE: OR em grandes volumes
+-- SELECT * FROM Produtos WHERE CategoriaID = 1 OR CategoriaID = 2;
+
+-- ✅ PREFIRA: IN
+-- SELECT * FROM Produtos WHERE CategoriaID IN (1, 2);
+
+-- ✅ USE: LIMIT/TOP para testes
+-- SELECT TOP 100 * FROM Produtos;
+
+-- ✅ USE: Índices apropriados (já criados no script de criação)
+-- Os índices já estão criados no script 2.CriacaoTabelas.sql
+-- Exemplo: IX_Produtos_Categoria, IX_Produtos_Preco, etc.
+
 -- Exemplo de paginação eficiente
-SELECT Nome, Salario
-FROM Funcionarios
-ORDER BY Nome
-OFFSET 20 ROWS
-FETCH NEXT 10 ROWS ONLY;
+SELECT NomeProduto, PrecoVenda
+FROM Produtos
+ORDER BY PrecoVenda DESC
+OFFSET 10 ROWS FETCH NEXT 5 ROWS ONLY; -- Pula 10 registros e pega os próximos 5
 
 -- Exemplo usando EXISTS (mais eficiente que IN em muitos casos)
-SELECT Nome, Departamento
-FROM Funcionarios f
+SELECT NomeProduto, CategoriaID
+FROM Produtos p
 WHERE EXISTS (
-    SELECT 1
-    FROM Projetos p
-    WHERE p.ResponsavelID = f.FuncionarioID
+    SELECT 1 
+    FROM ItensVenda iv 
+    WHERE iv.ProdutoID = p.ProdutoID
 );
 
 -- ═══════════════════════════════════════════════════════════════

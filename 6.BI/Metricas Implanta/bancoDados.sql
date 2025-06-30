@@ -16,9 +16,8 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'Staging')
 -- Limpeza das tabelas existentes
 
 
-DROP TABLE IF EXISTS [DM_MetricasClientes].[FatoMetricas];
-DROP TABLE IF EXISTS [DM_MetricasClientes].[DimMetricas];
-DROP TABLE IF EXISTS [Staging].[StagingMetricas];
+
+
 
 
 DROP TABLE IF EXISTS [Shared].[DimSistemas];
@@ -39,6 +38,43 @@ DROP TABLE IF EXISTS [DM_MetricasClientes].[LogExecucaoMetricas];
 -- TABELAS DIMENSÃO
 -- =============================================
 
+CREATE TABLE [Shared].[DimCategorias]
+(
+    SkCategoria SMALLINT NOT NULL IDENTITY(0,1),
+    Nome VARCHAR(100) NOT NULL,
+    [Ativo] BIT
+        DEFAULT 1,
+    [DataCarga] DATETIME2(2)
+        DEFAULT GETDATE(),
+    [DataAtualizacao] DATETIME2(2)
+        DEFAULT GETDATE(),
+    CONSTRAINT [PK_DimDimCategoria]
+        PRIMARY KEY CLUSTERED (SkCategoria)
+) ON [PRIMARY]
+WITH (DATA_COMPRESSION = PAGE);
+
+
+-- DIMENSÃO SISTEMAS
+CREATE TABLE [Shared].[DimSistemas]
+(
+    [SkSistema] TINYINT NOT NULL IDENTITY(0, 1),
+    [IdSistema] UNIQUEIDENTIFIER NOT NULL,
+    [Descricao] VARCHAR(250) NOT NULL,
+    [Area] VARCHAR(50),
+    [Ativo] BIT DEFAULT 1,
+    [DataCarga] DATETIME2(2) DEFAULT GETDATE(),
+    [DataAtualizacao] DATETIME2(2) DEFAULT GETDATE(),
+    CONSTRAINT [PK_DimSistemas] PRIMARY KEY CLUSTERED ([SkSistema])
+)
+WITH (DATA_COMPRESSION = PAGE);
+
+CREATE UNIQUE NONCLUSTERED INDEX IX_DimSistemas_Id ON 
+[Shared].[DimSistemas](IdSistema) 
+INCLUDE([SkSistema], [Descricao])
+WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
+
+
+
 -- DIMENSÃO CONSELHOS FEDERAIS
 CREATE TABLE [Shared].[DimConselhosFederais]
 (
@@ -46,8 +82,8 @@ CREATE TABLE [Shared].[DimConselhosFederais]
     [IdConselhoFederal] [UNIQUEIDENTIFIER] NOT NULL,
     [NomeRazaoSocial] [VARCHAR](250) COLLATE SQL_Latin1_General_CP1_CI_AI NOT NULL,
     [Sigla] [VARCHAR](50) COLLATE SQL_Latin1_General_CP1_CI_AI NOT NULL,
+	SkCategoria SMALLINT NOT NULL DEFAULT(0),
     [Ativo] BIT DEFAULT 1,
-	Categoria VARCHAR(30) ,
     [DataCarga] DATETIME2(2) DEFAULT GETDATE(),
     [DataAtualizacao] DATETIME2(2) DEFAULT GETDATE(),
     CONSTRAINT [PK_DimConselhosFederais] PRIMARY KEY CLUSTERED ([SkConselhoFederal])
@@ -87,24 +123,6 @@ CREATE NONCLUSTERED INDEX IX_DimClientes_ConselhoFederal ON
 [Shared].[DimClientes](SkConselhoFederal)
 WITH (DATA_COMPRESSION = PAGE);
 
--- DIMENSÃO SISTEMAS
-CREATE TABLE [Shared].[DimSistemas]
-(
-    [SkSistema] TINYINT NOT NULL IDENTITY(0, 1),
-    [IdSistema] INT NOT NULL,
-    [Descricao] VARCHAR(250) NOT NULL,
-    [Area] VARCHAR(50),
-    [Ativo] BIT DEFAULT 1,
-    [DataCarga] DATETIME2(2) DEFAULT GETDATE(),
-    [DataAtualizacao] DATETIME2(2) DEFAULT GETDATE(),
-    CONSTRAINT [PK_DimSistemas] PRIMARY KEY CLUSTERED ([SkSistema])
-)
-WITH (DATA_COMPRESSION = PAGE);
-
-CREATE UNIQUE NONCLUSTERED INDEX IX_DimSistemas_Id ON 
-[Shared].[DimSistemas](IdSistema) 
-INCLUDE([SkSistema], [Descricao])
-WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
 
 -- DIMENSÃO MÉTRICAS (Corrigida)
 CREATE TABLE [DM_MetricasClientes].[DimMetricas]
@@ -224,6 +242,26 @@ WITH (DATA_COMPRESSION = PAGE);
 -- =============================================
 -- SCHEMA STAGING
 -- =============================================
+
+CREATE TABLE [Staging].[ClientesProdutosCIGAM]
+(
+    [IdClienteProduto] [UNIQUEIDENTIFIER] NOT NULL PRIMARY KEY,
+    [UF] [VARCHAR](2) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+    [Categoria] [VARCHAR](20) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+    [Descricao] [VARCHAR](60) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+    [Tipo] [VARCHAR](60) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+    [Situacao] [VARCHAR](9) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+    [Pagador] [VARCHAR](30) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+    [SiglaCliente] [VARCHAR](30) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+    [DataVigenciaInicial] [DATE] NULL,
+    [DataVigenciaFinal] [DATE] NULL,
+    [SituacaoFinanceira] [VARCHAR](30) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+    [QtdLicencas] [INT] NULL,
+    [DataAtualizacao] [DATETIME2](2) NULL
+) ON [PRIMARY];
+GO
+
+
 
 -- TABELA DE STAGING OTIMIZADA
 CREATE TABLE [Staging].[StagingMetricas]

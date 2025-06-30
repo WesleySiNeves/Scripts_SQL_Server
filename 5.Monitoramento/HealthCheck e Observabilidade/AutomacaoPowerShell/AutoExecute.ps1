@@ -217,17 +217,28 @@ try
                         $totalBancos++
                         $serverInstance = "$($sqlserver.ServerName).database.windows.net"
                         
-                        # Executa HealthCheck no banco
-                        $resultado = Execute-HealthCheck -serverInstance $serverInstance `
-                                                        -databaseName $database.DatabaseName `
-                                                        -username $SecretValueUserName `
-                                                        -password $SecurePassword
-                        
-                        if ($resultado) {
-                            $bancosProcessados++
-                        } else {
+                        # Executa HealthCheck no banco com try-catch individual
+                        try {
+                            $resultado = Execute-HealthCheck -serverInstance $serverInstance `
+                                                            -databaseName $database.DatabaseName `
+                                                            -username $SecretValueUserName `
+                                                            -password $SecurePassword
+                            
+                            if ($resultado) {
+                                $bancosProcessados++
+                                Write-Output "✅ HealthCheck executado com sucesso: $($database.DatabaseName)"
+                            } else {
+                                $bancosComErro++
+                                $errorDetail = "❌ Falha no HealthCheck - Banco: $($database.DatabaseName) (Servidor: $serverInstance)"
+                                $errosDetalhados += $errorDetail
+                                Write-Warning $errorDetail
+                            }
+                        }
+                        catch {
                             $bancosComErro++
-                            $errosDetalhados += "Banco: $($database.DatabaseName) (Servidor: $serverInstance)"
+                            $errorDetail = "💥 Erro crítico no HealthCheck - Banco: $($database.DatabaseName) (Servidor: $serverInstance) - Erro: $($_.Exception.Message)"
+                            $errosDetalhados += $errorDetail
+                            Write-Error $errorDetail
                         }
                     }
                 }
@@ -263,17 +274,28 @@ try
                         $totalBancos++
                         $serverInstance = "$($sqlserver.ServerName).database.windows.net"
                         
-                        # Executa HealthCheck no banco
-                        $resultado = Execute-HealthCheck -serverInstance $serverInstance `
-                                                        -databaseName $database.DatabaseName `
-                                                        -username $SecretValueUserName `
-                                                        -password $SecurePassword
-                        
-                        if ($resultado) {
-                            $bancosProcessados++
-                        } else {
+                        # Executa HealthCheck no banco com try-catch individual
+                        try {
+                            $resultado = Execute-HealthCheck -serverInstance $serverInstance `
+                                                            -databaseName $database.DatabaseName `
+                                                            -username $SecretValueUserName `
+                                                            -password $SecurePassword
+                            
+                            if ($resultado) {
+                                $bancosProcessados++
+                                Write-Output "✅ HealthCheck executado com sucesso: $($database.DatabaseName)"
+                            } else {
+                                $bancosComErro++
+                                $errorDetail = "❌ Falha no HealthCheck - Banco: $($database.DatabaseName) (Servidor: $serverInstance)"
+                                $errosDetalhados += $errorDetail
+                                Write-Warning $errorDetail
+                            }
+                        }
+                        catch {
                             $bancosComErro++
-                            $errosDetalhados += "Banco: $($database.DatabaseName) (Servidor: $serverInstance)"
+                            $errorDetail = "💥 Erro crítico no HealthCheck - Banco: $($database.DatabaseName) (Servidor: $serverInstance) - Erro: $($_.Exception.Message)"
+                            $errosDetalhados += $errorDetail
+                            Write-Error $errorDetail
                         }
                     }
                 }

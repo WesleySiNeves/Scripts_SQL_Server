@@ -1,5 +1,4 @@
 
-DELETE FROM  Shared.DimClientes;
 
 
 ;WITH Dados
@@ -46,30 +45,23 @@ AS (SELECT R.IdCliente,
                              ELSE
                                  'NA'
                          END
-
-
-
     FROM Dados R)
-
-	INSERT INTO Shared.DimClientes
-	(
-	    IdCliente,
-	    SkConselhoFederal,
-	    Nome,
-	    Sigla,
-	    Estado,
-	    TipoCliente
-	   
-	)
-
+INSERT INTO Shared.DimClientes
+(
+    IdCliente,
+    SkConselhoFederal,
+    Nome,
+    Sigla,
+    Estado,
+    TipoCliente
+)
 SELECT R.IdCliente,
        R.SkConselhoFederal,
        R.Nome,
-	   R.SiglaConselhoRegional,
+       R.SiglaConselhoRegional,
        R.UF,
        R.TipoCliente
 FROM EnrriquecerDados R
-
 ORDER BY R.SiglaConselhoRegional;
 
 

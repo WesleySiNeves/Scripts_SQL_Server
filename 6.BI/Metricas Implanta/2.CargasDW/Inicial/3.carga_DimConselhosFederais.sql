@@ -48,27 +48,32 @@ INSERT INTO #tempConselhosCategoria (Categoria, NomeRazaoSocial, Sigla) VALUES
 ('MUSEOLOGIA', 'Conselho de Museologia', 'COFEM'),
 ('BIBLIOTECÁRIO', 'Conselho Federal de Biblioteconomia', 'CFB');
 
- 
- INSERT INTO Shared.DimConselhosFederais
+ INSERT INTO  Shared.DimConselhosFederais
  (
      IdConselhoFederal,
      NomeRazaoSocial,
      Sigla,
+     SkCategoria,
      Ativo,
-     Categoria,
      DataCarga,
      DataAtualizacao
  )
-
 SELECT conf.IdConselhoFederal,
        conf.NomeRazaoSocial,
        conf.Sigla,
+	   r.SkCategoria,
 	   1 AS Ativo,
-	   ISNULL(tem.Categoria,'Não Informado') AS Categoria,
 	   GETDATE() AS DataCarga,
 	   GETDATE() AS DataAtualizacao
 	   FROM Implanta.ConselhosFederais conf
-	   LEFT JOIN #tempConselhosCategoria tem ON tem.Sigla = conf.Sigla
+	   LEFT JOIN 
+	   (
+	   SELECT con.*, ISNULL(tem.Id,0) AS SkCategoria, tem.Categoria FROM Implanta.ConselhosFederais con
+	   LEFT JOIN  #tempConselhosCategoria tem ON con.Sigla = tem.Sigla
+		
+	   ) R ON R.Sigla = conf.Sigla
+	   
+	  
 
 
 	   

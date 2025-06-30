@@ -278,7 +278,7 @@ END
 IF EXISTS (
     SELECT 1 FROM sys.dm_os_wait_stats 
     WHERE wait_type LIKE 'PAGEIOLATCH_%' 
-    AND wait_time_ms / waiting_tasks_count > 100 -- Média > 100ms por I/O
+    AND wait_time_ms / IIF(waiting_tasks_count  = 0,1,waiting_tasks_count) > 100 -- Média > 100ms por I/O
 )
 BEGIN
     SET @AlertCount = @AlertCount + 1;
