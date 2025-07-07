@@ -328,6 +328,7 @@ BEGIN
                MagicBenefitNumber
         FROM MissingIndexData;
 
+
         -- 3. PROCESSAMENTO: Apenas se existem índices em falta
         IF EXISTS (SELECT 1 FROM #Missings)
         BEGIN
@@ -407,6 +408,8 @@ BEGIN
                    MagicBenefitNumber
             FROM ProcessedCandidates;
 
+
+
             -- 4. ANÁLISE: Objetos com apenas um candidato (casos simples)
             WITH SingleCandidateAnalysis
             AS (SELECT C.object_id,
@@ -473,6 +476,7 @@ BEGIN
             FROM SingleCandidateWithStats
             WHERE CountObjectId = 1;
 
+			
             -- 5. FILTRAGEM: Aplicar critérios de qualidade para casos simples
             INSERT INTO #Final
             SELECT object_id,
@@ -495,7 +499,7 @@ BEGIN
                       -- Critério principal: ambos os valores devem ser altos
                       (
                           MagicBenefitNumber >= @defaultTunningPerform
-                          AND AvgEstimatedImpact >= @defaultTunningPerform
+                          
                       )
                       OR
                       -- Critério alternativo: benefício muito alto com boa relação leitura/escrita
@@ -505,6 +509,7 @@ BEGIN
                           AND PotentialReadOperations > (@defaultTunningPerform / @READ_OP_DIVISOR)
                       )
                   );
+				 
 
             -- Remove candidatos já processados
             DELETE FROM #Candidates

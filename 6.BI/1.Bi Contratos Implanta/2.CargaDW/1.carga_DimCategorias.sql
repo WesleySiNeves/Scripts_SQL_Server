@@ -1,5 +1,6 @@
 DELETE FROM [Shared].[DimCategorias]
 -- Para que o primeiro registro tenha ID = 0
+
 DBCC CHECKIDENT ('[Shared].[DimCategorias]', RESEED, -1);
 
 INSERT INTO [Shared].[DimCategorias]
@@ -33,7 +34,7 @@ SELECT DISTINCT
        1,
        GETDATE() AS [DataCarga],
        GETDATE() AS [DataAtualizacao]
-FROM Implanta.ClientesProdutosCIGAM
+FROM Staging.ClientesProdutosCIGAM
 WHERE Categoria IS NOT NULL;
 
 
