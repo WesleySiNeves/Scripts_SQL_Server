@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE DM_ContratosProdutos.uspLoadDimProdutos
+CREATE OR ALTER PROCEDURE Shared.uspLoadDimProdutos
 AS
 BEGIN
     DROP TABLE IF EXISTS #Dados;

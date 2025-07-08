@@ -6,7 +6,7 @@
 -- Data: Criação automática - Versão otimizada com CTE
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [DM_ContratosProdutos].[uspLoadDimTempo]
+CREATE OR ALTER PROCEDURE [Shared].[uspLoadDimTempo]
 AS
 BEGIN
     SET NOCOUNT ON;

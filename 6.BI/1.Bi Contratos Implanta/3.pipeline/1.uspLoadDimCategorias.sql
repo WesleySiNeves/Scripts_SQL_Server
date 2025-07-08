@@ -3,7 +3,7 @@
 SELECT * FROM  Shared.DimCategorias
 */
 
-CREATE OR ALTER PROCEDURE DM_ContratosProdutos.uspLoadDimCategorias
+CREATE OR ALTER PROCEDURE Shared.uspLoadDimCategorias
 AS
 BEGIN
 

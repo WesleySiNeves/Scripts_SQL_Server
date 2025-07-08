@@ -236,10 +236,13 @@ IF (NOT EXISTS
 )
    )
 BEGIN
+   
+    
     CREATE TABLE [Staging].[ClientesProdutosCIGAM]
     (
         [IdClienteProduto] [UNIQUEIDENTIFIER] NOT NULL PRIMARY KEY,
         [UF] [VARCHAR](2) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+		[CodContrato] VARCHAR(10) NOT NULL,
         [Categoria] [VARCHAR](20) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
         [Descricao] [VARCHAR](60) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
         [Tipo] [VARCHAR](60) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
@@ -251,7 +254,8 @@ BEGIN
         [SituacaoFinanceira] [VARCHAR](30) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
         [QtdLicencas] [INT] NULL,
         [DataAtualizacao] [DATETIME2](2) NULL
-    ) ON [PRIMARY];
+    ) WITH(DATA_COMPRESSION=PAGE)
+
 
 END;
 
@@ -266,32 +270,36 @@ CREATE TABLE Shared.DimGeografia
 ---- TABELA FATO - CONTRATOS E PRODUTOS
 ---- =============================================
 
+
+--DROP TABLE [DM_ContratosProdutos].[FatoContratosProdutos]
 CREATE TABLE [DM_ContratosProdutos].[FatoContratosProdutos]
 (
     -- Chaves Surrogate (Dimensões)
-    [SkCliente] SMALLINT NOT NULL,
-    [SkProduto] TINYINT NOT NULL,
-    [SkTipoContrato] TINYINT NOT NULL,
-    [SkTipoSituacaoContrato] TINYINT NOT NULL,
-    [SkTiposSituacaoFinanceira] TINYINT NOT NULL,
-    [SkDataVigenciaInicial] INT NOT NULL, -- Referência para DimTempo
-    [SkDataVigenciaFinal] INT NOT NULL,   -- Referência para DimTempo
+		[SkUF] CHAR(2) NOT NULL,
+		[SkCategoria] TINYINT NOT NULL,
+        [SkProduto] TINYINT NOT NULL,
+        [SkTipoContrato] TINYINT NOT NULL,
+        [SkTipoSituacaoContrato] TINYINT NOT NULL,
+        [SkClientePagador] SMALLINT NOT NULL,
+        [SkCliente] SMALLINT NOT NULL,
+        [SkDataVigenciaInicial] INT NOT NULL,
+        [SkDataVigenciaFinal] INT NOT NULL,
+        [SkTiposSituacaoFinanceira] TINYINT NOT NULL,
 
-    -- Chave Natural (Deduplicação)
-    [IdClienteProduto] UNIQUEIDENTIFIER NOT NULL,
+		[CodContrato] VARCHAR(10) NULL,
 
-    -- Métricas/Fatos
-    [QtdLicencas] INT NOT NULL DEFAULT 0,
-    [ValorContrato] DECIMAL(15,2) NULL,           -- Valor monetário do contrato
-    [DiasVigencia] INT ,                 
+		-- Métricas/Fatos
+		[QtdLicencas] INT NOT NULL DEFAULT 0,
+		[ValorContrato] DECIMAL(15,2) NULL,           -- Valor monetário do contrato
+		[DiasVigencia] INT NOT NULL ,                 
 
-    -- Campos de Auditoria
-    [DataCarga] DATETIME2(2) DEFAULT GETDATE(),
-    [DataUltimaAtualizacao] DATETIME2(2) DEFAULT GETDATE(),
+		-- Campos de Auditoria
+		[DataCarga] DATETIME2(2) NOT NULL DEFAULT GETDATE(),
+		[DataUltimaAtualizacao]  DATETIME2(2) NOT NULL DEFAULT GETDATE(),
 
     -- Chave Primária Composta
     CONSTRAINT [PK_FatoContratosProdutos] 
-        PRIMARY KEY CLUSTERED ([IdClienteProduto]),
+        PRIMARY KEY CLUSTERED ([SkUF],[SkCliente],[SkProduto],[SkDataVigenciaInicial],[SkDataVigenciaFinal]),
 
     -- Chaves Estrangeiras
     CONSTRAINT [FK_FatoContratosProdutos_Cliente] 
@@ -322,9 +330,7 @@ CREATE TABLE [DM_ContratosProdutos].[FatoContratosProdutos]
         FOREIGN KEY ([SkDataVigenciaFinal]) 
         REFERENCES [Shared].[DimTempo] ([DataKey]),
 
-    CONSTRAINT [FK_FatoContratosProdutos_DataAtualizacao] 
-        FOREIGN KEY ([SkDataAtualizacao]) 
-        REFERENCES [Shared].[DimTempo] ([DataKey])
+   
 )
 WITH (DATA_COMPRESSION = PAGE);
 

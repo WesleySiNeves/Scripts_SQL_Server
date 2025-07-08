@@ -4,7 +4,7 @@ SELECT * FROM  Shared.DimConselhosFederais
 */
 
 
-CREATE OR ALTER PROCEDURE DM_ContratosProdutos.uspLoadDimConselhosFederais
+CREATE OR ALTER PROCEDURE Shared.uspLoadDimConselhosFederais
 AS
 BEGIN
 

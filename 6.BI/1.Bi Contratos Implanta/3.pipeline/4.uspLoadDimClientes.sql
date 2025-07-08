@@ -1,5 +1,5 @@
 
-CREATE OR ALTER PROCEDURE DM_ContratosProdutos.uspLoadDimClientes
+CREATE OR ALTER PROCEDURE Shared.uspLoadDimClientes
 AS
 BEGIN
 
