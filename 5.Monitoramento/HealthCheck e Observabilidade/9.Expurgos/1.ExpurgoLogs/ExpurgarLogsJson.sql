@@ -1,17 +1,20 @@
 
+
+--EXEC HealthCheck.uspExpurgarLogs @ProcessarApenasUmaFase =1 ,@FaseProcessar =3
+
 CREATE OR ALTER PROCEDURE HealthCheck.uspExpurgarLogs
 ( 
     @ProcessarApenasUmaFase BIT = 1, -- 0 = Todas as fases, 1 = Apenas uma fase
     @FaseProcessar TINYINT = 1, -- -- 1=Deletar Antigos, 2=Migrar, 3=Expurgar
-    @LimiteMaximoPorFase INT = 5000000
+    @LimiteMaximoPorFase INT = 1000000
 )
 AS
 BEGIN
 
-     -- Configurações otimizadas para Azure SQL Database
-    SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-    SET LOCK_TIMEOUT 1800000; -- 30 minutos
-    SET DEADLOCK_PRIORITY LOW;
+    -- -- Configurações otimizadas para Azure SQL Database
+    --SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+    --SET LOCK_TIMEOUT 1800000; -- 30 minutos
+    --SET DEADLOCK_PRIORITY LOW;
 
     -- CONFIGURAÇÃO DE EXECUÇÃO POR FASES
     --DECLARE @ProcessarApenasUmaFase BIT = 0; -- 0 = Todas as fases, 1 = Apenas uma fase
@@ -31,12 +34,12 @@ BEGIN
 
     -- Verificar configurações do sistema
     DECLARE @QtdMesExpurgoLogsAuditoria TINYINT =
-            (
+            ISNULL((
                 SELECT TOP 1
                        C.Valor
                 FROM Sistema.Configuracoes AS C
                 WHERE C.Configuracao = 'QtdMesExpurgoLogsAuditoria'
-            );
+            ),12);
 
     IF (@QtdMesExpurgoLogsAuditoria <= @QuantidadeMesesDeletarLogs)
     BEGIN
@@ -176,14 +179,14 @@ BEGIN
     DROP TABLE IF EXISTS #LogsMigrados;
     CREATE TABLE #LogsMigrados
     (
-        IdLog INT NOT NULL PRIMARY KEY
+        IdLog INT NOT NULL 
     );
 
     -- Tabela para controlar logs já deletados (máximo 1 milhão para performance)
     DROP TABLE IF EXISTS #LogsDeletados;
     CREATE TABLE #LogsDeletados
     (
-        IdLog INT NOT NULL PRIMARY KEY
+        IdLog INT NOT NULL
     );
 
 		BEGIN TRY
@@ -703,7 +706,7 @@ BEGIN
             DROP TABLE IF EXISTS #LogsParaExpurgar;
             CREATE TABLE #LogsParaExpurgar
             (
-                IdLog INT NOT NULL PRIMARY KEY
+                IdLog INT NOT NULL 
             );
 
             -- Buscar IDs para expurgar (limitado)

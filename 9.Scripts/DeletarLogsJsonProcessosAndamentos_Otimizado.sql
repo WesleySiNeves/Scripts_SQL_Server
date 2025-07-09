@@ -54,7 +54,7 @@ FROM Log.LogsJson
 WHERE Entidade = 'Processo.ProcessosAndamentos'
       AND Acao = 'U'
       AND YEAR(Data) = 2025
-      --AND LEN(Conteudo) / 1024 / 1024 > 1  -- Filtra apenas registros maiores que 1 MB
+      AND LEN(Conteudo) > 1048576  -- 1MB em 
 GROUP BY CAST(Data AS DATE),
          IdEntidade
 HAVING COUNT(1) > 10
@@ -118,21 +118,25 @@ BEGIN
         SET @LogsDeletadosNaIteracao = @Quantidade - 1;
         
         -- Executa deleção dos logs duplicados (mantém apenas o mais recente)
-        DELETE FROM Log.LogsJson
-        WHERE IdLog IN (
-            SELECT IdLog
-            FROM (
-                SELECT IdLog,
-                       ROW_NUMBER() OVER (ORDER BY Data DESC) AS RN
-                FROM Log.LogsJson
-                WHERE CAST(Data AS DATE) = @Data
-                      AND IdEntidade = @IdEntidade
-                      AND Entidade = 'Processo.ProcessosAndamentos'
-                      AND Acao = 'U'
-                      AND LEN(Conteudo) / 1024 / 1024 > 1  -- Filtra apenas registros maiores que 1 MB
-            ) AS DadosRankeados
-            WHERE RN > 1
-        );
+        -- VERSÃO OTIMIZADA - Substitua as linhas 122-134
+        
+        -- Abordagem 1: CTE com DELETE direto (mais eficiente)
+        WITH LogsParaDeletar AS (
+            SELECT IdLog,
+                   ROW_NUMBER() OVER (
+                       PARTITION BY CAST(Data AS DATE), IdEntidade 
+                       ORDER BY Data DESC
+                   ) AS RN
+            FROM Log.LogsJson
+            WHERE CAST(Data AS DATE) = @Data
+                  AND IdEntidade = @IdEntidade
+                  AND Entidade = 'Processo.ProcessosAndamentos'
+                  AND Acao = 'U'
+                  AND LEN(Conteudo) > 1048576  -- 1MB em bytes (mais rápido que divisão)
+        )
+        DELETE l
+        FROM LogsParaDeletar l
+        WHERE l.RN > 1;
         
         -- Atualiza contador de registros deletados
         SET @RegistrosDeletados = @RegistrosDeletados + @@ROWCOUNT;

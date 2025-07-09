@@ -1,10 +1,10 @@
 
 
 
--- EXEC HealthCheck.GetMetricasSistema @RecuperarInformacoesArquivosAnexos = 1, -- bit
---                                     @RecuperarDataUltimoCadastroSistema = 1, -- bit
---                                     @RecuperarTodasMetricas = 0,             -- bit
---                                     @RetornarFormatoPivot = 0                -- bit
+--EXEC HealthCheck.GetMetricasSistema @RecuperarInformacoesArquivosAnexos = 1, -- bit
+--                                    @RecuperarDataUltimoCadastroSistema = 1, -- bit
+--                                    @RecuperarTodasMetricas = 1,             -- bit
+--                                    @RetornarFormatoPivot = 0                -- bit
 
 -- --GO
 
@@ -18,9 +18,9 @@ CREATE OR ALTER PROCEDURE HealthCheck.GetMetricasSistema
 AS
 BEGIN
     --DECLARE @RecuperarInformacoesArquivosAnexos BIT = 1;
-    --DECLARE @RecuperarDataUltimoCadastroSistema BIT = 0;
-    --DECLARE @RecuperarTodasMetricas BIT = 0;
-    --DECLARE @RetornarFormatoPivot BIT = 1;
+    --DECLARE @RecuperarDataUltimoCadastroSistema BIT = 1;
+    --DECLARE @RecuperarTodasMetricas BIT = 1;
+    --DECLARE @RetornarFormatoPivot BIT = 0;
 
     DROP TABLE IF EXISTS #Metricas;
 
@@ -628,6 +628,20 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
         WHERE Ordem = 2;
     END;
 
+    /*trecho para remover sistemas aindas
+    CodSistema	Nome
+    00000000-0000-0000-0000-000000000002	Logon
+    00000000-0000-0000-0000-000000000003	PCS
+    00000000-0000-0000-0000-000000000012	Siplen
+    00000000-0000-0000-0000-000000000013	Cursos
+    */
+    DELETE FROM #MetricasScripts
+    WHERE CodSistema IN ( '{00000000-0000-0000-0000-000000000002}', '{00000000-0000-0000-0000-000000000003}',
+                          '{00000000-0000-0000-0000-000000000012}', '{00000000-0000-0000-0000-000000000013}'
+                        );
+
+
+
 
 
     DECLARE @dataAtualizacao DATETIME = GETDATE();
@@ -967,6 +981,12 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
         [DataAtualizacao] DATETIME2(2)
     );
 
+    DELETE FROM #Metricas
+    FROM #Metricas
+    WHERE CodSistema IN ( '{00000000-0000-0000-0000-000000000002}', '{00000000-0000-0000-0000-000000000003}',
+                          '{00000000-0000-0000-0000-000000000012}', '{00000000-0000-0000-0000-000000000013}'
+                        );
+
 
 
     INSERT INTO #Retorno
@@ -1078,19 +1098,15 @@ PIVOT (
 
 
 
-        
-		EXEC sp_executesql @sql;
-
-
-		SELECT CHARINDEX('.','cro-sp.implanta.net.br')
+        EXEC sp_executesql @sql;
 
     END;
     ELSE
     BEGIN
-	
-        SELECT Cliente = CAST(SUBSTRING(DB_NAME(),0,CHARINDEX('.',DB_NAME())) AS VARCHAR(20)),
-			  -- Id,
-               s.IdSistemaEspelhamento AS IdSistema,
+
+        SELECT Cliente = CAST(SUBSTRING(DB_NAME(), 0, CHARINDEX('.', DB_NAME())) AS VARCHAR(20)),
+               -- Id,
+               s.CodSistema AS IdSistema,
                Ordem,
                NomeMetrica,
                TipoRetorno,
@@ -1098,8 +1114,15 @@ PIVOT (
                Valor,
                DataAtualizacao
         FROM #Metricas m
-		JOIN Sistema.SistemasEspelhamentos s ON s.CodSistema = m.CodSistema
-		ORDER BY s.IdSistemaEspelhamento,m.Id
+            JOIN Sistema.SistemasEspelhamentos s
+                ON s.CodSistema = m.CodSistema
+        WHERE NOT (
+                      s.CodSistema = '00000000-0000-0000-0000-000000000000'
+                      AND m.NomeMetrica IN ( 'DataUltimoAcesso', 'QtdAcessos', 'QtdAcessosNoAno', 'PossueLicenca' )
+                  )
+            
+        ORDER BY s.IdSistemaEspelhamento,
+                 m.Id;
 
 
 
