@@ -1,6 +1,9 @@
-CREATE VIEW SqlServer.VwGetAllServerPrd
+--SELECT *  FROM SqlServer.VwGetAllServerPrd
+
+go
+CREATE OR ALTER VIEW SqlServer.VwGetAllServerPrd
 AS
-SELECT Nome,
+SELECT Nome AS ServerName,
        Usuario,
        ResourceGroupName,
        AzureSubscriptionId,

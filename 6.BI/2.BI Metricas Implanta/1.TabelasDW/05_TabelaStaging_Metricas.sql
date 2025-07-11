@@ -16,7 +16,7 @@ GO
 DROP TABLE IF EXISTS [Staging].[MetricasSistemas_Raw]
 GO
 
-CREATE TABLE [Staging].[MetricasSistemas_Raw] (
+CREATE TABLE [Staging].[MetricasSistemas] (
     -- Identificador único do lote de carga
     IdLote UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
     

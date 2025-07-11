@@ -332,7 +332,70 @@ BEGIN
         -- 3. PROCESSAMENTO: Apenas se existem índices em falta
         IF EXISTS (SELECT 1 FROM #Missings)
         BEGIN
-            -- Processamento dos candidatos
+            -- Criar função temporária para filtrar colunas inválidas
+            DECLARE @CreateFilterFunction NVARCHAR(MAX) = '
+            CREATE OR ALTER FUNCTION dbo.fnFilterInvalidIndexColumns(
+                @ColumnList VARCHAR(8000),
+                @ObjectId INT
+            )
+            RETURNS VARCHAR(8000)
+            AS
+            BEGIN
+                DECLARE @FilteredColumns VARCHAR(8000) = '''';
+                DECLARE @CurrentColumn VARCHAR(128);
+                DECLARE @Position INT = 1;
+                DECLARE @CommaPosition INT;
+                
+                -- Se a lista está vazia, retorna vazio
+                IF @ColumnList IS NULL OR LEN(TRIM(@ColumnList)) = 0
+                    RETURN '''';
+                
+                -- Adicionar vírgula no final para facilitar o processamento
+                SET @ColumnList = @ColumnList + '','';
+                
+                WHILE @Position <= LEN(@ColumnList)
+                BEGIN
+                    SET @CommaPosition = CHARINDEX('','', @ColumnList, @Position);
+                    
+                    IF @CommaPosition > 0
+                    BEGIN
+                        SET @CurrentColumn = LTRIM(RTRIM(SUBSTRING(@ColumnList, @Position, @CommaPosition - @Position)));
+                        
+                        -- Verificar se a coluna é válida para índice
+                        IF EXISTS (
+                            SELECT 1
+                            FROM sys.columns c
+                            JOIN sys.types t ON c.user_type_id = t.user_type_id
+                            WHERE c.object_id = @ObjectId
+                                AND c.name = @CurrentColumn
+                                AND NOT (
+                                    (t.name = ''varchar'' AND c.max_length = -1) OR
+                                    (t.name = ''nvarchar'' AND c.max_length = -1) OR
+                                    (t.name = ''varbinary'' AND c.max_length = -1) OR
+                                    t.name = ''text'' OR
+                                    t.name = ''ntext'' OR
+                                    t.name = ''image''
+                                )
+                        )
+                        BEGIN
+                            IF LEN(@FilteredColumns) > 0
+                                SET @FilteredColumns = @FilteredColumns + '','';
+                            SET @FilteredColumns = @FilteredColumns + @CurrentColumn;
+                        END
+                        
+                        SET @Position = @CommaPosition + 1;
+                    END
+                    ELSE
+                        BREAK;
+                END
+                
+                RETURN @FilteredColumns;
+            END';
+            
+            -- Executar criação da função
+             EXEC sp_executesql @CreateFilterFunction;
+
+             -- Processamento dos candidatos com filtragem de colunas inválidas
             WITH ProcessedCandidates
             AS (SELECT R.object_id,
                        R.SchemaName,
@@ -346,46 +409,54 @@ BEGIN
                        R.user_scans,
                        R.last_user_scan,
                        R.IndexName,
-                       -- Combinação das colunas chave (equality + inequality)
-                       KeyColumns = CAST(LTRIM(RTRIM(REPLACE(
-                                                                REPLACE(
-                                                                           REPLACE(
-                                                                                      ISNULL(R.equality_columns, '')
-                                                                                      + CASE
-                                                                                            WHEN R.equality_columns IS NOT NULL
-                                                                                                 AND R.inequality_columns IS NOT NULL THEN
-                                                                                                ','
-                                                                                            ELSE
-                                                                                                ''
-                                                                                        END
-                                                                                      + ISNULL(R.inequality_columns, ''),
-                                                                                      CHAR(32),
-                                                                                      ''
-                                                                                  ),
-                                                                           '[',
-                                                                           ''
-                                                                       ),
-                                                                ']',
-                                                                ''
-                                                            )
-                                                    )
-                                              ) AS VARCHAR(200)),
-                       -- Limpeza das colunas incluídas
-                       IncludedColumns = CAST(LTRIM(RTRIM(REPLACE(
-                                                                     REPLACE(
-                                                                                REPLACE(
-                                                                                           R.included_columns,
-                                                                                           '[',
-                                                                                           CHAR(32)
-                                                                                       ),
-                                                                                ']',
-                                                                                CHAR(32)
-                                                                            ),
-                                                                     CHAR(32),
-                                                                     ''
-                                                                 )
-                                                         )
-                                                   ) AS VARCHAR(1000)),
+                       -- Combinação das colunas chave (equality + inequality) com filtragem
+                       KeyColumns = CAST(LTRIM(RTRIM(
+                           -- Filtrar colunas inválidas das KeyColumns
+                           dbo.fnFilterInvalidIndexColumns(
+                               REPLACE(
+                                   REPLACE(
+                                       REPLACE(
+                                           ISNULL(R.equality_columns, '')
+                                           + CASE
+                                               WHEN R.equality_columns IS NOT NULL
+                                                    AND R.inequality_columns IS NOT NULL THEN
+                                                   ','
+                                               ELSE
+                                                   ''
+                                           END
+                                           + ISNULL(R.inequality_columns, ''),
+                                           CHAR(32),
+                                           ''
+                                       ),
+                                       '[',
+                                       ''
+                                   ),
+                                   ']',
+                                   ''
+                               ),
+                               R.object_id
+                           )
+                       )) AS VARCHAR(200)),
+                       -- Limpeza das colunas incluídas com filtragem
+                       IncludedColumns = CAST(LTRIM(RTRIM(
+                           -- Filtrar colunas inválidas das IncludedColumns
+                           dbo.fnFilterInvalidIndexColumns(
+                               REPLACE(
+                                   REPLACE(
+                                       REPLACE(
+                                           R.included_columns,
+                                           '[',
+                                           CHAR(32)
+                                       ),
+                                       ']',
+                                       CHAR(32)
+                                   ),
+                                   CHAR(32),
+                                   ''
+                               ),
+                               R.object_id
+                           )
+                       )) AS VARCHAR(1000)),
                        R.AvgEstimatedImpact,
                        R.MagicBenefitNumber
                 FROM #Missings R)
@@ -406,9 +477,12 @@ BEGIN
                    IncludedColumns,
                    AvgEstimatedImpact,
                    MagicBenefitNumber
-            FROM ProcessedCandidates;
+            FROM ProcessedCandidates
+            WHERE LEN(LTRIM(RTRIM(KeyColumns))) > 0; -- Só incluir se ainda há colunas válidas após filtragem
 
-
+            -- Limpar função temporária
+            IF OBJECT_ID('dbo.fnFilterInvalidIndexColumns', 'FN') IS NOT NULL
+                DROP FUNCTION dbo.fnFilterInvalidIndexColumns;
 
             -- 4. ANÁLISE: Objetos com apenas um candidato (casos simples)
             WITH SingleCandidateAnalysis
