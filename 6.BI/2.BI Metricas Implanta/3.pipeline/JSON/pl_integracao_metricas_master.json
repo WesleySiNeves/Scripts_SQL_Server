@@ -1,0 +1,99 @@
+{
+    "name": "pl_integracao_metricas_master",
+    "properties": {
+        "activities": [
+            {
+                "name": "Get All Azure SQL Servers",
+                "type": "Lookup",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "AzureSqlSource",
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
+                    },
+                    "dataset": {
+                        "referenceName": "DS_sqlserverallservidores",
+                        "type": "DatasetReference"
+                    },
+                    "firstRowOnly": false
+                }
+            },
+            {
+                "name": "ForEach Servidores",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "Get All Azure SQL Servers",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@activity('Get All Azure SQL Servers').output.value",
+                        "type": "Expression"
+                    },
+                    "isSequential": false,
+                    "batchCount": 3,
+                    "activities": [
+                        {
+                            "name": "Executar Pipeline Filha",
+                            "type": "ExecutePipeline",
+                            "dependsOn": [],
+                            "policy": {
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "pipeline": {
+                                    "referenceName": "pl_integracao_metricas_staging",
+                                    "type": "PipelineReference"
+                                },
+                                "waitOnCompletion": true,
+                                "parameters": {
+                                    "UserName": {
+                                        "value": "@item().UserName",
+                                        "type": "Expression"
+                                    },
+                                    "Senha": {
+                                        "value": "@item().Senha",
+                                        "type": "Expression"
+                                    },
+                                    "ServerName": {
+                                        "value": "@item().ServerName",
+                                        "type": "Expression"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "DefaultUserName": {
+                "type": "string",
+                "defaultValue": ""
+            },
+            "DefaultSenha": {
+                "type": "string",
+                "defaultValue": ""
+            }
+        },
+        "folder": {
+            "name": "ProjetoIntegracaoMetricas"
+        },
+        "annotations": []
+    }
+}

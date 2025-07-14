@@ -1,0 +1,128 @@
+{
+  "name": "Expressões Seguras para ADF",
+  "description": "Coleção de expressões seguras para evitar erros de propriedades inexistentes",
+  "expressoes": {
+    "verificar_se_value_existe": {
+      "descricao": "Verifica se a propriedade 'value' existe antes de usá-la",
+      "expressao": "@contains(activity('NomeAtividade').output, 'value')",
+      "exemplo_uso": "Usar em IfCondition antes de acessar .output.value"
+    },
+    "verificar_se_tem_dados": {
+      "descricao": "Verifica se existe 'value' e se tem dados",
+      "expressao": "@and(contains(activity('NomeAtividade').output, 'value'), greater(length(activity('NomeAtividade').output.value), 0))",
+      "exemplo_uso": "Usar antes de ForEach para garantir que há itens"
+    },
+    "contar_itens_seguro": {
+      "descricao": "Conta itens de forma segura, retornando 0 se não existir",
+      "expressao": "@if(contains(activity('NomeAtividade').output, 'value'), length(activity('NomeAtividade').output.value), 0)",
+      "exemplo_uso": "Para obter quantidade de registros sem erro"
+    },
+    "verificar_sucesso_atividade": {
+      "descricao": "Verifica se a atividade foi executada com sucesso",
+      "expressao": "@equals(activity('NomeAtividade').status, 'Succeeded')",
+      "exemplo_uso": "Usar em dependencyConditions"
+    },
+    "obter_primeiro_item_seguro": {
+      "descricao": "Obtém o primeiro item de forma segura",
+      "expressao": "@if(and(contains(activity('NomeAtividade').output, 'value'), greater(length(activity('NomeAtividade').output.value), 0)), activity('NomeAtividade').output.value[0], null)",
+      "exemplo_uso": "Para acessar o primeiro registro sem erro"
+    },
+    "verificar_count_lookup": {
+      "descricao": "Verifica se o Lookup retornou dados usando count",
+      "expressao": "@greater(activity('NomeAtividade').output.count, 0)",
+      "exemplo_uso": "Alternativa para verificar se há dados"
+    }
+  },
+  "exemplos_praticos": {
+    "ifcondition_segura": {
+      "name": "Verificar Dados Antes de Processar",
+      "type": "IfCondition",
+      "typeProperties": {
+        "expression": {
+          "value": "@and(contains(activity('Recuperar Bancos por Servidor').output, 'value'), greater(length(activity('Recuperar Bancos por Servidor').output.value), 0))",
+          "type": "Expression"
+        },
+        "ifTrueActivities": [
+          {
+            "name": "Processar Dados",
+            "type": "ForEach",
+            "typeProperties": {
+              "items": {
+                "value": "@activity('Recuperar Bancos por Servidor').output.value",
+                "type": "Expression"
+              }
+            }
+          }
+        ],
+        "ifFalseActivities": [
+          {
+            "name": "Log Sem Dados",
+            "type": "SetVariable",
+            "typeProperties": {
+              "variableName": "LogMessage",
+              "value": {
+                "value": "Nenhum dado retornado pela atividade Recuperar Bancos por Servidor",
+                "type": "Expression"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "setvariable_count_seguro": {
+      "name": "Definir Quantidade de Registros",
+      "type": "SetVariable",
+      "typeProperties": {
+        "variableName": "QtdRegistros",
+        "value": {
+          "value": "@if(contains(activity('Recuperar Bancos por Servidor').output, 'value'), string(length(activity('Recuperar Bancos por Servidor').output.value)), '0')",
+          "type": "Expression"
+        }
+      }
+    },
+    "lookup_com_tratamento_erro": {
+      "name": "Recuperar Dados com Tratamento",
+      "type": "Lookup",
+      "policy": {
+        "timeout": "0.00:05:00",
+        "retry": 2,
+        "retryIntervalInSeconds": 30
+      },
+      "typeProperties": {
+        "source": {
+          "type": "AzureSqlSource",
+          "sqlReaderQuery": "SELECT CodSistema, Nome FROM Sistema.Sistemas WHERE Ativo = 1",
+          "queryTimeout": "02:00:00"
+        },
+        "dataset": {
+          "referenceName": "AzureSqlTable_Source",
+          "type": "DatasetReference"
+        },
+        "firstRowOnly": false
+      }
+    }
+  },
+  "configuracoes_recomendadas": {
+    "lookup_multiplas_linhas": {
+      "firstRowOnly": false,
+      "descricao": "Sempre usar false quando precisar de múltiplas linhas"
+    },
+    "timeout_recomendado": {
+      "timeout": "0.00:05:00",
+      "descricao": "Timeout de 5 minutos para queries simples"
+    },
+    "retry_policy": {
+      "retry": 2,
+      "retryIntervalInSeconds": 30,
+      "descricao": "Tentar 2 vezes com intervalo de 30 segundos"
+    }
+  },
+  "debugging_tips": [
+    "Sempre teste a query SQL diretamente no SSMS primeiro",
+    "Use atividades SetVariable para logar outputs intermediários",
+    "Verifique as permissões do usuário do ADF no banco",
+    "Use dependencyConditions: ['Succeeded'] para garantir sucesso",
+    "Monitore os logs detalhados no portal do ADF",
+    "Teste atividades isoladamente antes de integrar no pipeline"
+  ]
+}
