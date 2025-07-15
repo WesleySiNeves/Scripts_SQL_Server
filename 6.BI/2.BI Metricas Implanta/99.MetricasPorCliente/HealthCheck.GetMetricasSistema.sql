@@ -3,9 +3,6 @@ SET ANSI_NULLS ON;
 GO
 --exec HealthCheck.GetMetricasSistema 
 
---rgprd-sqlsrv-prd01.database.windows.net
---cro-sp.implanta.net.br
---implanta
 
 --EXEC HealthCheck.GetMetricasSistema @RecuperarInformacoesArquivosAnexos = 1, -- bit
 --                                    @RecuperarDataUltimoCadastroSistema = 1, -- bit

@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS #DadosDeletar;
 
 
-DECLARE @QuantidadeADeletar INT = 100;
+DECLARE @QuantidadeADeletar INT = 500;
 
 DECLARE @quantiadeRegistrosEncontrados INT = 0;
 DECLARE @quantiadeRegistrosAposDelete INT = 0;
@@ -33,14 +33,14 @@ INSERT INTO #DadosDeletar
                 IdEntidade,
                 CAST(Data AS DATE)
             HAVING
-                COUNT(1) > 5;
+                COUNT(1) > 50;
 
 
 
 SET @quantiadeRegistrosEncontrados =
     (
         SELECT
-            SUM(Quantidade)
+            ISNULL(SUM(Quantidade), 0)
         FROM
             #DadosDeletar
     );
@@ -48,9 +48,6 @@ SET @quantiadeRegistrosEncontrados =
 
 IF (@quantiadeRegistrosEncontrados > 0)
     BEGIN
-        SELECT
-            CONCAT('Quantidade Registros: Antes ', FORMAT(@quantiadeRegistrosEncontrados, 'n0', 'Pt-Br'));
-
 
 
         DECLARE
@@ -111,44 +108,43 @@ IF (@quantiadeRegistrosEncontrados > 0)
         CLOSE cursor_DeletarLogs;
         DEALLOCATE cursor_DeletarLogs;
 
+        TRUNCATE TABLE #DadosDeletar;
+
+
+        INSERT INTO #DadosDeletar
+                    SELECT
+                        IdEntidade,
+                        CAST(Data AS DATE) Data,
+                        MAX(Data)          AS MaxData,
+                        COUNT(1)           AS Quantidade
+                    FROM
+                        Log.LogsJson
+                    WHERE
+                        Entidade = 'Processo.ProcessosAndamentos'
+                        AND Acao = 'U'
+                    GROUP BY
+                        IdEntidade,
+                        CAST(Data AS DATE)
+                    HAVING
+                        COUNT(1) > 5;
+
+
+        SET @quantiadeRegistrosAposDelete =
+            (
+                SELECT
+                    ISNULL(SUM(Quantidade), 0)
+                FROM
+                    #DadosDeletar
+            );
+
+        SELECT
+            CONCAT(
+                      'Qtd Registros: Antes:', FORMAT(@quantiadeRegistrosEncontrados, 'n0', 'Pt-Br'), ' Apos Delete ',
+                      FORMAT(@quantiadeRegistrosAposDelete, 'n0', 'Pt-Br'), ' Deletados ',
+                      FORMAT(@quantiadeRegistrosEncontrados - @quantiadeRegistrosAposDelete, 'n0', 'Pt-Br')
+                  );
+
 
     END;
 
-
-TRUNCATE TABLE #DadosDeletar;
-
-
-INSERT INTO #DadosDeletar
-            SELECT
-                IdEntidade,
-                CAST(Data AS DATE) Data,
-                MAX(Data)          AS MaxData,
-                COUNT(1)           AS Quantidade
-            FROM
-                Log.LogsJson
-            WHERE
-                Entidade = 'Processo.ProcessosAndamentos'
-                AND Acao = 'U'
-            GROUP BY
-                IdEntidade,
-                CAST(Data AS DATE)
-            HAVING
-                COUNT(1) > 5;
-
-
-SET @quantiadeRegistrosAposDelete =
-    (
-        SELECT
-            SUM(Quantidade)
-        FROM
-            #DadosDeletar
-    );
-
-SELECT
-    CONCAT('Quantidade Registros: Apos Delete ', FORMAT(@quantiadeRegistrosAposDelete, 'n0', 'Pt-Br'));
-SELECT
-    CONCAT(
-              'Registros Deletados: Apos Delete ',
-              FORMAT(@quantiadeRegistrosEncontrados - @quantiadeRegistrosAposDelete, 'n0', 'Pt-Br')
-          );
 

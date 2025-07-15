@@ -22,58 +22,87 @@ BEGIN
         PRINT 'Iniciando carga da tabela fato FatoContratosProdutos...';
         PRINT 'Timestamp: ' + CONVERT(VARCHAR(20), @InicioProcessamento, 120);
         PRINT '';
-
+		
 
         DROP TABLE IF EXISTS #DadosStaging;
 
-        CREATE TABLE #DadosStaging
-        (
-            [UF] VARCHAR(2),
-            [SkCategoria] SMALLINT,
-            [SkProduto] TINYINT,
-            [SkTipoContrato] TINYINT,
-            [SkTipoSituacaoContrato] TINYINT,
-            [SkPagador] SMALLINT,
-            [SkCliente] SMALLINT,
-            [SkDataVigenciaInicial] INT,
-            [SkDataVigenciaFinal] INT,
-            [SkTiposSituacaoFinanceira] TINYINT,
-            [CodContrato] VARCHAR(10),
-            [ValorContrato] INT,
-            [DiasVigencia] INT,
-            [QtdDiasFaltantes] INT,
-            [Vencido] VARCHAR(3),
-            ContratoPagoPorOutroCliente VARCHAR(3),
-            [QtdLicencas] INT,
-            [DataAtualizacao] DATETIME2(2)
-        );
-
+       CREATE TABLE #DadosStaging
+    (
+        [Estado]                      CHAR(2),
+        [SkCategoria]                 SMALLINT,
+        [SkProduto]                   TINYINT,
+        [SkTipoContrato]              TINYINT,
+        [SkTipoSituacaoContrato]      TINYINT,
+        [SkPagador]                   SMALLINT,
+        [SkCliente]                   SMALLINT,
+        [SkDataVigenciaInicial]        DATE,
+        [SkDataVigenciaFinal]          DATE,
+        [SkTiposSituacaoFinanceira]   TINYINT,
+        [CodContrato]                 VARCHAR(10),
+        [Periodicidade]               VARCHAR(60),
+		
+        [PrecoUnitario]               DECIMAL(10, 2),
+        [Quantidade]                  FLOAT(8),
+        [ValorTotal]                  DECIMAL(10, 2),
+		[ValorDesconto]               DECIMAL(10, 2),
+        [DataBase]                    DATE,
+		[QtdDiasVigencia]            INT,
+        [QtdDiasFaltantes]            INT,
+        [Vencido]                     VARCHAR(3),
+        [ContratoPagoPorOutroCliente] VARCHAR(3),
+        [QuantidadeLicencasGigam]     INT,
+        [DataAtualizacao]             DATETIME
+    );
+	
         INSERT INTO #DadosStaging
+            (
+                Estado,
+                SkCategoria,
+                SkProduto,
+                SkTipoContrato,
+                SkTipoSituacaoContrato,
+                SkPagador,
+                SkCliente,
+                SkDataVigenciaInicial,
+                SkDataVigenciaFinal,
+                SkTiposSituacaoFinanceira,
+                CodContrato,
+                Periodicidade,
+                PrecoUnitario,
+                Quantidade,
+                ValorTotal,
+                ValorDesconto,
+                [DataBase],
+                QtdDiasVigencia,
+                QtdDiasFaltantes,
+                Vencido,
+                ContratoPagoPorOutroCliente,
+                QuantidadeLicencasGigam,
+                DataAtualizacao
+            )
         SELECT geo.Estado,
-               --source.Categoria,
                categoria.SkCategoria,
-               --source.Descricao,
                prod.SkProduto,
-               --source.Tipo,
                tipo.SkTipoContrato,
-               --source.Situacao,
                situacao.SkTipoSituacaoContrato,
-               --source.Pagador,
                pagador.SkCliente AS SkPagador,
-               --source.SiglaCliente,
                cliente.SkCliente AS SkCliente,
-               tempoInicial.DataKey,
-               tempoFinal.DataKey,
-               --source.SituacaoFinanceira,
+               tempoInicial.Data AS DataVigenciaInical,
+               tempoFinal.Data AS DataVigenciaFinal,
                situacaofinanceira.SkTiposSituacaoFinanceira,
                source.CodContrato,
-               ValorContrato = 0,
+			   source.Periodicidade,
+			   source.PrecoUnitario,
+			   source.Quantidade,
+			   source.ValorTotal,
+			   source.ValorDesconto,
+			   source.[DataBase],
                DiasVingencia = DATEDIFF(DAY, source.DataVigenciaInicial, source.DataVigenciaFinal),
                QtdDiasFaltantes = DATEDIFF(DAY, GETDATE(), source.DataVigenciaFinal),
                Vencido = IIF(DATEDIFF(DAY, GETDATE(), source.DataVigenciaFinal) < 0, 'SIM', 'NÂO'),
                ContratoPagoPorOutroCliente = IIF(pagador.SkCliente <> cliente.SkCliente, 'SIM', 'NÃO'),
-               source.QtdLicencas,
-               source.DataAtualizacao
+               source.QtdLicencas AS QuantidadeLicencasGigam,
+               GETDATE() AS DataAtualizacao
         FROM Staging.ClientesProdutosCIGAM source
             LEFT JOIN Shared.DimTempo tempoInicial
                 ON tempoInicial.Data = source.DataVigenciaInicial
@@ -110,59 +139,63 @@ BEGIN
         -- Executa MERGE para inserir/atualizar dados na tabela fato
         PRINT 'Executando MERGE na tabela fato...';
 
-        SELECT *
-        FROM DM_ContratosProdutos.FatoContratosProdutos;
+
+
 
         MERGE DM_ContratosProdutos.FatoContratosProdutos AS Target
         USING #DadosStaging AS Source
-        ON Target.[SkUF] = Source.UF
+        ON Target.[SkUF] = Source.Estado
            AND Target.SkCliente = Source.SkCliente
            AND Target.SkProduto = Source.SkProduto
            AND Target.CodContrato = Source.CodContrato
            AND Target.SkTipoContrato = Source.SkTipoContrato
-           AND Target.SkDataVigenciaInicial = Source.SkDataVigenciaInicial
-           AND Target.SkDataVigenciaFinal = Source.SkDataVigenciaFinal
-
+           AND Target.DataVigenciaInicial = Source.SKDataVigenciaInicial
+           AND Target.DataVigenciaInicial = Source.SKDataVigenciaInicial
+		   
         -- Quando não existe na tabela fato, insere novo registro
         WHEN NOT MATCHED BY TARGET THEN
             INSERT
             (
                 SkUF,
+                CodContrato,
                 SkCategoria,
                 SkProduto,
                 SkTipoContrato,
                 SkTipoSituacaoContrato,
                 SkClientePagador,
                 SkCliente,
-                SkDataVigenciaInicial,
-                SkDataVigenciaFinal,
+                DataVigenciaInicial,
+                DataVigenciaFinal,
                 SkTiposSituacaoFinanceira,
-                CodContrato,
-                QtdLicencas,
-                ValorContrato,
-                DiasVigencia,
+				Data_base,
+				Periodicidade,
+				PrecoUnitario,
+				Quantidade,
+				ValorDesconto,
+				ValorTotal,
+				QtdLicencasCIGAM,
                 DataCarga,
                 DataUltimaAtualizacao
             )
             VALUES
-            (Source.UF, Source.SkCategoria, Source.SkProduto, Source.SkTipoContrato, Source.SkTipoSituacaoContrato,
+            (Source.Estado,
+			Source.CodContrato,
+			Source.SkCategoria, Source.SkProduto, Source.SkTipoContrato, Source.SkTipoSituacaoContrato,
              Source.SkPagador, Source.SkCliente, Source.SkDataVigenciaInicial, Source.SkDataVigenciaFinal,
-             Source.SkTiposSituacaoFinanceira, Source.CodContrato, Source.QtdLicencas, Source.ValorContrato,
-             Source.[DiasVigencia], GETDATE(), GETDATE())
-
+             Source.SkTiposSituacaoFinanceira,Source.[DataBase],Source.Periodicidade,Source.PrecoUnitario,
+			 Source.Quantidade,Source.ValorDesconto,Source.ValorTotal,Source.QuantidadeLicencasGigam, GETDATE(), GETDATE())
+		
         -- Quando existe na tabela fato, atualiza se houve mudança
         WHEN MATCHED AND (
                              Target.SkTipoSituacaoContrato <> Source.SkTipoSituacaoContrato
                              OR Target.SkTiposSituacaoFinanceira <> Source.SkTiposSituacaoFinanceira
-                             OR Target.QtdLicencas <> Source.QtdLicencas
-                             OR Target.ValorContrato <> Source.ValorContrato
-                             OR Target.DiasVigencia <> Source.[DiasVigencia]
+                             OR Target.QtdLicencasCIGAM <> Source.QuantidadeLicencasGigam
+                             OR Target.ValorTotal <> Source.ValorTotal
                          ) THEN
             UPDATE SET SkTipoSituacaoContrato = Source.SkTipoSituacaoContrato,
                        SkTiposSituacaoFinanceira = Source.SkTiposSituacaoFinanceira,
-                       QtdLicencas = Source.QtdLicencas,
-                       ValorContrato = Source.ValorContrato,
-                       DiasVigencia = Source.[DiasVigencia],
+                       QtdLicencasCIGAM = Source.QuantidadeLicencasGigam,
+                       ValorTotal = Source.ValorTotal,
                        DataUltimaAtualizacao = GETDATE();
 
         -- Captura estatísticas do MERGE
@@ -170,21 +203,19 @@ BEGIN
 
         UPDATE DM_ContratosProdutos.FatoContratosProdutos
         SET DataUltimaAtualizacao = GETDATE();
-
+		
         -- Calcula registros atualizados (aproximação)
         SELECT @RegistrosAtualizados = COUNT(*)
         FROM DM_ContratosProdutos.FatoContratosProdutos f
             INNER JOIN #DadosStaging s
                 ON f.SkCliente = s.SkCliente
                    AND f.SkProduto = s.SkProduto
-                   AND f.SkDataVigenciaInicial = s.SkDataVigenciaInicial
-                   AND f.SkDataVigenciaFinal = s.SkDataVigenciaFinal
+                   AND f.DataVigenciaInicial = s.SkDataVigenciaInicial
+                   AND f.DataVigenciaFinal = s.SkDataVigenciaFinal
         WHERE f.DataUltimaAtualizacao >= @InicioProcessamento;
 
         SET @RegistrosAtualizados = @RegistrosAtualizados - @RegistrosInseridos;
 
-        -- Limpa tabela temporária
-        DROP TABLE #DadosStaging;
 
         -- Estatísticas finais
         DECLARE @TempoProcessamento VARCHAR(20) = CONVERT(VARCHAR(20), GETDATE() - @InicioProcessamento, 108);
@@ -235,4 +266,6 @@ END;
 
 ---- Executa a carga da tabela fato
 --EXEC DM_ContratosProdutos.uspLoadFatoContratosProdutos;
+               
 
+	 

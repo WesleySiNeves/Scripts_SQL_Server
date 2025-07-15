@@ -25,6 +25,7 @@ BEGIN
             @MinData = MIN(DataVigenciaInicial), 
             @MaxData = MAX(DataVigenciaFinal) 
         FROM Staging.ClientesProdutosCIGAM;
+		
         
         -- Adiciona margem de segurança (1 ano antes e 2 anos depois)
         SET @MinData = DATEADD(YEAR, -1, @MinData);
@@ -38,9 +39,10 @@ BEGIN
         PRINT 'Total de registros a processar: ' + CAST(@TotalRegistros AS VARCHAR(10));
         PRINT '';
         
+
+		DROP TABLE IF EXISTS #TempDimTempo
         -- Cria tabela temporária para armazenar os dados gerados pela CTE
         CREATE TABLE #TempDimTempo (
-            DataKey INT NOT NULL,
             Data DATE NOT NULL,
             Ano INT NOT NULL,
             Mes INT NOT NULL,
@@ -49,7 +51,7 @@ BEGIN
             NomeMes VARCHAR(20) NOT NULL,
             DiaSemana INT NOT NULL,
             NomeDiaSemana VARCHAR(20) NOT NULL,
-            PRIMARY KEY (DataKey)
+            PRIMARY KEY (Data)
         );
         
         PRINT 'Gerando dados com CTE recursiva...';
@@ -69,8 +71,7 @@ BEGIN
         -- CTE para calcular todos os campos derivados
         CTE_DadosCompletos AS (
             SELECT 
-                -- DataKey no formato YYYYMMDD
-                YEAR(Data) * 10000 + MONTH(Data) * 100 + DAY(Data) AS DataKey,
+                
                 Data,
                 YEAR(Data) AS Ano,
                 MONTH(Data) AS Mes,
@@ -114,13 +115,13 @@ BEGIN
                 END AS NomeDiaSemana
             FROM CTE_Datas
         )
-        -- Insere todos os dados na tabela temporária
+        ---- Insere todos os dados na tabela temporária
         INSERT INTO #TempDimTempo (
-            DataKey, Data, Ano, Mes, Trimestre, Semestre, 
+             Data, Ano, Mes, Trimestre, Semestre, 
             NomeMes, DiaSemana, NomeDiaSemana
         )
         SELECT 
-            DataKey, Data, Ano, Mes, Trimestre, Semestre, 
+            Data, Ano, Mes, Trimestre, Semestre, 
             NomeMes, DiaSemana, NomeDiaSemana
         FROM CTE_DadosCompletos
         OPTION (MAXRECURSION 0); -- Remove limite de recursão
@@ -130,10 +131,10 @@ BEGIN
         -- Usa MERGE para inserir apenas registros que não existem
         MERGE Shared.DimTempo AS Target
         USING #TempDimTempo AS Source
-        ON Target.DataKey = Source.DataKey
+        ON Target.Data = Source.Data
         WHEN NOT MATCHED BY TARGET THEN
-            INSERT (DataKey, Data, Ano, Mes, Trimestre, Semestre, NomeMes, DiaSemana, NomeDiaSemana)
-            VALUES (Source.DataKey, Source.Data, Source.Ano, Source.Mes, Source.Trimestre, 
+            INSERT ( Data, Ano, Mes, Trimestre, Semestre, NomeMes, DiaSemana, NomeDiaSemana)
+            VALUES (Source.Data, Source.Ano, Source.Mes, Source.Trimestre, 
                    Source.Semestre, Source.NomeMes, Source.DiaSemana, Source.NomeDiaSemana);
         
         -- Captura estatísticas do MERGE
@@ -164,7 +165,7 @@ BEGIN
             MIN(Data) AS PrimeiraData,
             MAX(Data) AS UltimaData,
             COUNT(DISTINCT Ano) AS TotalAnos,
-            COUNT(DISTINCT DataKey) AS TotalDataKeys
+            COUNT(DISTINCT Data) AS TotalDatas
         FROM Shared.DimTempo
         WHERE Data BETWEEN @MinData AND @MaxData;
         
@@ -192,31 +193,3 @@ GO
 -- =============================================
 -- Script para executar a stored procedure
 -- =============================================
-
--- Executa a carga da DimTempo (CORRIGIDO: schema correto)
-EXEC DM_ContratosProdutos.uspLoadDimTempo;
-
--- Consulta para verificar os dados carregados
-SELECT TOP 10
-    DataKey,
-    Data,
-    Ano,
-    Mes,
-    Trimestre,
-    Semestre,
-    NomeMes,
-    DiaSemana,
-    NomeDiaSemana
-FROM Shared.DimTempo
-ORDER BY Data;
-
--- Estatísticas por ano
-SELECT 
-    Ano,
-    COUNT(*) AS TotalDias,
-    MIN(Data) AS PrimeiraData,
-    MAX(Data) AS UltimaData
-FROM Shared.DimTempo
-GROUP BY Ano
-ORDER BY Ano;
-

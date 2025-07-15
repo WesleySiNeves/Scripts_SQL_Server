@@ -1,9 +1,3 @@
--- =============================================
--- Autor:  Wesley
--- Data: Criação automática - Versão otimizada com CTE
--- =============================================
-CREATE VIEW Shared.VwGeAllFatoContratos
-AS
 
 SELECT geo.Estado,
        base.CodContrato,
@@ -36,5 +30,3 @@ SELECT geo.Estado,
 	   LEFT JOIN Shared.DimClientes clipagador ON clipagador.SkCliente = base.SkClientePagador
 	   LEFT JOIN Shared.DimClientes cli ON cli.SkCliente = base.SkCliente
 	   LEFT JOIN DM_ContratosProdutos.DimTiposSituacaoFinanceira fina ON fina.SkTiposSituacaoFinanceira = base.SkTiposSituacaoFinanceira
-
-

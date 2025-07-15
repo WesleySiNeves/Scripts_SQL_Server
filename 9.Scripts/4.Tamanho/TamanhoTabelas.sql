@@ -1,6 +1,8 @@
+
+
 -- Query para retornar tamanho de cada tabela com Schema, Nome e Tamanho em MB/GB
 -- Compatível com Azure SQL Database
-
+WITH Dados AS (
 SELECT 
     s.name AS [Schema],
     t.name AS [Tabela],
@@ -26,6 +28,18 @@ WHERE
     AND i.OBJECT_ID > 255 
 GROUP BY 
     t.Name, s.Name, p.Rows
+)
+SELECT R.[Schema],
+       R.Tabela,
+       R.Linhas,
+       R.Tamanho_MB,
+	   [Total Geral GB] = SUM(R.Tamanho_MB) OVER() / 1024.0, 
+
+       R.Tamanho_GB,
+       R.Usado_MB,
+       R.Usado_GB,
+       R.Livre_MB
+	    FROM Dados R
 ORDER BY 
     [Tamanho_MB] DESC;
 
