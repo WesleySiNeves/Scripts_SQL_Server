@@ -3,6 +3,9 @@ SET ANSI_NULLS ON;
 GO
 --exec HealthCheck.GetMetricasSistema 
 
+--rgprd-sqlsrv-prd01.database.windows.net
+--cro-sp.implanta.net.br
+--implanta
 
 --EXEC HealthCheck.GetMetricasSistema @RecuperarInformacoesArquivosAnexos = 1, -- bit
 --                                    @RecuperarDataUltimoCadastroSistema = 1, -- bit
@@ -24,6 +27,8 @@ AS
         --DECLARE @RecuperarDataUltimoCadastroSistema BIT = 1;
         --DECLARE @RecuperarTodasMetricas BIT = 1;
         --DECLARE @RetornarFormatoPivot BIT = 0;
+        --DECLARE @Sistema UNIQUEIDENTIFIER = '00000000-0000-0000-0000-000000000099';
+
 
         DROP TABLE IF EXISTS #Metricas;
 
@@ -180,23 +185,23 @@ AS
                                             ON AcessoPorExercicio.IdSistema = AcessoGeral.IdSistema
                             )                Acesso
                                 ON Acesso.IdSistema = s.CodSistema
-                    --WHERE s.CodSistema NOT IN ( '00000000-0000-0000-0000-000000000000' )
+                    --               WHERE 
+                    --(s.CodSistema  = @Sistema OR @Sistema IS NULL)
                     ORDER BY
                             s.CodSistema;
 
 
 
 
-
         DECLARE @UtilizaCentroCustoPagamento BIT = CAST(
                                                        (
-                                                           SELECT TOP 1
-                                                                  Valor
+                                                           SELECT
+                                                               c.Valor
                                                            FROM
-                                                                  Sistema.Configuracoes c
+                                                               Sistema.Configuracoes c
                                                            WHERE
-                                                                  c.Configuracao = 'UtilizaCentroCustoPagamento'
-                                                                  AND Ano = YEAR(GETDATE())
+                                                               c.Configuracao = 'UtilizaCentroCustoPagamento'
+                                                               AND Ano = YEAR(GETDATE())
                                                        ) AS BIT);
 
 
@@ -283,6 +288,7 @@ AS
                             ELSE
                                 0
                         END                                    AS QtdAcessosNoAno;
+
 
         /*Sistemas que são ativados por configuração e não por licenciamento*/
 
@@ -401,7 +407,8 @@ AS
             (
                 '00000000-0000-0000-0000-000000000099', 'QtdTotalRegistro', -- Nome - varchar(200)
                 'INT',                                                      -- TipoRetorno - varchar(30)
-                'Despesa.CentroCustos', 'SELECT COUNT(1) FROM   Despesa.CentroCustos'
+                'Despesa.CentroCustos',
+                'SELECT COUNT(1) FROM   Despesa.CentroCustos WHERE IdCentroCusto <> ''00000000-0000-0000-0000-000000000001'''
             ),
             (
                 '00000000-0000-0000-0000-000000000099', 'QtdRegistroAno', -- Nome - varchar(200)
@@ -815,6 +822,8 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
                     Ordem = 2;
             END;
 
+
+
         /*trecho para remover sistemas aindas
         CodSistema	Nome
         00000000-0000-0000-0000-000000000002	Logon
@@ -853,6 +862,7 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
                 Script
             FROM
                 #MetricasScripts;
+
 
         OPEN cursor_InsertsMetricas;
 
@@ -975,6 +985,7 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
                         #MetricasBase ss;
 
 
+
         DROP TABLE IF EXISTS #TabelasPrincipaisSistema;
 
         CREATE TABLE #TabelasPrincipaisSistema
@@ -1070,8 +1081,11 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
                                    st.NomeSchema
                             FROM
                                    #TabelasPrincipaisSistema st
+                            WHERE
+                                   st.CodSistema <> '00000000-0000-0000-0000-000000000099' --Centro de custos
                         )                       AS regra
                             ON regra.NomeSchema = target.NomeSchema;
+
 
 
 
@@ -1083,7 +1097,7 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
                     #MetricasArquivosAnexos AS target
                 WHERE
                     target.NomeSchema IN (
-                                             'Compra', 'Contratos'
+                                             'Compra', 'Contrato'
                                          )
                     AND target.CodSistema IS NULL;
 
@@ -1112,8 +1126,6 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
 
 
 
-
-
                 UPDATE
                     target
                 SET
@@ -1129,6 +1141,7 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
 
 
 
+
                 UPDATE
                     target
                 SET
@@ -1138,7 +1151,7 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
                 WHERE
                     target.NomeSchema IN (
                                              'AtivosBB', 'Financeiro', 'Plenaria', 'Requerimento', 'Serasa', 'Siscaf',
-                                             'Online', 'Recadastramento'
+                                             'Online', 'Recadastramento', 'Registro'
                                          )
                     AND target.CodSistema IS NULL;
 
@@ -1168,6 +1181,7 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
                     AND target.CodSistema IS NULL;
 
 
+
                 INSERT INTO #Metricas
                             SELECT DISTINCT
                                    CodSistema,
@@ -1190,6 +1204,8 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
                                    GETDATE()
                             FROM
                                    #Metricas;
+
+
 
                 UPDATE
                         target
@@ -1246,19 +1262,20 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
 
 
 
+
+
         DROP TABLE IF EXISTS #Retorno;
 
 
         CREATE TABLE #Retorno
             (
                 [Cliente]          VARCHAR(100),
-                [CodSistema]       UNIQUEIDENTIFIER,
-                [NomeSistema]      VARCHAR(100),
-                [Tabela Principal] VARCHAR(200),
-                [NomeMetrica]      VARCHAR(200),
-                [TipoRetorno]      VARCHAR(30),
-                [Valor]            VARCHAR(MAX),
-                [DataAtualizacao]  DATETIME2(2)
+                [CodSistema]       TINYINT,
+                [Ordem]            TINYINT,
+                [NomeMetrica]      VARCHAR(100),
+                [TipoRetorno]      VARCHAR(100),
+                [TabelaConsultada] VARCHAR(128),
+                [Valor]            VARCHAR(MAX)
             );
 
         DELETE FROM
@@ -1272,41 +1289,34 @@ WHERE pc.Codigo LIKE ''[78].%'' AND YEAR(p.Data) = YEAR(GETDATE())) AS bit ),0)'
                           );
 
 
-
         INSERT INTO #Retorno
-            (
-                Cliente,
-                CodSistema,
-                NomeSistema,
-                [Tabela Principal],
-                NomeMetrica,
-                TipoRetorno,
-                Valor,
-                DataAtualizacao
-            )
                     SELECT
-                            SUBSTRING(DB_NAME(), 0, CHARINDEX('.', DB_NAME())) AS Cliente,
-                            R.CodSistema,
-                            UPPER(ISNULL(s.Descricao, s.Nome))                 AS Sistema,
-                            --R.TabelaConsultada AS [Tabela Principal],
-                            (
-                                SELECT
-                                    rr.TabelaConsultada
-                                FROM
-                                    #Metricas rr
-                                WHERE
-                                    rr.CodSistema = R.CodSistema
-                                    AND rr.NomeMetrica = 'QtdTotalRegistro'
-                            )                                                  AS [Tabela],
+                            Cliente                                                                       = UPPER(CAST(SUBSTRING(DB_NAME(), 0, CHARINDEX('.', DB_NAME())) AS VARCHAR(20))),
+                            ISNULL(s.IdSistemaEspelhamento, RIGHT(CAST(m.CodSistema AS VARCHAR(100)), 3)) AS CodSistema,
+                            Ordem,
                             NomeMetrica,
                             TipoRetorno,
-                            Valor,
-                            DataAtualizacao
+                            TabelaConsultada,
+                            Valor
                     FROM
-                            #Metricas        R
-                        JOIN
-                            Sistema.Sistemas s
-                                ON s.CodSistema = R.CodSistema;
+                            #Metricas                     m
+                        LEFT JOIN
+                            Sistema.SistemasEspelhamentos s
+                                ON s.CodSistema = m.CodSistema
+                    WHERE
+                            NOT (
+                                    m.CodSistema = '00000000-0000-0000-0000-000000000000'
+                                    AND m.NomeMetrica IN (
+                                                             'DataUltimoAcesso', 'QtdAcessos', 'QtdAcessosNoAno',
+                                                             'PossueLicenca'
+                                                         )
+                                )
+                    ORDER BY
+                            s.IdSistemaEspelhamento,
+                            m.Id;
+
+
+
 
         IF (@RetornarFormatoPivot = 1)
             BEGIN
@@ -1407,32 +1417,23 @@ PIVOT (
             BEGIN
 
                 SELECT
-                        Cliente                                                                       = UPPER(CAST(SUBSTRING(DB_NAME(), 0, CHARINDEX('.', DB_NAME())) AS VARCHAR(20))),
-                        ISNULL(s.IdSistemaEspelhamento, RIGHT(CAST(m.CodSistema AS VARCHAR(100)), 3)) AS CodSistema,
-                        Ordem,
-                        NomeMetrica,
-                        TipoRetorno,
-                        TabelaConsultada,
-                        Valor
+                        R.Cliente,
+                        R.CodSistema,
+                        --se.Nome,
+                        R.Ordem,
+                        R.NomeMetrica,
+                        R.TipoRetorno,
+                        R.TabelaConsultada,
+                        ISNULL(R.Valor,'') AS Valor
                 FROM
-                        #Metricas                     m
+                        #Retorno                      R
                     LEFT JOIN
-                        Sistema.SistemasEspelhamentos s
-                            ON s.CodSistema = m.CodSistema
-                WHERE
-                        NOT (
-                                s.CodSistema = '00000000-0000-0000-0000-000000000000'
-                                AND m.NomeMetrica IN (
-                                                         'DataUltimoAcesso', 'QtdAcessos', 'QtdAcessosNoAno',
-                                                         'PossueLicenca'
-                                                     )
-                            )
-                ORDER BY
-                        s.IdSistemaEspelhamento,
-                        m.Id;
-
-
+                        Sistema.SistemasEspelhamentos se
+                            ON se.IdSistemaEspelhamento = R.CodSistema;
+            --WHERE se.Nome  LIKE '%Sispad%'
+            --WHERE R.CodSistema  IN( 1,99)
 
             END;
     END;
 GO
+

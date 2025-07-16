@@ -17,7 +17,7 @@
                 "typeProperties": {
                     "source": {
                         "type": "AzureSqlSource",
-                        "sqlReaderQuery": "SELECT TOP 1 name as DataBaseName FROM sys.databases\nWHERE name LIKE '%implanta.net.br'\nand name NOT  LIKE '%DBMigradoEArquivado%'\nORDER BY name \n",
+                        "sqlReaderQuery": "SELECT name as DataBaseName FROM sys.databases\nWHERE name LIKE '%implanta.net.br'\nand name NOT  LIKE '%DBMigradoEArquivado%'\nORDER BY name \n",
                         "queryTimeout": "02:00:00",
                         "partitionOption": "None"
                     },
@@ -60,60 +60,16 @@
                         "value": "@activity('Recuperar Bancos por Servidor').output.value",
                         "type": "Expression"
                     },
+                    "batchCount": 5,
                     "activities": [
-                        {
-                            "name": "Get Metricas",
-                            "type": "SqlServerStoredProcedure",
-                            "dependsOn": [],
-                            "policy": {
-                                "timeout": "0.01:00:00",
-                                "retry": 0,
-                                "retryIntervalInSeconds": 45,
-                                "secureOutput": false,
-                                "secureInput": false
-                            },
-                            "userProperties": [],
-                            "typeProperties": {
-                                "storedProcedureName": "HealthCheck.GetMetricasSistema"
-                            },
-                            "linkedServiceName": {
-                                "referenceName": "LS_Azure_SQL_Server",
-                                "type": "LinkedServiceReference",
-                                "parameters": {
-                                    "ServerName": {
-                                        "value": "@pipeline().parameters.ServerName",
-                                        "type": "Expression"
-                                    },
-                                    "DatabaseName": {
-                                        "value": "@item().DataBaseName",
-                                        "type": "Expression"
-                                    },
-                                    "UserName": {
-                                        "value": "@pipeline().parameters.UserName",
-                                        "type": "Expression"
-                                    },
-                                    "Senha": {
-                                        "value": "@pipeline().parameters.Senha",
-                                        "type": "Expression"
-                                    }
-                                }
-                            }
-                        },
                         {
                             "name": "Copy to Staging",
                             "type": "Copy",
-                            "dependsOn": [
-                                {
-                                    "activity": "Get Metricas",
-                                    "dependencyConditions": [
-                                        "Succeeded"
-                                    ]
-                                }
-                            ],
+                            "dependsOn": [],
                             "policy": {
                                 "timeout": "0.12:00:00",
                                 "retry": 0,
-                                "retryIntervalInSeconds": 45,
+                                "retryIntervalInSeconds": 30,
                                 "secureOutput": false,
                                 "secureInput": false
                             },
@@ -128,7 +84,8 @@
                                 "sink": {
                                     "type": "AzureSqlSink",
                                     "writeBehavior": "insert",
-                                    "sqlWriterUseTableLock": false
+                                    "sqlWriterUseTableLock": false,
+                                    "disableMetricsCollection": false
                                 },
                                 "enableStaging": false,
                                 "translator": {
@@ -246,6 +203,7 @@
                     ]
                 }
             }
+
         ],
         "parameters": {
             "UserName": {
@@ -261,6 +219,8 @@
         "folder": {
             "name": "ProjetoIntegracaoMetricas"
         },
-        "annotations": []
-    }
+        "annotations": [],
+        "lastPublishTime": "2025-07-12T12:34:34Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
 }

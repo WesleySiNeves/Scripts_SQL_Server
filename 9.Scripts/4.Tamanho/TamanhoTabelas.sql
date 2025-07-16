@@ -28,6 +28,18 @@ WHERE
     AND i.OBJECT_ID > 255 
 GROUP BY 
     t.Name, s.Name, p.Rows
+), Agregate AS 
+(
+SELECT R.[Schema],
+       R.Tabela,
+      SUM(R.Linhas) AS Linhas,
+       SUM(R.Tamanho_MB)AS Tamanho_MB,
+       SUM(R.Tamanho_GB)AS Tamanho_GB,
+       SUM(R.Usado_MB)AS Usado_MB,
+       SUM(R.Usado_GB)AS Usado_GB,
+       SUM(R.Livre_MB)AS Livre_MB FROM Dados R
+	   GROUP BY R.[Schema],
+                R.Tabela
 )
 SELECT R.[Schema],
        R.Tabela,
@@ -39,7 +51,8 @@ SELECT R.[Schema],
        R.Usado_MB,
        R.Usado_GB,
        R.Livre_MB
-	    FROM Dados R
+	    FROM Agregate R
+		WHERE R.Tabela ='LogsJson'
 ORDER BY 
     [Tamanho_MB] DESC;
 

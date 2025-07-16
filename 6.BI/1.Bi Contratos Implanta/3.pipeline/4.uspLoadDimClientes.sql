@@ -156,6 +156,8 @@ BEGIN
                R.SiglaFederal
         FROM ClientesNovos R;
 
+		
+
 
         ;WITH MapeamentoDados
         AS (SELECT NEWID() AS IdCliente,
@@ -195,29 +197,125 @@ BEGIN
 
 
 
-        MERGE Shared.DimClientes AS target
-        USING #DadosCLientes AS source
-        ON target.Sigla = source.SiglaCliente COLLATE Latin1_General_CI_AI
-        WHEN MATCHED THEN
-            UPDATE SET target.Nome = source.NomeCliente,
-                       target.DataAtualizacao = GETDATE()
-        WHEN NOT MATCHED BY TARGET THEN
-            INSERT
-            (
-                IdCliente,
-                SkConselhoFederal,
-                Nome,
-                Sigla,
-                Estado,
-                TipoCliente,
-                Ativo,
-                DataCarga,
-                DataAtualizacao
-            )
-            VALUES
-            (source.IdCliente, source.SkConselhoFederal, source.NomeCliente, source.SiglaCliente, source.UF,
-             source.TipoCliente, source.Ativo, GETDATE(), GETDATE());
-
+        -- =============================================
+        -- IMPLEMENTAÇÃO SCD TIPO 2 PARA DIMENSÃO CLIENTES
+        -- =============================================
+        
+        -- 1. Identificar registros que mudaram (necessitam nova versão)
+        DROP TABLE IF EXISTS #ClientesAlterados;
+        CREATE TABLE #ClientesAlterados
+        (
+            IdCliente UNIQUEIDENTIFIER,
+            SkClienteAtual INT,
+            NovoNome VARCHAR(100),
+            NovoTipoCliente VARCHAR(20),
+            NovoSkConselhoFederal SMALLINT
+        );
+        
+        INSERT INTO #ClientesAlterados
+        SELECT 
+            source.IdCliente,
+            target.SkCliente,
+            source.NomeCliente,
+            source.TipoCliente,
+            source.SkConselhoFederal
+        FROM #DadosCLientes source
+        INNER JOIN Shared.DimClientes target 
+            ON target.IdCliente = source.IdCliente 
+            AND target.VersaoAtual = 1
+        WHERE 
+            target.Nome <> source.NomeCliente COLLATE Latin1_General_CI_AI
+            OR ISNULL(target.TipoCliente, '') <> ISNULL(source.TipoCliente, '') COLLATE Latin1_General_CI_AI
+            OR target.SkConselhoFederal <> source.SkConselhoFederal;
+        
+        -- 2. Fechar versões antigas (definir DataFimVersao e VersaoAtual = 0)
+        UPDATE Shared.DimClientes 
+        SET 
+            DataFimVersao = GETDATE(),
+            VersaoAtual = 0,
+            DataAtualizacao = GETDATE()
+        WHERE SkCliente IN (SELECT SkClienteAtual FROM #ClientesAlterados);
+        
+		
+        -- 3. Inserir novas versões para registros alterados
+        INSERT INTO Shared.DimClientes
+        (
+            IdCliente,
+            SkConselhoFederal,
+            Nome,
+            Sigla,
+            Estado,
+            TipoCliente,
+            Ativo,
+            DataInicioVersao,
+            DataFimVersao,
+            VersaoAtual,
+            DataCarga,
+            DataAtualizacao
+        )
+        SELECT 
+            alt.IdCliente,
+            alt.NovoSkConselhoFederal,
+            alt.NovoNome,
+            source.SiglaCliente,
+            source.UF,
+            alt.NovoTipoCliente,
+            1, -- Ativo
+            GETDATE(), -- DataInicioVersao
+            NULL, -- DataFimVersao (NULL = versão atual)
+            1, -- VersaoAtual
+            GETDATE(), -- DataCarga
+            GETDATE() -- DataAtualizacao
+        FROM #ClientesAlterados alt
+        INNER JOIN #DadosCLientes source ON alt.IdCliente = source.IdCliente;
+        
+        -- 4. Inserir novos clientes (que não existem na dimensão)
+        INSERT INTO Shared.DimClientes
+        (
+            IdCliente,
+            SkConselhoFederal,
+            Nome,
+            Sigla,
+            Estado,
+            TipoCliente,
+            Ativo,
+            DataInicioVersao,
+            DataFimVersao,
+            VersaoAtual,
+            DataCarga,
+            DataAtualizacao
+        )
+        SELECT 
+            source.IdCliente,
+            source.SkConselhoFederal,
+            source.NomeCliente,
+            source.SiglaCliente,
+            source.UF,
+            source.TipoCliente,
+            source.Ativo,
+            GETDATE(), -- DataInicioVersao
+            NULL, -- DataFimVersao (NULL = versão atual)
+            1, -- VersaoAtual
+            GETDATE(), -- DataCarga
+            GETDATE() -- DataAtualizacao
+        FROM #DadosCLientes source
+        WHERE NOT EXISTS (
+            SELECT 1 
+            FROM Shared.DimClientes target 
+            WHERE target.Sigla = source.SiglaCliente
+        );
+		
+        
+        -- 5. Atualizar apenas DataAtualizacao para registros inalterados
+        UPDATE target
+        SET target.DataAtualizacao = GETDATE()
+        FROM Shared.DimClientes target
+        INNER JOIN #DadosCLientes source 
+            ON target.IdCliente = source.IdCliente 
+            AND target.VersaoAtual = 1
+        WHERE target.SkCliente NOT IN (SELECT SkClienteAtual FROM #ClientesAlterados);
+        
+        
 
 
     END TRY

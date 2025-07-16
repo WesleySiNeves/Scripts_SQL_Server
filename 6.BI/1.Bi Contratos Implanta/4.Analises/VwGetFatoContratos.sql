@@ -30,11 +30,11 @@ SELECT geo.Estado,
        base.DataUltimaAtualizacao FROM DM_ContratosProdutos.FatoContratosProdutos base
 	   LEFT JOIN Shared.DimGeografia geo ON base.SkUF = geo.Estado
 	   LEFT JOIN Shared.DimCategorias cat ON cat.SkCategoria = base.SkCategoria
-	   LEFT JOIN Shared.DimProdutos prod ON prod.SkProduto = base.SkProduto
+	   LEFT JOIN Shared.DimProdutos prod ON prod.SkProduto = base.SkProduto AND prod.VersaoAtual = 1
 	   LEFT JOIN DM_ContratosProdutos.DimTipoContratos tipo ON tipo.SkTipoContrato = base.SkTipoContrato
 	   LEFT JOIN DM_ContratosProdutos.DimTipoSituacaoContratos situ  ON situ.SkTipoSituacaoContrato = base.SkTipoSituacaoContrato
-	   LEFT JOIN Shared.DimClientes clipagador ON clipagador.SkCliente = base.SkClientePagador
-	   LEFT JOIN Shared.DimClientes cli ON cli.SkCliente = base.SkCliente
+	   LEFT JOIN Shared.DimClientes clipagador ON clipagador.SkCliente = base.SkClientePagador AND clipagador.VersaoAtual = 1
+    LEFT JOIN Shared.DimClientes cli ON cli.SkCliente = base.SkCliente AND cli.VersaoAtual = 1
 	   LEFT JOIN DM_ContratosProdutos.DimTiposSituacaoFinanceira fina ON fina.SkTiposSituacaoFinanceira = base.SkTiposSituacaoFinanceira
 
 

@@ -3,10 +3,18 @@ CREATE OR ALTER PROCEDURE DM_ContratosProdutos.uspInsertUpdateDw
 AS
 BEGIN
     BEGIN TRY
+        -- Executar todas as dimensões em ordem de dependência
+        EXEC Shared.uspLoadDimTempo;
+        EXEC Shared.uspLoadDimCategorias;
+        EXEC Shared.uspLoadDimProdutos;
+        EXEC Shared.uspLoadDimClientes;
+        EXEC DM_ContratosProdutos.uspLoadDimensionTypes;
         
-		EXEC DM_ContratosProdutos.uspLoadDimCategorias;
-
-
+        -- Por último, carregar a tabela fato
+        EXEC DM_ContratosProdutos.uspLoadFatoContratosProdutos;
+        
+        PRINT 'Pipeline ETL executado com sucesso!';
+        
     END TRY
     BEGIN CATCH
         -- Tratamento de erros melhorado

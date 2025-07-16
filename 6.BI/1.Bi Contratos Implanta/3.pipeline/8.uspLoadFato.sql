@@ -114,10 +114,13 @@ BEGIN
                 ON geo.Estado = source.UF
             LEFT JOIN Shared.DimProdutos prod
                 ON prod.DescricaoCigam = source.Descricao
+                AND prod.VersaoAtual = 1
             LEFT JOIN Shared.DimClientes pagador
-                ON pagador.Sigla = source.Pagador
+                ON pagador.Sigla = source.Pagador COLLATE Latin1_General_CI_AI
+                AND pagador.VersaoAtual = 1
             LEFT JOIN Shared.DimClientes cliente
-                ON cliente.Sigla = source.SiglaCliente
+                ON cliente.Sigla = source.SiglaCliente COLLATE Latin1_General_CI_AI
+                AND cliente.VersaoAtual = 1
             LEFT JOIN DM_ContratosProdutos.DimTipoContratos tipo
                 ON tipo.Nome = source.Tipo
             LEFT JOIN DM_ContratosProdutos.DimTipoSituacaoContratos situacao

@@ -85,28 +85,54 @@ WITH (DATA_COMPRESSION = PAGE);
 
 
 
--- DIMENSÃO Produtos
+-- DIMENSÃO PRODUTOS (TEMPORAL - SCD TIPO 2)
 CREATE TABLE [Shared].[DimProdutos]
     (
-        [SkProduto]       TINYINT          NOT NULL,
-        [IdProduto]       UNIQUEIDENTIFIER NOT NULL,
-        [DescricaoCigam]       VARCHAR(250)     NOT NULL,
-		[DescricaoImplanta]       VARCHAR(250)     NOT NULL,
-        [Area]            VARCHAR(50),
-        [Ativo]           BIT
+        [SkProduto]         INT              NOT NULL IDENTITY(1, 1),  -- Alterado de TINYINT para INT
+        [IdProduto]         UNIQUEIDENTIFIER NOT NULL,                  -- Chave natural
+        [DescricaoCigam]    VARCHAR(250)     NOT NULL,
+        [DescricaoImplanta] VARCHAR(250)     NOT NULL,
+        [Area]              VARCHAR(50),
+        [Ativo]             BIT
             DEFAULT 1,
-        [DataCarga]       DATETIME2(2)
+        
+        -- Campos de versionamento temporal (SCD Tipo 2)
+        [DataInicioVersao]  DATETIME2(2)     NOT NULL DEFAULT GETDATE(),
+        [DataFimVersao]     DATETIME2(2)     NULL,           -- NULL = versão atual
+        [VersaoAtual]       BIT              NOT NULL DEFAULT 1,      -- 1 = versão atual, 0 = histórica
+        
+        -- Auditoria
+        [DataCarga]         DATETIME2(2)
             DEFAULT GETDATE(),
-        [DataAtualizacao] DATETIME2(2)
+        [DataAtualizacao]   DATETIME2(2)
             DEFAULT GETDATE(),
-        CONSTRAINT [PK_DimSistemas]
+        CONSTRAINT [PK_DimProdutos]  -- Corrigido nome da constraint
             PRIMARY KEY CLUSTERED ([SkProduto])
     )
 WITH (DATA_COMPRESSION = PAGE);
 
-CREATE UNIQUE NONCLUSTERED INDEX IX_DimProdutosSkProduto
-    ON [Shared].[DimProdutos] ([IdProduto])
-    INCLUDE ([SkProduto], DescricaoImplanta,DescricaoCigam)
+-- Índice para busca por chave natural e versão atual
+CREATE NONCLUSTERED INDEX [IX_DimProdutos_IdProduto_VersaoAtual] 
+    ON [Shared].[DimProdutos] ([IdProduto], [VersaoAtual])
+    INCLUDE ([SkProduto], [DataInicioVersao], [DataFimVersao])
+    WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
+
+CREATE UNIQUE NONCLUSTERED INDEX IX_DimProdutos_IdProduto_VersaoAtual_Unique
+    ON [Shared].[DimProdutos] ([IdProduto], [VersaoAtual])
+    INCLUDE ([SkProduto], [DescricaoImplanta], [DescricaoCigam])
+    WHERE [VersaoAtual] = 1
+    WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
+
+-- Índice para consultas históricas
+CREATE NONCLUSTERED INDEX IX_DimProdutos_Historico
+    ON [Shared].[DimProdutos] (DataInicioVersao, DataFimVersao)
+    INCLUDE (SkProduto, IdProduto, DescricaoImplanta, DescricaoCigam)
+    WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
+
+-- Índice para busca por descrição (versão atual)
+CREATE NONCLUSTERED INDEX IX_DimProdutos_Descricao_VersaoAtual
+    ON [Shared].[DimProdutos] ([DescricaoCigam], [VersaoAtual])
+    INCLUDE ([SkProduto], [IdProduto])
     WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
 
 
@@ -137,18 +163,25 @@ CREATE UNIQUE NONCLUSTERED INDEX IX_DimConselhosFederais_Id
     INCLUDE ([SkConselhoFederal], [Sigla])
     WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
 
--- DIMENSÃO CLIENTES
+-- DIMENSÃO CLIENTES (TEMPORAL - SCD TIPO 2)
 CREATE TABLE [Shared].[DimClientes]
     (
-        [SkCliente]         SMALLINT         NOT NULL IDENTITY(0, 1),
-        [IdCliente]         UNIQUEIDENTIFIER NOT NULL,
+        [SkCliente]         INT              NOT NULL IDENTITY(1, 1),
+        [IdCliente]         UNIQUEIDENTIFIER NOT NULL,        -- Chave natural
         [SkConselhoFederal] SMALLINT         NOT NULL,
         [Nome]              VARCHAR(100)     NOT NULL,
         [Sigla]             VARCHAR(50)      NOT NULL,
         [Estado]            CHAR(2),
-        [TipoCliente]       VARCHAR(20), -- Adicionado baseado na imagem 2
+        [TipoCliente]       VARCHAR(20),
         [Ativo]             BIT
             DEFAULT 1,
+        
+        -- Campos de versionamento temporal (SCD Tipo 2)
+        [DataInicioVersao]  DATETIME2(2)     NOT NULL DEFAULT GETDATE(),
+        [DataFimVersao]     DATETIME2(2)     NULL,           -- NULL = versão atual
+        [VersaoAtual]       BIT              NOT NULL DEFAULT 1,      -- 1 = versão atual, 0 = histórica
+        
+        -- Auditoria
         [DataCarga]         DATETIME2(2)
             DEFAULT GETDATE(),
         [DataAtualizacao]   DATETIME2(2)
@@ -161,14 +194,26 @@ CREATE TABLE [Shared].[DimClientes]
     )
 WITH (DATA_COMPRESSION = PAGE);
 
-CREATE UNIQUE NONCLUSTERED INDEX IX_DimClientes_Sigla
-    ON [Shared].[DimClientes] (Sigla)
+-- Índice para busca por chave natural e versão atual
+CREATE NONCLUSTERED INDEX [IX_DimClientes_IdCliente_VersaoAtual] 
+    ON [Shared].[DimClientes] ([IdCliente], [VersaoAtual])
+    INCLUDE ([SkCliente], [DataInicioVersao], [DataFimVersao])
+    WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
+
+CREATE UNIQUE NONCLUSTERED INDEX IX_DimClientes_Sigla_VersaoAtual
+    ON [Shared].[DimClientes] (Sigla, VersaoAtual)
     INCLUDE (SkCliente, IdCliente, Nome)
     WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
 
 CREATE NONCLUSTERED INDEX IX_DimClientes_ConselhoFederal
     ON [Shared].[DimClientes] (SkConselhoFederal)
     WITH (DATA_COMPRESSION = PAGE);
+
+-- Índice para consultas históricas
+CREATE NONCLUSTERED INDEX IX_DimClientes_Historico
+    ON [Shared].[DimClientes] (DataInicioVersao, DataFimVersao)
+    INCLUDE (SkCliente, IdCliente, Nome, Sigla)
+    WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
 
 
 CREATE TABLE [DM_ContratosProdutos].[DimTipoContratos]
@@ -296,11 +341,11 @@ CREATE TABLE [DM_ContratosProdutos].[FatoContratosProdutos]
         [SkUF]                      CHAR(2)        NOT NULL,
 		[CodContrato]               VARCHAR(10)    NOT NULL,
         [SkCategoria]               TINYINT        NOT NULL,
-        [SkProduto]                 TINYINT        NOT NULL,
+        [SkProduto]                 INT            NOT NULL,
         [SkTipoContrato]            TINYINT        NOT NULL,
         [SkTipoSituacaoContrato]    TINYINT        NOT NULL,
-        [SkClientePagador]          SMALLINT       NOT NULL,
-        [SkCliente]                 SMALLINT       NOT NULL,
+        [SkClientePagador]          INT            NOT NULL,
+        [SkCliente]                 INT            NOT NULL,
         [DataVigenciaInicial]		DATE           NOT NULL,
         [DataVigenciaFinal]			DATE           NOT NULL,
         [SkTiposSituacaoFinanceira] TINYINT        NOT NULL,
