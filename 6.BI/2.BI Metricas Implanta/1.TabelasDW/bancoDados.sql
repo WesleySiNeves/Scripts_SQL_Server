@@ -37,28 +37,37 @@ IF NOT EXISTS
     )
     EXEC ('CREATE SCHEMA Staging');
 
-DROP TABLE IF EXISTS [Staging].[MetricasClientes];
-DROP TABLE IF EXISTS  [DM_MetricasClientes].[FatoMetricasClientes]
-DROP TABLE IF EXISTS [DM_MetricasClientes].[DimTipoRetorno]
-DROP TABLE IF EXISTS [DM_MetricasClientes].[DimMetricas]
+
+DROP TABLE IF EXISTS [DM_MetricasClientes].[FatoMetricasClientes];
+DROP TABLE IF EXISTS [DM_MetricasClientes].[DimTabelasConsultadas]
+DROP TABLE IF EXISTS [DM_MetricasClientes].[DimMetricas];
 
 
-CREATE TABLE [Staging].[MetricasClientes]
+
+IF(NOT EXISTS(SELECT * FROM  sys.tables WHERE name ='MetricasClientes'))
+BEGIN
+	CREATE TABLE [Staging].[MetricasClientes]
     (
         [Cliente]           [VARCHAR](50)  COLLATE SQL_Latin1_General_CP1_CI_AI NOT NULL,
-        [CodSistema]        [TINYINT]      NOT NULL,
+        [CodSistema]        SMALLINT      NOT NULL,
         [Ordem]             [TINYINT]      NOT NULL,
         [NomeMetrica]       [VARCHAR](50)  COLLATE SQL_Latin1_General_CP1_CI_AI NOT NULL,
         [TipoRetorno]       [VARCHAR](50)  COLLATE SQL_Latin1_General_CP1_CI_AI NOT NULL,
         [TabelaConsultada]  [VARCHAR](128) COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
-        [Valor]             [VARCHAR](MAX) COLLATE SQL_Latin1_General_CP1_CI_AI NOT NULL DEFAULT(''),
-        [DataCarga]         [DATETIME2](2) NOT NULL DEFAULT(GETDATE()),
-        [DataProcessamento] [DATETIME2](2) NOT NULL DEFAULT (GETDATE()),
-		--CONSTRAINT PK_MetricasClientes PRIMARY KEY(Cliente,CodSistema,Ordem,NomeMetrica,Valor)
-		 
+        [Valor]             [VARCHAR](MAX) COLLATE SQL_Latin1_General_CP1_CI_AI NOT NULL DEFAULT (''),
+        [DataCarga]         [DATETIME2](2) NOT NULL
+            DEFAULT (GETDATE()),
+        [DataProcessamento] [DATETIME2](2)  NULL ,
+    --CONSTRAINT PK_MetricasClientes PRIMARY KEY(Cliente,CodSistema,Ordem,NomeMetrica,Valor)
+
     ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 WITH (DATA_COMPRESSION = PAGE);
-GO
+
+
+END
+
+
+
 
 
 -- =============================================
@@ -69,46 +78,38 @@ GO
 -- Dimensão Métrica (Temporal)
 CREATE TABLE [DM_MetricasClientes].[DimMetricas]
     (
-        [SkMetrica]        INT          IDENTITY(1, 1) NOT NULL,
+        [SkMetrica]        SMALLINT          IDENTITY(1, 1) NOT NULL,
         [NomeMetrica]      VARCHAR(50)  NOT NULL, -- Chave natural
         [TipoRetorno]      VARCHAR(20),
-        [TabelaConsultada] VARCHAR(128),
         [Categoria]        VARCHAR(50),
         [Descricao]        VARCHAR(255),
-        [Ativo]            BIT
-            DEFAULT 1,
+        [Ativo]            BIT DEFAULT 1,
 
                                                   -- Campos de versionamento temporal (SCD Tipo 2)
         [DataInicioVersao] DATETIME2(2) NOT NULL
             DEFAULT GETDATE(),
         [DataFimVersao]    DATETIME2(2) NULL,
-        [VersaoAtual]      BIT          NOT NULL
-            DEFAULT 1,
+        [VersaoAtual]      BIT          NOT NULL DEFAULT 1,
 
                                                   -- Auditoria
         [DataCarga]        DATETIME2(2)
             DEFAULT GETDATE(),
-        [DataAtualizacao]  DATETIME2(2)
-            DEFAULT GETDATE(),
+        [DataAtualizacao]  DATETIME2(2) NULL ,
         CONSTRAINT [PK_DimMetricas]
             PRIMARY KEY CLUSTERED ([SkMetrica])
     ) ON [PRIMARY]
 WITH (DATA_COMPRESSION = PAGE);
 
 -- Dimensão Tipo Retorno (Simples - sem versionamento)
-CREATE TABLE [DM_MetricasClientes].[DimTipoRetorno]
+CREATE TABLE [DM_MetricasClientes].[DimTabelasConsultadas]
     (
-        [SkTipoRetorno]   TINYINT     IDENTITY(1, 1) NOT NULL,
-        [TipoRetorno]     VARCHAR(20) NOT NULL,
-        [Descricao]       VARCHAR(100),
-        [Ativo]           BIT
-            DEFAULT 1,
-        [DataCarga]       DATETIME2(2)
-            DEFAULT GETDATE(),
-        [DataAtualizacao] DATETIME2(2)
-            DEFAULT GETDATE(),
+        [SkTabelasConsultada]   SMALLINT     IDENTITY(1, 1) NOT NULL,
+        [Nome]     VARCHAR(128) NOT NULL,
+        [Ativo]           BIT DEFAULT 1,
+        [DataCarga]       DATETIME2(2) DEFAULT GETDATE(), 
+	    [DataAtualizacao] DATETIME2(2) DEFAULT GETDATE(),
         CONSTRAINT [PK_DimTipoRetorno]
-            PRIMARY KEY CLUSTERED ([SkTipoRetorno])
+            PRIMARY KEY CLUSTERED ([SkTabelasConsultada])
     ) ON [PRIMARY]
 WITH (DATA_COMPRESSION = PAGE);
 
@@ -118,67 +119,62 @@ WITH (DATA_COMPRESSION = PAGE);
 -- Snapshot temporal das métricas por período
 -- =============================================
 
+
 CREATE TABLE [DM_MetricasClientes].[FatoMetricasClientes]
     (
-        -- Chaves Surrogate (Dimensões)
-        [SkCliente]         INT           NOT NULL,
-        [SkSistema]         INT           NOT NULL,
-        [SkMetrica]         INT           NOT NULL,
-        [SkTipoRetorno]     TINYINT       NOT NULL,
-        [SkTempo]           DATE          NOT NULL, -- Referência para DimTempo compartilhada
-
-                                                    -- Chaves de Negócio (para rastreabilidade)
-        [CodigoCliente]     VARCHAR(20)   NOT NULL,
-        [CodSistema]        TINYINT       NOT NULL,
-        [NomeMetrica]       VARCHAR(50)   NOT NULL,
-        [Ordem]             TINYINT       NOT NULL,
-
-                                                    -- Métricas/Fatos
-        [ValorTexto]        VARCHAR(MAX),           -- Para métricas de texto
-        [ValorNumerico]     DECIMAL(18, 4),         -- Para métricas numéricas
-        [ValorData]         DATETIME2(2),           -- Para métricas de data
-        [ValorBooleano]     BIT,                    -- Para métricas booleanas
-
-                                                    -- Metadados temporais
-        [DataSnapshot]      DATE          NOT NULL, -- Data do snapshot
-        [DataProcessamento] DATETIME2(2)  NOT NULL, -- Quando foi processado
-        [VersaoCliente]     INT           NOT NULL, -- Versão do cliente na época
-        [VersaoSistema]     INT           NOT NULL, -- Versão do sistema na época
-        [VersaoMetrica]     INT           NOT NULL, -- Versão da métrica na época
-
-                                                    -- Auditoria
-        [DataCarga]         DATETIME2(2)
-            DEFAULT GETDATE(),
-        [DataAtualizacao]   DATETIME2(2)
-            DEFAULT GETDATE(),
-
-                                                    -- Chave Primária Composta (inclui data para particionamento temporal)
-        CONSTRAINT [PK_FatoMetricasClientes]
-            PRIMARY KEY CLUSTERED ([SkCliente], [SkSistema], [SkMetrica], [DataSnapshot]),
-
-                                                    -- Chaves Estrangeiras
-        CONSTRAINT [FK_FatoMetricas_Cliente]
-            FOREIGN KEY ([SkCliente])
-            REFERENCES [Shared].[DimClientes] ([SkCliente]),
-        CONSTRAINT [FK_FatoMetricas_Sistema]
-            FOREIGN KEY ([SkSistema])
-            REFERENCES [Shared].[DimProdutos] ([SkProduto]),
-        CONSTRAINT [FK_FatoMetricas_Metrica]
-            FOREIGN KEY ([SkMetrica])
-            REFERENCES [DM_MetricasClientes].[DimMetricas] ([SkMetrica]),
-        CONSTRAINT [FK_FatoMetricas_TipoRetorno]
-            FOREIGN KEY ([SkTipoRetorno])
-            REFERENCES [DM_MetricasClientes].[DimTipoRetorno] ([SkTipoRetorno]),
-        CONSTRAINT [FK_FatoMetricas_Tempo]
-            FOREIGN KEY ([SkTempo])
-            REFERENCES [Shared].[DimTempo] ([Data])
+		[SkTempo]                 [DATE]           NOT NULL,
+        [SkCliente]               [SMALLINT]       NOT NULL,
+        [SkProduto]               [SMALLINT]       NOT NULL,
+        [SkMetrica]               [SMALLINT]       NOT NULL,
+        [SkDimTabelasConsultadas] [SMALLINT]       NOT NULL,
+        [Ordem]                   [TINYINT]        NOT NULL,
+        [ValorTexto]              [VARCHAR](MAX)   COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
+        [ValorNumerico]           [DECIMAL](10, 2) NULL,
+        [ValorData]               [DATETIME2](2)   NULL,
+        [ValorBooleano]           [BIT]            NULL,
+        [VersaoCliente]           [TINYINT]        NOT NULL,
+        [VersaoSistema]           [TINYINT]        NOT NULL,
+        [VersaoMetrica]           [TINYINT]        NOT NULL,
+        [DataProcessamento]       [DATETIME2](2)   NOT NULL,
+        [DataCarga]               [DATETIME2](2)   NULL CONSTRAINT [DF_FatoMetricasClienteDataCarga] DEFAULT (GETDATE()),
+        [DataAtualizacao]         [DATETIME2](2)   NULL CONSTRAINT [DF_FatoMetricasClienteDataAtualizacao]  DEFAULT (GETDATE()),
+        [CodContrato]             [VARCHAR](20)    COLLATE SQL_Latin1_General_CP1_CI_AI NULL
     ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 WITH (DATA_COMPRESSION = PAGE);
-
--- Índices para performance
-CREATE NONCLUSTERED INDEX [IX_FatoMetricas_DataSnapshot]
-    ON [DM_MetricasClientes].[FatoMetricasClientes] ([DataSnapshot])
-    INCLUDE ([SkCliente], [SkSistema], [SkMetrica]);
-
-CREATE NONCLUSTERED INDEX [IX_FatoMetricas_Cliente_Data]
-    ON [DM_MetricasClientes].[FatoMetricasClientes] ([SkCliente], [DataSnapshot]);
+GO
+ALTER TABLE [DM_MetricasClientes].[FatoMetricasClientes]
+ADD
+    CONSTRAINT [PK_FatoMetricasClientes]
+    PRIMARY KEY CLUSTERED ([SkCliente], [SkProduto], [SkMetrica], [SkDimTabelasConsultadas],SkTempo)
+    WITH (DATA_COMPRESSION = PAGE) ON [PRIMARY];
+GO
+ALTER TABLE [DM_MetricasClientes].[FatoMetricasClientes]
+ADD
+    CONSTRAINT [FK_FatoMetricas_Cliente]
+    FOREIGN KEY ([SkCliente])
+    REFERENCES [Shared].[DimClientes] ([SkCliente]);
+GO
+ALTER TABLE [DM_MetricasClientes].[FatoMetricasClientes]
+ADD
+    CONSTRAINT [FK_FatoMetricas_DimTabelasConsultadas]
+    FOREIGN KEY ([SkDimTabelasConsultadas])
+    REFERENCES [DM_MetricasClientes].[DimTabelasConsultadas] ([SkTabelasConsultada]);
+GO
+ALTER TABLE [DM_MetricasClientes].[FatoMetricasClientes]
+ADD
+    CONSTRAINT [FK_FatoMetricas_Metrica]
+    FOREIGN KEY ([SkMetrica])
+    REFERENCES [DM_MetricasClientes].[DimMetricas] ([SkMetrica]);
+GO
+ALTER TABLE [DM_MetricasClientes].[FatoMetricasClientes]
+ADD
+    CONSTRAINT [FK_FatoMetricas_Sistema]
+    FOREIGN KEY ([SkProduto])
+    REFERENCES [Shared].[DimProdutos] ([SkProduto]);
+GO
+ALTER TABLE [DM_MetricasClientes].[FatoMetricasClientes]
+ADD
+    CONSTRAINT [FK_FatoMetricas_Tempo]
+    FOREIGN KEY ([SkTempo])
+    REFERENCES [Shared].[DimTempo] ([Data]);
+GO

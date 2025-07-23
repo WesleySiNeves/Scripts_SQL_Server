@@ -45,25 +45,28 @@ IF NOT EXISTS
 
 -- Limpeza das tabelas existentes
 
-DROP TABLE IF EXISTS [DM_ContratosProdutos].[FatoContratosProdutos];
-DROP TABLE IF EXISTS [Shared].[DimSistemas];
-DROP TABLE IF EXISTS [Shared].[DimCategorias];
-DROP TABLE IF EXISTS [Shared].[DimClientes];
-DROP TABLE IF EXISTS [Shared].DimProdutos;
-DROP TABLE IF EXISTS [Shared].DimGeografia;
-DROP TABLE IF EXISTS [Shared].[DimConselhosFederais];
-DROP TABLE IF EXISTS [Shared].[DimTempo];
-DROP TABLE IF EXISTS DM_MetricasProdutos.DimTipoRetornoMetrica;
-DROP TABLE IF EXISTS DM_MetricasProdutos.DimMetricasProdutos;
-DROP TABLE IF EXISTS Staging.MetricasClientes;
-DROP TABLE IF EXISTS [DM_ContratosProdutos].[DimTipoContratos];
-DROP TABLE IF EXISTS [DM_ContratosProdutos].[DimTipoSituacaoContratos];
-DROP TABLE IF EXISTS [DM_ContratosProdutos].[DimTiposSituacaoFinanceira];
-DROP TABLE IF EXISTS DM_MetricasProdutos.DimTipoRetornoMetrica;
-DROP TABLE IF EXISTS Staging.ClientesProdutosCIGAM;
+DROP TABLE IF EXISTS DM_MetricasClientes.DimMetricas
+DROP TABLE IF EXISTS Shared.DimTempo
+DROP TABLE IF EXISTS Shared.DimCategorias
+DROP TABLE IF EXISTS DM_MetricasClientes.DimTabelasConsultadas
+DROP TABLE IF EXISTS DM_MetricasClientes.FatoMetricasClientes
+DROP TABLE IF EXISTS DM_MetricasClientes.DimClientesRegioes
 
 
---DM_MetricasClientes
+DROP TABLE IF EXISTS Shared.DimProdutos
+DROP TABLE IF EXISTS Shared.DimClientes
+DROP TABLE IF EXISTS Shared.DimConselhosFederais
+
+
+
+SELECT CONCAT('DROP TABLE ', se.name,'.',t.name) FROM  sys.tables t
+JOIN sys.schemas se ON se.schema_id = t.schema_id
+WHERE se.name NOT IN ('Implanta','Staging','dbo')
+
+
+
+
+
 -- =============================================
 -- TABELAS DIMENSÃO
 -- =============================================
@@ -88,31 +91,33 @@ WITH (DATA_COMPRESSION = PAGE);
 -- DIMENSÃO PRODUTOS (TEMPORAL - SCD TIPO 2)
 CREATE TABLE [Shared].[DimProdutos]
     (
-        [SkProduto]         INT              NOT NULL IDENTITY(1, 1),  -- Alterado de TINYINT para INT
-        [IdProduto]         UNIQUEIDENTIFIER NOT NULL,                  -- Chave natural
+        [SkProduto]         SMALLINT              NOT NULL, 
+        [IdProduto]         UNIQUEIDENTIFIER NOT NULL,                -- Chave natural
         [DescricaoCigam]    VARCHAR(250)     NOT NULL,
         [DescricaoImplanta] VARCHAR(250)     NOT NULL,
         [Area]              VARCHAR(50),
         [Ativo]             BIT
             DEFAULT 1,
-        
-        -- Campos de versionamento temporal (SCD Tipo 2)
-        [DataInicioVersao]  DATETIME2(2)     NOT NULL DEFAULT GETDATE(),
-        [DataFimVersao]     DATETIME2(2)     NULL,           -- NULL = versão atual
-        [VersaoAtual]       BIT              NOT NULL DEFAULT 1,      -- 1 = versão atual, 0 = histórica
-        
-        -- Auditoria
+
+                                                                      -- Campos de versionamento temporal (SCD Tipo 2)
+        [DataInicioVersao]  DATETIME2(2)     NOT NULL
+            DEFAULT GETDATE(),
+        [DataFimVersao]     DATETIME2(2)     NULL,                    -- NULL = versão atual
+        [VersaoAtual]       BIT              NOT NULL
+            DEFAULT 1,                                                -- 1 = versão atual, 0 = histórica
+
+                                                                      -- Auditoria
         [DataCarga]         DATETIME2(2)
             DEFAULT GETDATE(),
         [DataAtualizacao]   DATETIME2(2)
             DEFAULT GETDATE(),
-        CONSTRAINT [PK_DimProdutos]  -- Corrigido nome da constraint
+        CONSTRAINT [PK_DimProdutos] -- Corrigido nome da constraint
             PRIMARY KEY CLUSTERED ([SkProduto])
     )
 WITH (DATA_COMPRESSION = PAGE);
 
 -- Índice para busca por chave natural e versão atual
-CREATE NONCLUSTERED INDEX [IX_DimProdutos_IdProduto_VersaoAtual] 
+CREATE NONCLUSTERED INDEX [IX_DimProdutos_IdProduto_VersaoAtual]
     ON [Shared].[DimProdutos] ([IdProduto], [VersaoAtual])
     INCLUDE ([SkProduto], [DataInicioVersao], [DataFimVersao])
     WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
@@ -164,24 +169,27 @@ CREATE UNIQUE NONCLUSTERED INDEX IX_DimConselhosFederais_Id
     WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
 
 -- DIMENSÃO CLIENTES (TEMPORAL - SCD TIPO 2)
+
+ 
 CREATE TABLE [Shared].[DimClientes]
     (
-        [SkCliente]         INT              NOT NULL IDENTITY(1, 1),
-        [IdCliente]         UNIQUEIDENTIFIER NOT NULL,        -- Chave natural
+        [SkCliente]         SMALLINT              NOT NULL IDENTITY(1, 1),
+        [IdCliente]         UNIQUEIDENTIFIER NOT NULL, -- Chave natural
         [SkConselhoFederal] SMALLINT         NOT NULL,
         [Nome]              VARCHAR(100)     NOT NULL,
-        [Sigla]             VARCHAR(50)      NOT NULL,
+        [SiglaCliente]      VARCHAR(50)      NOT NULL,
+        [SiglaImplanta]      VARCHAR(50)      NOT NULL,
         [Estado]            CHAR(2),
         [TipoCliente]       VARCHAR(20),
-        [Ativo]             BIT
-            DEFAULT 1,
-        
-        -- Campos de versionamento temporal (SCD Tipo 2)
-        [DataInicioVersao]  DATETIME2(2)     NOT NULL DEFAULT GETDATE(),
-        [DataFimVersao]     DATETIME2(2)     NULL,           -- NULL = versão atual
-        [VersaoAtual]       BIT              NOT NULL DEFAULT 1,      -- 1 = versão atual, 0 = histórica
-        
-        -- Auditoria
+        [Ativo]             BIT DEFAULT 1,
+		ClienteAtivoImplanta BIT NOT NULL DEFAULT(1),
+        [DataInicioVersao]  DATETIME2(2)     NOT NULL -- Campos de versionamento temporal (SCD Tipo 2)
+            DEFAULT GETDATE(),
+        [DataFimVersao]     DATETIME2(2)     NULL,     -- NULL = versão atual
+        [VersaoAtual]       BIT              NOT NULL
+            DEFAULT 1,                                 -- 1 = versão atual, 0 = histórica
+
+                                                       -- Auditoria
         [DataCarga]         DATETIME2(2)
             DEFAULT GETDATE(),
         [DataAtualizacao]   DATETIME2(2)
@@ -195,13 +203,13 @@ CREATE TABLE [Shared].[DimClientes]
 WITH (DATA_COMPRESSION = PAGE);
 
 -- Índice para busca por chave natural e versão atual
-CREATE NONCLUSTERED INDEX [IX_DimClientes_IdCliente_VersaoAtual] 
+CREATE NONCLUSTERED INDEX [IX_DimClientes_IdCliente_VersaoAtual]
     ON [Shared].[DimClientes] ([IdCliente], [VersaoAtual])
     INCLUDE ([SkCliente], [DataInicioVersao], [DataFimVersao])
     WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
 
 CREATE UNIQUE NONCLUSTERED INDEX IX_DimClientes_Sigla_VersaoAtual
-    ON [Shared].[DimClientes] (Sigla, VersaoAtual)
+    ON [Shared].[DimClientes] (SiglaCliente, VersaoAtual)
     INCLUDE (SkCliente, IdCliente, Nome)
     WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
 
@@ -212,7 +220,7 @@ CREATE NONCLUSTERED INDEX IX_DimClientes_ConselhoFederal
 -- Índice para consultas históricas
 CREATE NONCLUSTERED INDEX IX_DimClientes_Historico
     ON [Shared].[DimClientes] (DataInicioVersao, DataFimVersao)
-    INCLUDE (SkCliente, IdCliente, Nome, Sigla)
+    INCLUDE (SkCliente, IdCliente, Nome, SiglaCliente)
     WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
 
 
@@ -265,18 +273,18 @@ WITH (DATA_COMPRESSION = PAGE);
 CREATE TABLE [Shared].[DimTempo]
     (
         [Data]          DATE        NOT NULL,
-        [Ano]           INT         NOT NULL,
-        [Mes]           INT         NOT NULL,
-        [Trimestre]     INT         NOT NULL,
-        [Semestre]      INT         NOT NULL,
+        [Ano]           SMALLINT         NOT NULL,
+        [Mes]           TINYINT         NOT NULL,
+        [Trimestre]     TINYINT         NOT NULL,
+        [Semestre]      TINYINT         NOT NULL,
         [NomeMes]       VARCHAR(20) NOT NULL,
-        [DiaSemana]     INT         NOT NULL,
+        [DiaSemana]     TINYINT         NOT NULL,
         [NomeDiaSemana] VARCHAR(20) NOT NULL,
         CONSTRAINT [PK_DimTempo]
             PRIMARY KEY CLUSTERED ([Data])
     )
-WITH (DATA_COMPRESSION = PAGE)
-   
+WITH (DATA_COMPRESSION = PAGE);
+
 
 
 -- =============================================
@@ -294,7 +302,7 @@ IF (NOT EXISTS
     )
    )
     BEGIN
-	
+
         CREATE TABLE [Staging].[ClientesProdutosCIGAM]
             (
                 [IdClienteProduto]    [UNIQUEIDENTIFIER] NOT NULL PRIMARY KEY,
@@ -311,7 +319,7 @@ IF (NOT EXISTS
                 [DataBase]            [DATE]             NULL,
                 [Periodicidade]       VARCHAR(60)        NULL,
                 PrecoUnitario         DECIMAL(10, 2)     NOT NULL,
-                Quantidade            FLOAT            NOT NULL,
+                Quantidade            FLOAT              NOT NULL,
                 ValorDesconto         DECIMAL(10, 2)     NOT NULL,
                 ValorTotal            DECIMAL(10, 2)     NOT NULL,
                 [SituacaoFinanceira]  [VARCHAR](30)      COLLATE SQL_Latin1_General_CP1_CI_AI NULL,
@@ -339,35 +347,37 @@ CREATE TABLE [DM_ContratosProdutos].[FatoContratosProdutos]
     (
         -- Chaves Surrogate (Dimensões)
         [SkUF]                      CHAR(2)        NOT NULL,
-		[CodContrato]               VARCHAR(10)    NOT NULL,
+        [CodContrato]               VARCHAR(10)    NOT NULL,
         [SkCategoria]               TINYINT        NOT NULL,
-        [SkProduto]                 INT            NOT NULL,
+        [SkProduto]                 SMALLINT            NOT NULL,
         [SkTipoContrato]            TINYINT        NOT NULL,
         [SkTipoSituacaoContrato]    TINYINT        NOT NULL,
-        [SkClientePagador]          INT            NOT NULL,
-        [SkCliente]                 INT            NOT NULL,
-        [DataVigenciaInicial]		DATE           NOT NULL,
-        [DataVigenciaFinal]			DATE           NOT NULL,
+        [SkClientePagador]          SMALLINT            NOT NULL,
+        [SkCliente]                 SMALLINT            NOT NULL,
+        [DataVigenciaInicial]       DATE           NOT NULL,
+        [DataVigenciaFinal]         DATE           NOT NULL,
         [SkTiposSituacaoFinanceira] TINYINT        NOT NULL,
-        [Data_base]					DATE		   NOT NULL,
-                                                         -- Métricas/Fatos
-		[Periodicidade]       VARCHAR(60)           NOT NULL,
-		PrecoUnitario DECIMAL(10,2)				    NOT NULL,
-		Quantidade SMALLINT							NOT NULL,
-		ValorDesconto DECIMAL(10,2)					NOT NULL,
-		[ValorTotal]             DECIMAL(10, 2)		NOT NULL, -- Valor monetário do contrato
-        [QtdLicencasCIGAM]			SMALLINT		 NOT NULL DEFAULT 0,
-		QuantidadeDiasVigenciaFinal AS  DATEDIFF(DAY,GETDATE(),DataVigenciaFinal),
-		[QtdDiasVigencia]   AS    DATEDIFF(DAY,DataVigenciaInicial,DataVigenciaFinal),
-		Vencido  AS  IIF(DATEDIFF(DAY,DataVigenciaFinal,GETDATE()) > 0,'SIM','NÂO'),
-		[DataCarga]                 DATETIME2(2)   NOT NULL,
-        [DataUltimaAtualizacao]     DATETIME2(2)   NOT NULL DEFAULT GETDATE(),
+        [Data_base]                 DATE           NOT NULL,
+                                                             -- Métricas/Fatos
+        [Periodicidade]             VARCHAR(60)    NOT NULL,
+        PrecoUnitario               DECIMAL(10, 2) NOT NULL,
+        Quantidade                  SMALLINT       NOT NULL,
+        ValorDesconto               DECIMAL(10, 2) NOT NULL,
+        [ValorTotal]                DECIMAL(10, 2) NOT NULL, -- Valor monetário do contrato
+        [QtdLicencasCIGAM]          SMALLINT       NOT NULL
+            DEFAULT 0,
+        QuantidadeDiasVigenciaFinal AS DATEDIFF(DAY, GETDATE(), DataVigenciaFinal),
+        [QtdDiasVigencia]           AS DATEDIFF(DAY, DataVigenciaInicial, DataVigenciaFinal),
+        Vencido                     AS IIF(DATEDIFF(DAY, DataVigenciaFinal, GETDATE()) > 0, 'SIM', 'NÂO'),
+        [DataCarga]                 DATETIME2(2)   NOT NULL,
+        [DataUltimaAtualizacao]     DATETIME2(2)   NOT NULL
+            DEFAULT GETDATE(),
 
-                                                         -- Chave Primária Composta
+                                                             -- Chave Primária Composta
         CONSTRAINT [PK_FatoContratosProdutos]
             PRIMARY KEY CLUSTERED ([SkUF], [SkCliente], [SkProduto], [DataVigenciaInicial], [DataVigenciaFinal]),
 
-                                                         -- Chaves Estrangeiras
+                                                             -- Chaves Estrangeiras
         CONSTRAINT [FK_FatoContratosProdutos_Cliente]
             FOREIGN KEY ([SkCliente])
             REFERENCES [Shared].[DimClientes] ([SkCliente]),
@@ -415,6 +425,10 @@ CREATE NONCLUSTERED INDEX IX_FatoContratosProdutos_SituacaoContrato
     ON [DM_ContratosProdutos].[FatoContratosProdutos] ([SkTipoSituacaoContrato], [SkTiposSituacaoFinanceira])
     INCLUDE ([SkCliente], [QtdLicencasCIGAM], [ValorTotal])
     WITH (DATA_COMPRESSION = PAGE, FILLFACTOR = 95);
+
+
+
+
 
 
 

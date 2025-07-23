@@ -1,241 +1,285 @@
 
+
+
 CREATE OR ALTER PROCEDURE Shared.uspLoadDimClientes
 AS
 BEGIN
 
     BEGIN TRY
 
-        DROP TABLE IF EXISTS #DadosCLientes;
+	DECLARE @quantidadeRegistros INT =
+				(
+					SELECT
+						COUNT(1)
+					FROM
+						Staging.ClientesProdutosCIGAM
+				);
 
-        CREATE TABLE #DadosCLientes
-        (
-            [IdCliente] UNIQUEIDENTIFIER,
-            [SkConselhoFederal] SMALLINT,
-            [NomeCliente] VARCHAR(8000),
-            [SiglaCliente] VARCHAR(30),
-            [UF] VARCHAR(30),
-            [TipoCliente] VARCHAR(8),
-            [Ativo] INT,
-            [IdConselhoFederal] UNIQUEIDENTIFIER,
-            [SiglaConselhoRegional] VARCHAR(250),
-            [SiglaFederal] VARCHAR(50)
-        );
+	DROP TABLE IF EXISTS #DadosCLientes;
 
-        DROP TABLE IF EXISTS #DadosClientesNaoIndenticados;
+	DROP TABLE IF EXISTS #NovosClientes;
 
-        CREATE TABLE #DadosClientesNaoIndenticados
-        (
-            [IdCliente] UNIQUEIDENTIFIER,
-            [SkConselhoFederal] SMALLINT,
-            [NomeCliente] VARCHAR(8000),
-            [SiglaCliente] VARCHAR(30),
-            [SiglaSemUF] VARCHAR(30),
-            [UF] VARCHAR(30),
-            [TipoCliente] VARCHAR(8),
-            [Ativo] INT,
-            [IdConselhoFederal] UNIQUEIDENTIFIER,
-            [SiglaConselhoRegional] VARCHAR(250),
-            [SiglaFederal] VARCHAR(50)
-        );
+	DROP TABLE IF EXISTS #SourceClientes;
 
 
-        ;WITH ClientesUnicos
-        AS (SELECT DISTINCT
-                   Categoria,
-                   SiglaCliente
-            FROM Staging.ClientesProdutosCIGAM),
-              ClientesOLTP
-        AS (SELECT c.IdCliente,
-                   c.IdConselhoFederal,
-                   cfed.SkConselhoFederal,
-                   NomeCliente = REPLACE(
-                                            REPLACE(REPLACE(c.Nome, 'Cons.', 'Conselho'), 'Reg.', 'Regional'),
-                                            'Med.',
-                                            'Medicina'
-                                        ),
-                   c.SiglaConselhoRegional,
-                   cfed.Sigla AS SiglaFederal,
-                   cfed.SkCategoria
-            FROM Implanta.Clientes c
-                JOIN Shared.DimConselhosFederais cfed
-                    ON cfed.IdConselhoFederal = c.IdConselhoFederal),
-              CorrigirNomesERecuperarUF
-        AS (SELECT vinculo.IdCliente,
-                   vinculo.SkConselhoFederal,
-                   REPLACE(
-                              REPLACE(REPLACE(vinculo.NomeCliente, 'Cons.', 'Conselho'), 'Reg.', 'Regional'),
-                              'Med.',
-                              'Medicina'
-                          ) AS NomeCliente,
-                   Uni.SiglaCliente,
-                   UF = CASE
-                            WHEN CHARINDEX('/', Uni.SiglaCliente) = 0 THEN
-                                'BR'
-                            WHEN CHARINDEX('/', Uni.SiglaCliente) > 0 THEN
-                                SUBSTRING(Uni.SiglaCliente, CHARINDEX('/', Uni.SiglaCliente) + 1)
-                        END,
-                   CASE
-                       WHEN vinculo.NomeCliente LIKE '%conselho%'
-                            OR vinculo.NomeCliente LIKE 'CR%' THEN
-                           'Conselho'
-                       ELSE
-                           NULL
-                   END AS TipoCliente,
-                   vinculo.IdConselhoFederal,
-                   vinculo.SiglaConselhoRegional,
-                   vinculo.SiglaFederal
-            FROM ClientesUnicos Uni
-                LEFT JOIN ClientesOLTP vinculo
-                    ON Uni.SiglaCliente = vinculo.SiglaConselhoRegional)
-        INSERT INTO #DadosCLientes
-        (
-            IdCliente,
-            SkConselhoFederal,
-            NomeCliente,
-            SiglaCliente,
-            UF,
-            TipoCliente,
-            Ativo,
-            IdConselhoFederal,
-            SiglaConselhoRegional,
-            SiglaFederal
-        )
-        SELECT cli.IdCliente,
-               cli.SkConselhoFederal,
-               cli.NomeCliente,
-               cli.SiglaCliente,
-               cli.UF,
-               cli.TipoCliente,
-               1 AS Ativo,
-               cli.IdConselhoFederal,
-               cli.SiglaConselhoRegional,
-               cli.SiglaFederal
-        FROM CorrigirNomesERecuperarUF cli;
+	CREATE TABLE #NovosClientes
+		(
+			[IdCliente]             UNIQUEIDENTIFIER,
+			[IdConselhoFederal]     UNIQUEIDENTIFIER,
+			[SiglaConselhoRegional] VARCHAR(30),
+			[Conselho]              VARCHAR(30),
+			[UF]                    VARCHAR(2),
+			[Nome]        VARCHAR(403)
+		);
+
+	CREATE TABLE #SourceClientes
+		(
+			[IdCliente]            UNIQUEIDENTIFIER,
+			[SkConselhoFederal]    SMALLINT,
+			[NomeCliente]          VARCHAR(8000),
+			[SiglaCliente]         VARCHAR(250),
+			[SiglaImplanta]        VARCHAR(250) NULL,
+			[SkCategoria]          SMALLINT,
+			[UF]                   VARCHAR(250),
+			[TipoCliente]          VARCHAR(22),
+			[ClienteAtivoImplanta] BIT 
+		);
 
 
-        WITH ClientesNovos
-        AS (SELECT IdCliente,
-                   SkConselhoFederal,
-                   NomeCliente,
-                   SiglaCliente,
-                   SiglaSemUF = IIF(CHARINDEX('/', SiglaCliente) = 0,
-                                    SiglaCliente,
-                                    SUBSTRING(SiglaCliente, 0, CHARINDEX('/', SiglaCliente))),
-                   UF,
-                   TipoCliente,
-                   Ativo,
-                   IdConselhoFederal,
-                   SiglaConselhoRegional,
-                   SiglaFederal
-            FROM #DadosCLientes
-            WHERE NomeCliente IS NULL)
-        INSERT INTO #DadosClientesNaoIndenticados
-        (
-            IdCliente,
-            SkConselhoFederal,
-            NomeCliente,
-            SiglaCliente,
-            SiglaSemUF,
-            UF,
-            TipoCliente,
-            Ativo,
-            IdConselhoFederal,
-            SiglaConselhoRegional,
-            SiglaFederal
-        )
-        SELECT R.IdCliente,
-               R.SkConselhoFederal,
-               R.NomeCliente,
-               R.SiglaCliente,
-               R.SiglaSemUF,
-               R.UF,
-               R.TipoCliente,
-               R.Ativo,
-               R.IdConselhoFederal,
-               R.SiglaConselhoRegional,
-               R.SiglaFederal
-        FROM ClientesNovos R;
+		;WITH DadosNovosClientes
+		AS (   SELECT DISTINCT
+					  SiglaCliente,
+					  SUBSTRING(SiglaCliente, 0, CHARINDEX('/', SiglaCliente)) AS Conselho,
+					  UF    = IIF( CHARINDEX('/', SiglaCliente) > 0,SUBSTRING(SiglaCliente, CHARINDEX('/', SiglaCliente) + 1, 2),'BR')
+			   FROM
+					  Staging.ClientesProdutosCIGAM
+			   WHERE
+					  SiglaCliente NOT IN
+						  (
+							  SELECT
+								  SiglaConselhoRegional
+							  FROM
+								  Implanta.Clientes
+						  ))
 
+						  INSERT INTO #NovosClientes
+		SELECT
+			NEWID()           AS IdCliente,
+			vinculo.IdConselhoFederal,
+			R.SiglaCliente    AS SiglaConselhoRegional,
+			R.Conselho,
+			R.UF,
+			CONCAT(vinculo.Nome, '/', R.UF) AS Nome
+			FROM
+				DadosNovosClientes R
+				OUTER APPLY
+				(
+					SELECT TOP 1
+						   SUBSTRING(cli.Nome, 0, CHARINDEX('/', cli.Nome)) AS Nome,
+						   cli.IdConselhoFederal
+					FROM
+						   Implanta.Clientes cli
+					WHERE
+						   cli.SiglaConselhoRegional LIKE CONCAT('%', R.Conselho, '%')
+				)                  vinculo;
 		
+				INSERT INTO Implanta.Clientes
+					(
+						IdCliente,
+						IdConselhoFederal,
+						SiglaConselhoRegional,
+						Nome
+					)
+				SELECT IdCliente,
+					   IdConselhoFederal,
+					   SiglaConselhoRegional,
+					   Nome FROM #NovosClientes
+	 
 
+			;WITH DadosClientesImplanta AS (
+			SELECT c.IdCliente,
+					   c.IdConselhoFederal,
+					   cfed.SkConselhoFederal,
+                  
+						cfed.Sigla AS SiglaFederal,
+						 NomeCliente = REPLACE(
+												REPLACE(REPLACE(c.Nome, 'Cons.', 'Conselho'), 'Reg.', 'Regional'),
+												'Med.',
+												'Medicina'
+											),
+					   c.SiglaConselhoRegional AS SiglaCliente,
+                   
+					   cfed.SkCategoria
+				FROM Implanta.Clientes c
+					JOIN Shared.DimConselhosFederais cfed
+						ON cfed.IdConselhoFederal = c.IdConselhoFederal
+			),
+			Resumo AS (
+			SELECT
+						cli.IdCliente,
+						cli.SkConselhoFederal,
+						cli.NomeCliente,
+						cli.SiglaCliente,
+						cli.SkCategoria,
+						UF      = CASE
+									  WHEN CHARINDEX('/', cli.SiglaCliente) = 0
+										  THEN
+										  'BR'
+									  WHEN CHARINDEX('/', cli.SiglaCliente) > 0
+										  THEN
+										  SUBSTRING(cli.SiglaCliente, CHARINDEX('/', cli.SiglaCliente) + 1)
+								  END,
+						ISNULL(   CASE
+									  WHEN cli.NomeCliente LIKE '%conselho%'
+										   OR cli.NomeCliente LIKE 'CR%'
+										   OR cli.NomeCliente LIKE 'CF%'
+										  THEN
+										  'Conselho'
+									  WHEN cli.NomeCliente LIKE '%OAB%'
+										   OR cli.NomeCliente LIKE '%Advocaci%'
+										   OR cli.NomeCliente LIKE '%Advoga%'
+										  THEN
+										  'Ordem dos Advogados'
+									  WHEN cli.NomeCliente LIKE '%Prefeitura%'
+										  THEN
+										  'Prefeitura'
+									  WHEN cli.NomeCliente LIKE '%Serviço%'
+										   OR cli.NomeCliente LIKE '%Servico%'
+										  THEN
+										  'Sistema S'
+									  WHEN cli.NomeCliente LIKE '%Sindicato%'
+										  THEN
+										  'sindicato'
+									  WHEN cli.NomeCliente LIKE '%MÚSICOS%'
+										  THEN
+										  'conselho'
+									  WHEN cli.NomeCliente LIKE '%Economista%'
+										  THEN
+										  'conselho'
+									  WHEN cli.NomeCliente LIKE '%Ministério Público%'
+										  THEN
+										  'M.Público'
+									  WHEN cli.NomeCliente LIKE '%Cooperativa%'
+										  THEN
+										  'Cooperativa'
+									  ELSE
+										  NULL
+								  END, 'Sem Categoria'
+							  ) AS TipoCliente,
+							  IIF(@quantidadeRegistros > 0 AND cliCigam.SiglaCliente IS NULL,0,1) AS ClienteAtivoImplanta
+				FROM
+						DadosClientesImplanta cli
+					LEFT JOIN
+						(
+							SELECT DISTINCT
+								   SiglaCliente
+							FROM
+								   Staging.ClientesProdutosCIGAM -- Talvez aqui no futuro colocar um where Situacao ='?'
+						)              cliCigam
+							ON cliCigam.SiglaCliente = cli.SiglaCliente
+							WHERE cli.IdCliente <> '00000000-0000-0000-0000-000000000000' -- Implanta Informatica
+		
+			)
+			INSERT INTO #SourceClientes
+			    (
+			        IdCliente,
+			        SkConselhoFederal,
+			        NomeCliente,
+			        SiglaCliente,
+			        SkCategoria,
+			        UF,
+			        TipoCliente,
+			        ClienteAtivoImplanta
+			    )
+			SELECT R.IdCliente,
+				   R.SkConselhoFederal,
+				   R.NomeCliente,
+				   R.SiglaCliente,
+				   R.SkCategoria,
+				   R.UF,
+				   R.TipoCliente,
+				   R.ClienteAtivoImplanta FROM Resumo R
 
-        ;WITH MapeamentoDados
-        AS (SELECT NEWID() AS IdCliente,
-                   Vinculo.SkConselhoFederal,
-                   CONCAT(SUBSTRING(Vinculo.NomeCliente, 0, CHARINDEX('/', Vinculo.NomeCliente)), '/', base.UF) AS Nome,
-                   base.SiglaCliente,
-                   base.UF,
-                   Vinculo.TipoCliente,
-                   base.Ativo,
-                   Vinculo.IdConselhoFederal,
-                   Vinculo.SiglaFederal
-            FROM #DadosClientesNaoIndenticados base
-                OUTER APPLY
-            (
-                SELECT TOP 1
-                       SkConselhoFederal,
-                       NomeCliente,
-                       TipoCliente,
-                       IdConselhoFederal,
-                       SiglaConselhoRegional,
-                       SiglaFederal
-                FROM #DadosCLientes
-                WHERE NomeCliente IS NOT NULL
-                      AND SiglaConselhoRegional LIKE base.SiglaSemUF + '%'
-            ) AS Vinculo )
-        UPDATE TARGET
-        SET TARGET.SkConselhoFederal = SOURCE.SkConselhoFederal,
-            TARGET.NomeCliente = SOURCE.Nome,
-            TARGET.TipoCliente = SOURCE.TipoCliente,
-            TARGET.IdConselhoFederal = SOURCE.IdConselhoFederal,
-            TARGET.SiglaFederal = SOURCE.SiglaFederal,
-            TARGET.IdCliente = NEWID()
-        FROM #DadosCLientes TARGET
-            JOIN MapeamentoDados AS SOURCE
-                ON TARGET.SiglaCliente = SOURCE.SiglaCliente
-        WHERE TARGET.NomeCliente IS NULL;
-
-
+			
+			UPDATE target SET target.SiglaImplanta = REPLACE(IIF(TipoCliente ='Conselho' AND UF ='BR', CONCAT(REPLACE(SiglaCliente,'/BR',''),'-BR'),SiglaCliente),'-','/')
+		 FROM #SourceClientes target	
+		
+			
+			
+			UPDATE cli SET cli.SiglaImplanta =regiao.SiglaImplanta FROM #SourceClientes cli
+			JOIN  DM_MetricasClientes.DimClientesRegioes regiao ON regiao.SiglaCliente = cli.SiglaCliente
+			
 
         -- =============================================
         -- IMPLEMENTAÇÃO SCD TIPO 2 PARA DIMENSÃO CLIENTES
         -- =============================================
         
+        PRINT 'Iniciando processo SCD Tipo 2 para DimClientes...';
+        
         -- 1. Identificar registros que mudaram (necessitam nova versão)
         DROP TABLE IF EXISTS #ClientesAlterados;
         CREATE TABLE #ClientesAlterados
         (
-            IdCliente UNIQUEIDENTIFIER,
+            SiglaCliente VARCHAR(250),
             SkClienteAtual INT,
-            NovoNome VARCHAR(100),
-            NovoTipoCliente VARCHAR(20),
-            NovoSkConselhoFederal SMALLINT
+            IdCliente UNIQUEIDENTIFIER,
+            NovoNome VARCHAR(250),
+			NovaSiglaImplanta VARCHAR(50),
+            NovoTipoCliente VARCHAR(22),
+            NovoSkConselhoFederal SMALLINT,
+            NovoUF VARCHAR(250),
+            NovoClienteAtivoImplanta BIT
         );
         
+        -- Identificar clientes que sofreram alterações
         INSERT INTO #ClientesAlterados
+        (
+            SiglaCliente,
+            SkClienteAtual,
+            IdCliente,
+            NovoNome,
+			NovaSiglaImplanta,
+            NovoTipoCliente,
+            NovoSkConselhoFederal,
+            NovoUF,
+            NovoClienteAtivoImplanta
+        )
         SELECT 
-            source.IdCliente,
-            target.SkCliente,
-            source.NomeCliente,
-            source.TipoCliente,
-            source.SkConselhoFederal
-        FROM #DadosCLientes source
-        INNER JOIN Shared.DimClientes target 
-            ON target.IdCliente = source.IdCliente 
-            AND target.VersaoAtual = 1
-        WHERE 
-            target.Nome <> source.NomeCliente COLLATE Latin1_General_CI_AI
-            OR ISNULL(target.TipoCliente, '') <> ISNULL(source.TipoCliente, '') COLLATE Latin1_General_CI_AI
-            OR target.SkConselhoFederal <> source.SkConselhoFederal;
+            src.SiglaCliente,
+            dim.SkCliente,
+            src.IdCliente,
+            src.NomeCliente,
+			src.SiglaImplanta,
+            src.TipoCliente,
+            src.SkConselhoFederal,
+            src.UF,
+            src.ClienteAtivoImplanta
+        FROM #SourceClientes src
+        INNER JOIN Shared.DimClientes dim ON src.SiglaCliente = dim.SiglaCliente
+                                          AND dim.VersaoAtual = 1
+        WHERE (
+            ISNULL(src.NomeCliente, '') <> ISNULL(dim.Nome, '') OR
+            ISNULL(src.TipoCliente, '') <> ISNULL(dim.TipoCliente, '') OR
+            ISNULL(src.SkConselhoFederal, 0) <> ISNULL(dim.SkConselhoFederal, 0) OR
+            ISNULL(src.UF, '') <> ISNULL(dim.Estado, '') OR
+            ISNULL(src.ClienteAtivoImplanta, 0) <> ISNULL(dim.ClienteAtivoImplanta, 0)
+        );
+        
+        DECLARE @ClientesAlterados INT = @@ROWCOUNT;
+        PRINT 'Clientes identificados para atualização (SCD): ' + CAST(@ClientesAlterados AS VARCHAR(10));
         
         -- 2. Fechar versões antigas (definir DataFimVersao e VersaoAtual = 0)
-        UPDATE Shared.DimClientes 
+        UPDATE dim
         SET 
             DataFimVersao = GETDATE(),
             VersaoAtual = 0,
             DataAtualizacao = GETDATE()
-        WHERE SkCliente IN (SELECT SkClienteAtual FROM #ClientesAlterados);
+        FROM Shared.DimClientes dim
+        INNER JOIN #ClientesAlterados alt ON dim.SkCliente = alt.SkClienteAtual;
         
+        PRINT 'Versões antigas fechadas: ' + CAST(@@ROWCOUNT AS VARCHAR(10));
+        
+		
 		
         -- 3. Inserir novas versões para registros alterados
         INSERT INTO Shared.DimClientes
@@ -243,10 +287,12 @@ BEGIN
             IdCliente,
             SkConselhoFederal,
             Nome,
-            Sigla,
+            SiglaCliente,
+			SiglaImplanta,
             Estado,
             TipoCliente,
             Ativo,
+            ClienteAtivoImplanta,
             DataInicioVersao,
             DataFimVersao,
             VersaoAtual,
@@ -257,17 +303,20 @@ BEGIN
             alt.IdCliente,
             alt.NovoSkConselhoFederal,
             alt.NovoNome,
-            source.SiglaCliente,
-            source.UF,
+            alt.SiglaCliente,
+			alt.NovaSiglaImplanta,
+            alt.NovoUF,
             alt.NovoTipoCliente,
             1, -- Ativo
+            alt.NovoClienteAtivoImplanta,
             GETDATE(), -- DataInicioVersao
             NULL, -- DataFimVersao (NULL = versão atual)
             1, -- VersaoAtual
             GETDATE(), -- DataCarga
             GETDATE() -- DataAtualizacao
-        FROM #ClientesAlterados alt
-        INNER JOIN #DadosCLientes source ON alt.IdCliente = source.IdCliente;
+        FROM #ClientesAlterados alt;
+        
+        PRINT 'Novas versões inseridas: ' + CAST(@@ROWCOUNT AS VARCHAR(10));
         
         -- 4. Inserir novos clientes (que não existem na dimensão)
         INSERT INTO Shared.DimClientes
@@ -275,10 +324,12 @@ BEGIN
             IdCliente,
             SkConselhoFederal,
             Nome,
-            Sigla,
+            SiglaCliente,
+			SiglaImplanta,
             Estado,
             TipoCliente,
             Ativo,
+            ClienteAtivoImplanta,
             DataInicioVersao,
             DataFimVersao,
             VersaoAtual,
@@ -286,35 +337,54 @@ BEGIN
             DataAtualizacao
         )
         SELECT 
-            source.IdCliente,
-            source.SkConselhoFederal,
-            source.NomeCliente,
-            source.SiglaCliente,
-            source.UF,
-            source.TipoCliente,
-            source.Ativo,
+            src.IdCliente,
+            src.SkConselhoFederal,
+            src.NomeCliente,
+			src.SiglaCliente,
+			src.SiglaImplanta,
+            src.UF,
+            src.TipoCliente,
+            1, -- Ativo
+            src.ClienteAtivoImplanta,
             GETDATE(), -- DataInicioVersao
             NULL, -- DataFimVersao (NULL = versão atual)
             1, -- VersaoAtual
             GETDATE(), -- DataCarga
             GETDATE() -- DataAtualizacao
-        FROM #DadosCLientes source
+        FROM #SourceClientes src
         WHERE NOT EXISTS (
             SELECT 1 
-            FROM Shared.DimClientes target 
-            WHERE target.Sigla = source.SiglaCliente
+            FROM Shared.DimClientes dim 
+            WHERE dim.SiglaCliente = src.SiglaCliente
         );
-		
         
-        -- 5. Atualizar apenas DataAtualizacao para registros inalterados
-        UPDATE target
-        SET target.DataAtualizacao = GETDATE()
-        FROM Shared.DimClientes target
-        INNER JOIN #DadosCLientes source 
-            ON target.IdCliente = source.IdCliente 
-            AND target.VersaoAtual = 1
-        WHERE target.SkCliente NOT IN (SELECT SkClienteAtual FROM #ClientesAlterados);
+        DECLARE @NovosClientes INT = @@ROWCOUNT;
+        PRINT 'Novos clientes inseridos: ' + CAST(@NovosClientes AS VARCHAR(10));
         
+        -- 5. Desativar clientes que não estão mais na origem (opcional)
+        -- Comentado para preservar histórico, mas pode ser ativado se necessário
+        /*
+        UPDATE dim
+        SET 
+            DataFimVersao = GETDATE(),
+            VersaoAtual = 0,
+            Ativo = 0,
+            DataAtualizacao = GETDATE()
+        FROM Shared.DimClientes dim
+        WHERE dim.VersaoAtual = 1
+          AND NOT EXISTS (
+              SELECT 1 
+              FROM #SourceClientes src 
+              WHERE src.SiglaCliente = dim.SiglaCliente
+          );
+        */
+        
+        -- Limpeza de tabelas temporárias
+        DROP TABLE IF EXISTS #ClientesAlterados;
+        
+        PRINT 'Processo SCD Tipo 2 para DimClientes concluído com sucesso!';
+        PRINT 'Resumo: ' + CAST(@NovosClientes AS VARCHAR(10)) + ' novos clientes, ' + 
+              CAST(@ClientesAlterados AS VARCHAR(10)) + ' clientes atualizados (SCD)';
         
 
 
@@ -330,7 +400,7 @@ BEGIN
 
         -- Log detalhado do erro
         PRINT '========== ERRO NA EXECUÇÃO DA PROCEDURE ==========';
-        PRINT 'Procedure: ' + ISNULL(@ErrorProcedure, 'uspInsertUpdateDw');
+        PRINT 'Procedure: ' + ISNULL(@ErrorProcedure, 'Shared.uspLoadDimClientes');
         PRINT 'Número do Erro: ' + CAST(@ErrorNumber AS VARCHAR(MAX));
         PRINT 'Linha do Erro: ' + CAST(@ErrorLine AS VARCHAR(MAX));
         PRINT 'Mensagem: ' + @ErrorMessage;
@@ -344,3 +414,5 @@ BEGIN
 
     END CATCH;
 END;
+
+

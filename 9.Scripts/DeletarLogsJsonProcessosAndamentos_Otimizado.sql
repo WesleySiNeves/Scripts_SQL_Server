@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS #DadosDeletar;
 
 
-DECLARE @QuantidadeADeletar INT = 500;
+DECLARE @QuantidadeADeletar INT = 1500;
 
 DECLARE @quantiadeRegistrosEncontrados INT = 0;
 DECLARE @quantiadeRegistrosAposDelete INT = 0;

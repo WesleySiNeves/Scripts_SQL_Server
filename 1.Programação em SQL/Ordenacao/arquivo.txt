@@ -1,0 +1,379 @@
+CARGO 14: ANALISTA DE SUPORTE AO NEGÓCIO – ESPECIALIDADE: ANALISTA DE SISTEMAS
+10013914, Aaron de Castro Rocha Zveiter, 14.48, 14, 13.33, 13, 27.81 / 10030835, Abel Feitoza da Costa, 6.21,
+6, 4.10, 4, 10.31 / 10006250, Adrian Soares Lopes, 19.66, 19, 26.67, 26, 46.33 / 10023149, Adriana Mallab
+Moreira Lopes, 19.66, 19, 22.56, 22, 42.22 / 10006812, Adriana Serejo Pantoja, 17.59, 17, 17.44, 17, 35.03 /
+10036651, Adriana Soares de Abreu, 16.55, 16, 20.51, 20, 37.06 / 10010864, Adriano Gomes de Aguiar, 10.34,
+10, 10.26, 10, 20.60 / 10030957, Adriel Caninde Filgueira do Amaral, 15.52, 15, 15.38, 15, 30.90 / 10029047,
+Alan de Mesquita Viegas, 13.45, 13, 18.46, 18, 31.91 / 10015775, Alan Henrique Rangel Ferreira, 14.48, 14,
+18.46, 18, 32.94 / 10011325, Alberi Lemos Mendanha de Paula, 10.34, 10, 17.44, 17, 27.78 / 10003066, Aldo
+Lopes Fernandes, 15.52, 15, 9.23, 9, 24.75 / 10008333, Alex dos Santos Bomtempo, 10.34, 10, 16.41, 16,
+26.75 / 10023331, Alex Fernandes Bezerra Alves, 13.45, 13, 19.49, 19, 32.94 / 10004909, Alex Pereira da
+Costa, 11.38, 11, 19.49, 19, 30.87 / 10003197, Alexandre Barbosa da Silva, 8.28, 8, 11.28, 11, 19.56 /
+10000868, Alexandre de Godoi Rodrigues, 16.55, 16, 18.46, 18, 35.01 / 10036658, Alexandre Oliveira de
+Freitas, 22.76, 22, 23.59, 23, 46.35 / 10016016, Alexandre Roberto Gualter Bastos, 15.52, 15, 16.41, 16, 31.93
+/ 10020611, Alexandre Silva Alves, 12.41, 12, 15.38, 15, 27.79 / 10027008, Alexssander Carvalho Neves, 14.48,
+14, 15.38, 15, 29.86 / 10015225, Alicia Rita Oliveira dos Reis, 12.41, 12, 16.41, 16, 28.82 / 10002306, Aline
+Mitiko Otsubo, 15.52, 15, 22.56, 22, 38.08 / 10018635, Alison Torres Ribeiro, 16.55, 16, 24.62, 24, 41.17 /
+10037555, Alisson da Silva Pereira, 18.62, 18, 21.54, 21, 40.16 / 10001967, Alvaro Pereira Gomes, 13.45, 13,
+17.44, 17, 30.89 / 10013989, Amanda Silvestre Castro Miranda, 13.45, 13, 14.36, 14, 27.81 / 10027650, Ana
+Beatriz Scott Gurra Marques, 8.28, 8, 16.41, 16, 24.69 / 10005729, Ana Carolina Rodrigues Leite, 16.55, 16,
+13.33, 13, 29.88 / 10002385, Ana Gersica da Silva Goncalo, 12.41, 12, 17.44, 17, 29.85 / 10030928, Ana Giulia
+dos Anjos Santos, 9.31, 9, 19.49, 19, 28.80 / 10033637, Ana Julia Franca de Oliveira, 11.38, 11, 11.28, 11,
+22.66 / 10004600, Ana Lidia Moura Cavalcante, 20.69, 20, 19.49, 19, 40.18 / 10004146, Ana Maria
+Carvalheiro, 14.48, 14, 19.49, 19, 33.97 / 10002444, Ana Paula Moraes de Azevedo, 16.55, 16, 18.46, 18,
+35.01 / 10009620, Ana Paula Silva de Sousa, 16.55, 16, 15.38, 15, 31.93 / 10038809, Anderson Felix Pereira
+da Silva, 16.55, 16, 6.15, 6, 22.70 / 10018159, Anderson Philipe Fonseca de Oliveira, 15.52, 15, 21.54, 21,
+37.06 / 10031754, Anderson Renato de Lima Nobre, 10.34, 10, 19.49, 19, 29.83 / 10019379, Andre Alfredo
+Andrade Cruz, 15.52, 15, 19.49, 19, 35.01 / 10003078, Andre de Carvalho Pereira, 17.59, 17, 25.64, 25, 43.23
+/ 10022051, Andre de Oliveira Clovandi, 17.59, 17, 16.41, 16, 34.00 / 10030593, Andre Eugenio Ferreira,
+15.52, 15, 16.41, 16, 31.93 / 10004766, Andre Luiz Dias de Oliveira, 14.48, 14, 18.46, 18, 32.94 / 10040262,
+Andre Moreira Costa, 8.28, 8, 4.10, 4, 12.38 / 10001502, Andre Tamiarana Canetta, 17.59, 17, 19.49, 19, 37.08
+/ 10003858, Andre Vinicius Gomes Bezerra, 12.41, 12, 11.28, 11, 23.69 / 10023419, Antonia Luiza Quaresma,
+17.59, 17, 9.23, 9, 26.82 / 10031084, Antonio Alyson Araujo Leite, 16.55, 16, 18.46, 18, 35.01 / 10013301,
+Antonio de Padua Aguiar Filho, 14.48, 14, 18.46, 18, 32.94 / 10030717, Antonio dos Santos Figueiredo Araujo,
+13.45, 13, 16.41, 16, 29.86 / 10029681, Antonio Luis Sombra de Medeiros, 23.79, 23, 30.77, 30, 54.56 /
+10033723, Antony Vinicius de Souza Cunha, 6.21, 6, 8.21, 8, 14.42 / 10034891, Aristides Belarmino Gomes,
+10.34, 10, 16.41, 16, 26.75 / 10025318, Arnaldo de Sena Santos, 17.59, 17, 24.62, 24, 42.21 / 10027815,
+Arnaldo Lopes dos Santos, 15.52, 15, 16.41, 16, 31.93 / 10017119, Arthur Barbosa Freitas, 10.34, 10, 4.10, 4,
+14.44 / 10003422, Arthur de Carvalho Pereira, 11.38, 11, 12.31, 12, 23.69 / 10004875, Arthur Felipe da Silva
+Matos, 8.28, 8, 10.26, 10, 18.54 / 10031943, Arthur Ferreira Teixeira, 9.31, 9, 14.36, 14, 23.67 / 10030550,
+Arthur Fidelis de Souza Fernandes, 12.41, 12, 14.36, 14, 26.77 / 10017058, Arthur Luiz de Franca, 10.34, 10,
+11.28, 11, 21.62 / 10010775, Aryanne Thayz das Chagas Manzan, 12.41, 12, 10.26, 10, 22.67 / 10006219,
+Aryene Campos do Nascimento, 9.31, 9, 15.38, 15, 24.69 / 10016226, Athreyo Adryann Barbosa Marfizio,
+11.38, 11, 10.26, 10, 21.64 / 10016700, Augusto Soares de Souza, 14.48, 14, 16.41, 16, 30.89 / 10007523,
+Ayllah Ahmad Lopes, 17.59, 17, 19.49, 19, 37.08 / 10023930, Ayrton Gissoni Almeida, 17.59, 17, 27.69, 27,
+45.28 / 10000077, Bianca Ferreira Caetano, 13.45, 13, 18.46, 18, 31.91 / 10018997, Breno Barbosa de
+Andrade Duarte, 21.72, 21, 25.64, 25, 47.36 / 10027127, Breno Braga Galvao, 18.62, 18, 15.38, 15, 34.00 /
+10031367, Breno Guedes Martinelli, 12.41, 12, 12.31, 12, 24.72 / 10013723, Breno Thomas Vieira de
+Carvalho, 18.62, 18, 18.46, 18, 37.08 / 10033739, Brunno de Araujo Goncalves, 8.28, 8, 8.21, 8, 16.49 /
+10034966, Bruno dos Santos Messias, 18.62, 18, 22.56, 22, 41.18 / 10020837, Bruno Ribeiro de Oliveira,
+15.52, 15, 18.46, 18, 33.98 / 10011003, Bruno Silva Santos, 16.55, 16, 16.41, 16, 32.96 / 10031215, Bruno
+Tolentino de Amorim, 14.48, 14, 23.59, 23, 38.07 / 10012978, Bryan Barbosa de Lima, 14.48, 14, 14.36, 14,
+28.84 / 10032410, Caio Freitas Guimaraes Moreira Lima, 14.48, 14, 15.38, 15, 29.86 / 10036925, Caio Leonni
+Santana e Silva, 9.31, 9, 7.18, 7, 16.49 / 10019571, Caio Oliveira Marques, 22.76, 22, 25.64, 25, 48.40 /
+10007367, Caio Sanlay Araujo Amorim, 18.62, 18, 2.05, 2, 20.67 / 10040211, Caio Viana de Azeredo, 10.34,
+10, 17.44, 17, 27.78 / 10033692, Caio Victor, 12.41, 12, 16.41, 16, 28.82 / 10004638, Caio Vinicius Rodrigues
+Moreira, 13.45, 13, 23.59, 23, 37.04 / 10037644, Calebe Josue da Silva Campos, 13.45, 13, 10.26, 10, 23.71 /
+10022011, Camila Ramos Souza dos Santos, 17.59, 17, 20.51, 20, 38.10 / 10005925, Carliene Vieira Brasileiro,
+7.24, 7, 9.23, 9, 16.47 / 10038309, Carlos de Laet Azevedo Braga Neto, 17.59, 17, 18.46, 18, 36.05 / 10004387,
+Carmen Leila da Costa Terra das Neves Marra da Silveira, 15.52, 15, 12.31, 12, 27.83 / 10015951, Cassio
+Adriano Barroso da Silva, 14.48, 14, 11.28, 11, 25.76 / 10000659, Cecilia Margarete Heinen, 17.59, 17, 18.46,
+18, 36.05 / 10036355, Charlene Bezerra da Silva, 16.55, 16, 15.38, 15, 31.93 / 10033899, Charles Junior de
+Miranda Fernandes, 16.55, 16, 22.56, 22, 39.11 / 10006156, Clara Regia Nascimento Carioca, 9.31, 9, 12.31,
+12, 21.62 / 10016277, Clarice Valdivia Costa Guerra, 11.38, 11, 9.23, 9, 20.61 / 10028042, Clauder Noronha
+de Carvalho, 12.41, 12, 21.54, 21, 33.95 / 10026278, Claudia Maria de Sousa, 11.38, 11, 14.36, 14, 25.74 /
+10017161, Clayton da Silva Lobato, 11.38, 11, 12.31, 12, 23.69 / 10003541, Cleber Brilhante de Albuquerque
+Neto, 20.69, 20, 14.36, 14, 35.05 / 10041012, Cristian de Paula Braga Correia, 17.59, 17, 17.44, 17, 35.03 /
+10013701, Crystiane Andrade Sousa Tiemann, 10.34, 10, 13.33, 13, 23.67 / 10028022, Daniel de Paiva Rath,
+18.62, 18, 18.46, 18, 37.08 / 10017048, Daniel Kennedy de Souza Batalha, 18.62, 18, 10.26, 10, 28.88 /
+10007291, Daniel Lins Rodriguez, 20.69, 20, 23.59, 23, 44.28 / 10041168, Daniel Pinto Caldeira, 11.38, 11,
+19.49, 19, 30.87 / 10023306, Daniel Silva Pereira, 13.45, 13, 14.36, 14, 27.81 / 10034518, Daniel Vitor Ribeiro
+da Silva, 13.45, 13, 13.33, 13, 26.78 / 10035134, Danilo dos Santos Cardoso, 19.66, 19, 20.51, 20, 40.17 /
+10035755, Danilo Gomes de Medeiros, 11.38, 11, 20.51, 20, 31.89 / 10021412, Danilo Teixeira de Sousa, 8.28,
+8, 14.36, 14, 22.64 / 10030326, Davi Costa Silva, 23.79, 23, 21.54, 21, 45.33 / 10026094, Davi Jesus de Almeida
+Paturi, 19.66, 19, 27.69, 27, 47.35 / 10003216, Davi Sales Barcelos, 19.66, 19, 22.56, 22, 42.22 / 10007236,
+David Ewerson Nicolini Pereira, 10.34, 10, 9.23, 9, 19.57 / 10007697, Dayane Santos da Silveira Amaral, 11.38,
+11, 8.21, 8, 19.59 / 10039933, Deborah Barbosa Silva Floriano, 22.76, 22, 17.44, 17, 40.20 / 10006600, Denis
+Adonis de Novaes Rego, 12.41, 12, 13.33, 13, 25.74 / 10031899, Derick Zitzke, 16.55, 16, 14.36, 14, 30.91 /
+10030037, Deyvid Areas Silva, 13.45, 13, 22.56, 22, 36.01 / 10027938, Diego Cajuzeiro Silva, 15.52, 15, 17.44,
+17, 32.96 / 10021141, Diego Fernandes dos Santos, 17.59, 17, 27.69, 27, 45.28 / 10002625, Diego Fernando
+Correia Monteiro dos Santos, 9.31, 9, 16.41, 16, 25.72 / 10015032, Diego Furtado Abrantes de Melo, 15.52,
+15, 22.56, 22, 38.08 / 10021014, Diego Lucas de Sousa, 20.69, 20, 19.49, 19, 40.18 / 10028930, Diego Oliveira
+de Carvalho, 16.55, 16, 16.41, 16, 32.96 / 10029846, Diego Samuel Alves, 14.48, 14, 21.54, 21, 36.02 /
+10013601, Diego Yoshio Falcao Matsunaga, 11.38, 11, 18.46, 18, 29.84 / 10032227, Dielton da Silva Sousa,
+6.21, 6, 10.26, 10, 16.47 / 10026092, Dimas Sulz Gonsalves Filho, 17.59, 17, 22.56, 22, 40.15 / 10017829,
+Dione Alves de Oliveira, 16.55, 16, 20.51, 20, 37.06 / 10032146, Dione Sudario da Silva, 11.38, 11, 14.36, 14,
+25.74 / 10004126, Domingos Sousa Alves, 13.45, 13, 17.44, 17, 30.89 / 10033707, Douglas Souza Silva, 5.17,
+5, 11.28, 11, 16.45 / 10000495, Douglas Wilson Vieira dos Santos, 21.72, 21, 20.51, 20, 42.23 / 10003098,
+Duilio Rodrigo Torres Filho, 17.59, 17, 22.56, 22, 40.15 / 10027283, Dyane Rodrigues Oliveira, 12.41, 12,
+11.28, 11, 23.69 / 10017066, Eder Ferreira de Andrade, 9.31, 9, 10.26, 10, 19.57 / 10024293, Edivan Pereira
+dos Santos, 15.52, 15, 10.26, 10, 25.78 / 10017187, Edivania Alves da Costa, 18.62, 18, 10.26, 10, 28.88 /
+10032256, Edson Henrique de Sousa Lima, 13.45, 13, 15.38, 15, 28.83 / 10018693, Eduardo Alessandro de
+Carvalho, 12.41, 12, 15.38, 15, 27.79 / 10036697, Eduardo Augusto Crozarioli Lopes Filho, 18.62, 18, 28.72,
+28, 47.34 / 10030435, Eduardo Barbosa Pereira, 15.52, 15, 13.33, 13, 28.85 / 10029195, Eduardo Chin
+Ohtoshi, 23.79, 23, 22.56, 22, 46.35 / 10023284, Eduardo Gomes Marra, 15.52, 15, 14.36, 14, 29.88 /
+10031547, Eduardo Santos Diniz, 15.52, 15, 25.64, 25, 41.16 / 10009096, Eduardo Siqueira de Souza, 20.69,
+20, 18.46, 18, 39.15 / 10033041, Elbeth Ribeiro, 14.48, 14, 17.44, 17, 31.92 / 10010737, Elder Fernandes de
+Oliveira, 14.48, 14, 18.46, 18, 32.94 / 10030978, Eldom Pinto Costa, 12.41, 12, 10.26, 10, 22.67 / 10005981,
+Eliane dos Santos Costa, 14.48, 14, 11.28, 11, 25.76 / 10013546, Elias Dionizio Nogueira, 14.48, 14, 7.18, 7,
+21.66 / 10029084, Elias Teles de Alcantra, 9.31, 9, 13.33, 13, 22.64 / 10039764, Emerson Santos Tavares,
+14.48, 14, 14.36, 14, 28.84 / 10018468, Emilly Gabrielly Gatinho Oliveira, 4.14, 4, 16.41, 16, 20.55 / 10000866,
+Endrigo Cardoso Magalhaes, 11.38, 11, 10.26, 10, 21.64 / 10002602, Enelson Gomes Rodrigues, 19.66, 19,
+19.49, 19, 39.15 / 10016345, Enzo Calasans Cardoso Correa da Costa, 12.41, 12, 14.36, 14, 26.77 / 10017953,
+Enzo Rodrigues Padilha, 9.31, 9, 11.28, 11, 20.59 / 10002935, Eric Luiz Rodrigues de Franca, 17.59, 17, 22.56,
+22, 40.15 / 10033544, Erick Rinald Alves Silva, 12.41, 12, 13.33, 13, 25.74 / 10022440, Erick Silva Araujo, 6.21,
+6, 14.36, 14, 20.57 / 10020786, Erico de Almeida dos Santos, 20.69, 20, 20.51, 20, 41.20 / 10025238, Erik
+Machado de Andrade, 13.45, 13, 4.10, 4, 17.55 / 10029382, Erina Vitoria Ribeiro Gomes, 13.45, 13, 12.31, 12,
+25.76 / 10036526, Erion Dias Monteiro, 15.52, 15, 18.46, 18, 33.98 / 10021676, Eryka Bruna de Oliveira
+Albuquerque, 18.62, 18, 17.44, 17, 36.06 / 10035572, Esdras Tenorio Mendes, 14.48, 14, 16.41, 16, 30.89 /
+10027482, Esther Afonso Pereira Silva, 7.24, 7, 14.36, 14, 21.60 / 10011940, Ethan Correa Matias, 13.45, 13,
+18.46, 18, 31.91 / 10018978, Fabio Ataide Castro Martins, 14.48, 14, 20.51, 20, 34.99 / 10024906, Fabio da
+Silva Craveiro, 7.24, 7, 6.15, 6, 13.39 / 10020193, Fabio Ferreira de Souza, 16.55, 16, 18.46, 18, 35.01 /
+10003594, Fabio Junior Martins da Rocha, 10.34, 10, 12.31, 12, 22.65 / 10019709, Felipe Carvalho Oliveira,
+13.45, 13, 24.62, 24, 38.07 / 10019188, Felipe Farinha da Costa, 11.38, 11, 15.38, 15, 26.76 / 10036857,
+Fernanda Rocha dos Santos, 6.21, 6, 6.15, 6, 12.36 / 10029503, Fernando Chin Ohtoshi, 21.72, 21, 17.44, 17,
+39.16 / 10017745, Fernando da Rocha Moreira, 15.52, 15, 10.26, 10, 25.78 / 10022428, Filipe Fernandes de
+Oliveira Nascimento, 14.48, 14, 22.56, 22, 37.04 / 10033232, Filipe Gomes Vitorino, 7.24, 7, 12.31, 12, 19.55
+/ 10004213, Filipe Goncalves Botelho, 17.59, 17, 19.49, 19, 37.08 / 10009631, Filipe Guimaraes de Oliveira,
+17.59, 17, 19.49, 19, 37.08 / 10003497, Filipe Jacobson Marra, 11.38, 11, 16.41, 16, 27.79 / 10034781, Filipe
+Monteiro de Medeiros, 9.31, 9, 12.31, 12, 21.62 / 10031511, Filipe Moreira Gandra dos Santos, 12.41, 12,
+13.33, 13, 25.74 / 10001326, Flavia Cristina de Castro Soares, 24.83, 24, 28.72, 28, 53.55 / 10006037, Flavio
+Caixeta da Mota, 7.24, 7, 13.33, 13, 20.57 / 10014502, Flavio Henrique de Souza Silva, 9.31, 9, 16.41, 16,
+25.72 / 10017279, Gabriel Abreu Albuquerque, 16.55, 16, 22.56, 22, 39.11 / 10003818, Gabriel Angelo Braga
+Fernandes, 12.41, 12, 15.38, 15, 27.79 / 10018608, Gabriel Antonio dos Santos Castro, 14.48, 14, 14.36, 14,
+28.84 / 10036487, Gabriel Arthur Ferreira Fiusa, 9.31, 9, 16.41, 16, 25.72 / 10008980, Gabriel Bahia, 9.31, 9,
+13.33, 13, 22.64 / 10037465, Gabriel Brognoli Lopes e Silva, 12.41, 12, 13.33, 13, 25.74 / 10012649, Gabriel
+Carlos Veras Lima, 14.48, 14, 14.36, 14, 28.84 / 10029567, Gabriel Carrasco Queiroz, 19.66, 19, 19.49, 19,
+39.15 / 10026804, Gabriel Cesar Veloso de Oliveira, 16.55, 16, 24.62, 24, 41.17 / 10032324, Gabriel de Freitas
+Campos, 13.45, 13, 13.33, 13, 26.78 / 10012537, Gabriel de Oliveira Torezan, 14.48, 14, 9.23, 9, 23.71 /
+10038651, Gabriel do Espirito Santo Moura, 15.52, 15, 24.62, 24, 40.14 / 10039568, Gabriel Felipe Araujo de
+Oliveira, 17.59, 17, 20.51, 20, 38.10 / 10033636, Gabriel Ferreira Leonardo de Lima, 13.45, 13, 8.21, 8, 21.66
+/ 10036739, Gabriel Ferreira Sena, 9.31, 9, 8.21, 8, 17.52 / 10006768, Gabriel Henrique Souza de Melo, 20.69,
+20, 24.62, 24, 45.31 / 10030289, Gabriel Lucas Silva, 16.55, 16, 15.38, 15, 31.93 / 10001484, Gabriel
+Magalhaes Martins, 12.41, 12, 12.31, 12, 24.72 / 10026115, Gabriel Marinho dos Santos, 15.52, 15, 16.41, 16,
+31.93 / 10009724, Gabriel Mendonca Fernandes, 15.52, 15, 16.41, 16, 31.93 / 10034448, Gabriel Monteiro
+Soares, 16.55, 16, 33.85, 33, 50.40 / 10016244, Gabriel Moreira Lemes, 11.38, 11, 15.38, 15, 26.76 /
+10036731, Gabriel Naves da Silva, 21.72, 21, 27.69, 27, 49.41 / 10010377, Gabriel Neves Alves da Costa, 13.45,
+13, 11.28, 11, 24.73 / 10038930, Gabriel Rodrigues Martins, 12.41, 12, 4.10, 4, 16.51 / 10020355, Gabriel
+Santos Teixeira, 13.45, 13, 19.49, 19, 32.94 / 10029559, Gabriel Souza Franco, 11.38, 11, 12.31, 12, 23.69 /
+10024700, Gabriela Albarado de Almeida, 16.55, 16, 22.56, 22, 39.11 / 10030497, Gabriela Alves da Gama,
+16.55, 16, 16.41, 16, 32.96 / 10026765, Gabriela Caires Soares, 5.17, 5, 10.26, 10, 15.43 / 10022147, Gabriela
+Coutinho Sales, 12.41, 12, 19.49, 19, 31.90 / 10002858, Gabriela Meira de Souza, 20.69, 20, 23.59, 23, 44.28
+/ 10019287, George Fabricio Santos Rodrigues, 13.45, 13, 16.41, 16, 29.86 / 10036631, Geovanne da Silva
+Andrade, 10.34, 10, 20.51, 20, 30.85 / 10026955, Geovanni Fernandes Fioretti da Silva, 14.48, 14, 15.38, 15,
+29.86 / 10033333, Gianlucca Pereira de Borba Rocha, 13.45, 13, 13.33, 13, 26.78 / 10008463, Giovana da Silva
+Sousa, 10.34, 10, 10.26, 10, 20.60 / 10019091, Giovane Ferreira Costa, 14.48, 14, 12.31, 12, 26.79 / 10023349,
+Giovanna Sampaio Bezerra, 16.55, 16, 10.26, 10, 26.81 / 10005427, Glauber de Carvalho Rispoli, 9.31, 9,
+15.38, 15, 24.69 / 10003490, Glebson Gonzaga Pereira da Silva, 12.41, 12, 9.23, 9, 21.64 / 10018077, Gleison
+Tavares Ramos da Silva, 16.55, 16, 10.26, 10, 26.81 / 10030444, Guido Yuri Esteves Oliveira, 12.41, 12, 13.33,
+13, 25.74 / 10020165, Guilherme Alves de Souza, 12.41, 12, 15.38, 15, 27.79 / 10034985, Guilherme Antonio
+Deusdara Banci, 19.66, 19, 22.56, 22, 42.22 / 10025005, Guilherme Claudio Marques Lima, 15.52, 15, 14.36,
+14, 29.88 / 10000939, Guilherme de Paula Fernandes, 10.34, 10, 16.41, 16, 26.75 / 10025943, Guilherme de
+Sousa Borges, 7.24, 7, 12.31, 12, 19.55 / 10027335, Guilherme Mariz Holanda, 14.48, 14, 21.54, 21, 36.02 /
+10007760, Guilherme Moraes Campelo, 17.59, 17, 11.28, 11, 28.87 / 10009459, Guilherme Neves Souza,
+17.59, 17, 22.56, 22, 40.15 / 10033873, Guilherme Nunes Ribeiro, 15.52, 15, 11.28, 11, 26.80 / 10027563,
+Gustavo Camargo da Silva, 14.48, 14, 17.44, 17, 31.92 / 10003196, Gustavo Guntzel de Souza, 16.55, 16,
+21.54, 21, 38.09 / 10016602, Gustavo Henrique Alves Rodrigues, 17.59, 17, 22.56, 22, 40.15 / 10029280,
+Gustavo Henrique Rodrigues Carvalho de S, 12.41, 12, 18.46, 18, 30.87 / 10013355, Gustavo Rodrigues de
+Lima, 10.34, 10, 16.41, 16, 26.75 / 10001530, Gustavo Soares Lacerda, 15.52, 15, 15.38, 15, 30.90 / 10038203,
+Gustavo Vieira Messias, 12.41, 12, 9.23, 9, 21.64 / 10011320, Harryson Campos Martins, 15.52, 15, 18.46, 18,
+33.98 / 10017089, Helton Araujo da Silva, 18.62, 18, 11.28, 11, 29.90 / 10014430, Henrique Augusto Coelho,
+18.62, 18, 20.51, 20, 39.13 / 10024197, Henrique de Lemos Gomes, 15.52, 15, 18.46, 18, 33.98 / 10019596,
+Henrique Lira Gomes, 9.31, 9, 14.36, 14, 23.67 / 10032723, Henrique Oliveira dos Reis, 10.34, 10, 11.28, 11,
+21.62 / 10009474, Henrique Rocha Cordeiro, 16.55, 16, 23.59, 23, 40.14 / 10012662, Hercules Fortes de
+Andrade, 14.48, 14, 22.56, 22, 37.04 / 10040586, Heveraldo Garcia Valadares da Silva, 9.31, 9, 9.23, 9, 18.54
+/ 10033535, Heverson Luiz Martins Campos, 13.45, 13, 9.23, 9, 22.68 / 10006623, Hezio Silva dos Santos,
+12.41, 12, 14.36, 14, 26.77 / 10004631, Higo Melo Farias Mourao, 11.38, 11, 11.28, 11, 22.66 / 10005763,
+Higor Paulo da Visitacao, 15.52, 15, 18.46, 18, 33.98 / 10021677, Hudson da Silva Aires, 15.52, 15, 15.38, 15,
+30.90 / 10031434, Hudson Gustavo Oliveira Teles, 5.17, 5, 12.31, 12, 17.48 / 10016210, Iago Costa Silva,
+14.48, 14, 17.44, 17, 31.92 / 10022914, Idelfonso Alves dos Santos, 18.62, 18, 17.44, 17, 36.06 / 10032271,
+Igor Barros de Sousa, 8.28, 8, 19.49, 19, 27.77 / 10018409, Igor de Alcantara Rabelo, 15.52, 15, 21.54, 21,
+37.06 / 10007206, Igor Montenegro de Souza, 13.45, 13, 9.23, 9, 22.68 / 10021531, Irislenisson de Souza
+Oliveira, 13.45, 13, 21.54, 21, 34.99 / 10003375, Isaac Goncalves da Silva, 9.31, 9, 11.28, 11, 20.59 / 10022820,
+Isaac Silva Martins, 10.34, 10, 20.51, 20, 30.85 / 10037219, Isabel Cristina da Silva, 9.31, 9, 7.18, 7, 16.49 /
+10015345, Isabela Luna Oliveira, 14.48, 14, 11.28, 11, 25.76 / 10009637, Isabela Saraiva Laranjeira, 10.34, 10,
+11.28, 11, 21.62 / 10003876, Isac Mamede Pereira Santos, 18.62, 18, 16.41, 16, 35.03 / 10031038, Isac
+Ramalho de Lima, 18.62, 18, 15.38, 15, 34.00 / 10023925, Isaque Augusto da Silva Santos, 17.59, 17, 24.62,
+24, 42.21 / 10039017, Itallo Rodrigues Pereira Duarte, 8.28, 8, 6.15, 6, 14.43 / 10033917, Italo Bandeira de
+Sousa Freire, 14.48, 14, 9.23, 9, 23.71 / 10014457, Italo Lopo Matos, 14.48, 14, 13.33, 13, 27.81 / 10012459,
+Italo Rodrigo Moreira Borges, 16.55, 16, 22.56, 22, 39.11 / 10003162, Ivan Schwanka Penna, 16.55, 16, 20.51,
+20, 37.06 / 10023056, Izabela Ferreira Braga Bueno, 15.52, 15, 11.28, 11, 26.80 / 10013151, Izabela Gomes
+Pereira, 10.34, 10, 13.33, 13, 23.67 / 10016914, Izabella Christina Brandao Silva, 12.41, 12, 20.51, 20, 32.92 /
+10013707, Izael Julio Silva, 18.62, 18, 25.64, 25, 44.26 / 10035659, James Batista Figueiredo, 12.41, 12, 20.51,
+20, 32.92 / 10020988, Jaqueline Couto Moreira, 10.34, 10, 17.44, 17, 27.78 / 10032049, Jaqueline Sa Santos,
+9.31, 9, 11.28, 11, 20.59 / 10002542, Jedson Soares Mariano, 10.34, 10, 11.28, 11, 21.62 / 10024689, Jefferson
+Abdel da Conceicao Souza, 11.38, 11, 16.41, 16, 27.79 / 10033293, Jefferson Pereira da Silva, 18.62, 18, 25.64,
+25, 44.26 / 10038340, Jesiel Dias Vasconcelos, 10.34, 10, 13.33, 13, 23.67 / 10008596, Jessica Alida Valenca
+Padilha, 14.48, 14, 13.33, 13, 27.81 / 10022374, Jessica Nunes Neves, 22.76, 22, 18.46, 18, 41.22 / 10024478,
+Jhean Victo Barbosa Almeida, 15.52, 15, 18.46, 18, 33.98 / 10031791, Jhonathan Gabriel Oliveira de Jesus,
+16.55, 16, 8.21, 8, 24.76 / 10036270, Jhone Silva de Souza Justino, 17.59, 17, 19.49, 19, 37.08 / 10011512,
+Jiuseppe Ribeiro Cintra, 16.55, 16, 15.38, 15, 31.93 / 10026298, Joab Rocha de Oliveira, 13.45, 13, 9.23, 9,
+22.68 / 10011413, Joao Felipe da Silva Gomes, 12.41, 12, 14.36, 14, 26.77 / 10006171, Joao Kleber Magalhaes
+dos Santos, 19.66, 19, 20.51, 20, 40.17 / 10027413, Joao Lucas Silva Ferreira, 13.45, 13, 17.44, 17, 30.89 /
+10019116, Joao Pedro Antonio dos Santos Castro, 8.28, 8, 13.33, 13, 21.61 / 10016809, Joao Pedro Costa
+Vitorino Lima, 9.31, 9, 6.15, 6, 15.46 / 10003565, Joao Pedro de Magalhaes Coutinho, 15.52, 15, 20.51, 20,
+36.03 / 10013084, Joao Victor Alves da Costa, 10.34, 10, 7.18, 7, 17.52 / 10029408, Joao Victor Batista
+Sampaio, 18.62, 18, 12.31, 12, 30.93 / 10008339, Joao Victor Campos Souza Oliveira, 15.52, 15, 17.44, 17,
+32.96 / 10022068, Joao Victor Guimaraes Cavalcanti, 14.48, 14, 20.51, 20, 34.99 / 10021735, Joao Victor
+Oliveira Mendes, 13.45, 13, 7.18, 7, 20.63 / 10015423, Joao Victor Xavier Jorge, 16.55, 16, 21.54, 21, 38.09 /
+10033147, Joao Vitor Guerra de Souza, 10.34, 10, 12.31, 12, 22.65 / 10024419, Joao Vitor Lacerda de Matteo,
+6.21, 6, 13.33, 13, 19.54 / 10036851, Jobson Ferreira Calixto, 3.10, 3, 14.36, 14, 17.46 / 10027113, Joene
+Carrilho Fernandes, 11.38, 11, 9.23, 9, 20.61 / 10015480, Johnnyel Galvao da Silva, 7.24, 7, 8.21, 8, 15.45 /
+10004057, Johny Victor Rodrigues Lemos, 9.31, 9, 8.21, 8, 17.52 / 10023204, Joice Alves Neres, 7.24, 7, 11.28,
+11, 18.52 / 10033177, Jonas Prado Soares, 22.76, 22, 28.72, 28, 51.48 / 10020710, Jonathan Michael Pinheiro
+da Silva, 16.55, 16, 23.59, 23, 40.14 / 10010426, Jonathan Nobre da Rocha, 14.48, 14, 21.54, 21, 36.02 /
+10011787, Jorge Lucas Carvalho Silva, 16.55, 16, 16.41, 16, 32.96 / 10001281, Jorge Porfirio da Silva, 9.31, 9,
+11.28, 11, 20.59 / 10033542, Jose Augusto Chaves Izabel, 14.48, 14, 20.51, 20, 34.99 / 10023878, Jose Matias
+de Santana, 13.45, 13, 24.62, 24, 38.07 / 10015257, Jose Mauro Goncalves Junior, 13.45, 13, 22.56, 22, 36.01
+/ 10035236, Jose Roberto Costa Sidney Garcia, 18.62, 18, 17.44, 17, 36.06 / 10010336, Jose Vitorino Cruz
+Silva, 15.52, 15, 21.54, 21, 37.06 / 10013160, Julia Ribeiro Souza Oliveira, 12.41, 12, 16.41, 16, 28.82 /
+10039222, Julia Sousa de Oliveira, 17.59, 17, 8.21, 8, 25.80 / 10025868, Juliana de Carvalho Fernandes Veras,
+12.41, 12, 15.38, 15, 27.79 / 10020344, Juliana Naiomi Nunes Toratani, 16.55, 16, 16.41, 16, 32.96 /
+10039120, Kaio Lucas Araujo Silva, 8.28, 8, 11.28, 11, 19.56 / 10028919, Kaio Ribeiro Rodrigues, 16.55, 16,
+13.33, 13, 29.88 / 10004847, Kaique Freitas Santos, 10.34, 10, 7.18, 7, 17.52 / 10015466, Karla Chaiane da
+Silva Feliciano, 17.59, 17, 12.31, 12, 29.90 / 10018265, Kaua Santos Lima de Araujo, 4.14, 4, 18.46, 18, 22.60
+/ 10035462, Kaue Ferreira Mota, 14.48, 14, 14.36, 14, 28.84 / 10039615, Keise Cristiene Dias de Freitas, 11.38,
+11, 12.31, 12, 23.69 / 10002897, Kennedy Rodrigo Torres Goncalves, 17.59, 17, 20.51, 20, 38.10 / 10038409,
+Kenzo Gustavo Pereira Neves Paiva, 15.52, 15, 17.44, 17, 32.96 / 10036533, Kevin Carvalho Iqbal, 9.31, 9,
+17.44, 17, 26.75 / 10017192, Kleber Brito Moreira, 15.52, 15, 19.49, 19, 35.01 / 10036210, Klesley Silva
+Pinheiro, 14.48, 14, 8.21, 8, 22.69 / 10017705, Kleyber Gabriel Roque de Oliveira, 16.55, 16, 16.41, 16, 32.96
+/ 10017789, Krissia Natalia de Faria Amorim, 13.45, 13, 10.26, 10, 23.71 / 10015570, Layo Francisco Aguiar,
+18.62, 18, 19.49, 19, 38.11 / 10023529, Leandro de Almeida Franca, 12.41, 12, 15.38, 15, 27.79 / 10041243,
+Leidiane Cardoso Pinto, 15.52, 15, 24.62, 24, 40.14 / 10017043, Leonardo Boaventura Ribas, 15.52, 15, 13.33,
+13, 28.85 / 10011119, Leonardo Nunes de Oliveira, 17.59, 17, 21.54, 21, 39.13 / 10030520, Leonardo
+Rodrigues de Souza Martins, 11.38, 11, 7.18, 7, 18.56 / 10016606, Leonardo Silva Teodoro, 10.34, 10, 12.31,
+12, 22.65 / 10001717, Leukarty Ronniery de Oliveira Herminio, 19.66, 19, 20.51, 20, 40.17 / 10021506, Liomar
+Jose Osorio, 12.41, 12, 15.38, 15, 27.79 / 10033099, Loidianne Alves Marinho, 13.45, 13, 16.41, 16, 29.86 /
+10039481, Lorena da Silva Ferreira, 9.31, 9, 16.41, 16, 25.72 / 10014981, Luan de Abreu Cardoso, 20.69, 20,
+25.64, 25, 46.33 / 10003485, Luana Maria de Araujo, 14.48, 14, 20.51, 20, 34.99 / 10002206, Luane Calixto
+de Godoi, 10.34, 10, 11.28, 11, 21.62 / 10008627, Lucas Aguiar de Lima, 12.41, 12, 15.38, 15, 27.79 /
+10019966, Lucas Almeida de Oliveira, 11.38, 11, 19.49, 19, 30.87 / 10033588, Lucas Angelim Britto Paes,
+13.45, 13, 16.41, 16, 29.86 / 10031983, Lucas Assis Pereira, 11.38, 11, 15.38, 15, 26.76 / 10014396, Lucas
+Borges da Silva, 12.41, 12, 11.28, 11, 23.69 / 10011273, Lucas Cunha de Alencar, 13.45, 13, 21.54, 21, 34.99
+/ 10011485, Lucas da Silva Nunes da Mata, 14.48, 14, 15.38, 15, 29.86 / 10023346, Lucas David Carvalho
+Vieira de Matos, 13.45, 13, 14.36, 14, 27.81 / 10002121, Lucas Dionisio Gomes Lima, 9.31, 9, 14.36, 14, 23.67
+/ 10033259, Lucas dos Santos Felix, 15.52, 15, 12.31, 12, 27.83 / 10018433, Lucas Fernandes Silva, 16.55, 16,
+9.23, 9, 25.78 / 10013571, Lucas Gabriel Neves Pereira, 13.45, 13, 16.41, 16, 29.86 / 10014953, Lucas Lima
+Ferraz, 14.48, 14, 20.51, 20, 34.99 / 10035907, Lucas Luiz Inacio da Silva, 7.24, 7, 15.38, 15, 22.62 / 10016463,
+Lucas Mafra Chagas, 11.38, 11, 16.41, 16, 27.79 / 10017037, Lucas Miranda Cavalcanti, 15.52, 15, 21.54, 21,
+37.06 / 10005229, Lucas Piauilino Vieira, 12.41, 12, 17.44, 17, 29.85 / 10012936, Lucas Rodrigues Francisco,
+12.41, 12, 15.38, 15, 27.79 / 10004137, Lucas Schalcher Silva, 10.34, 10, 14.36, 14, 24.70 / 10017500, Lucas
+Tavares, 15.52, 15, 13.33, 13, 28.85 / 10036950, Lucas Yukio Nishikawa Vidigal, 12.41, 12, 10.26, 10, 22.67 /
+10020961, Luciene Alves do Carmo, 5.17, 5, 8.21, 8, 13.38 / 10030562, Ludymilla Rodrigues Nunes, 14.48, 14,
+11.28, 11, 25.76 / 10030967, Luis Felipe Alonso Mendes, 15.52, 15, 19.49, 19, 35.01 / 10010419, Luis Henrique
+Cunha Silva, 15.52, 15, 21.54, 21, 37.06 / 10033105, Luisa Amancio Brambilla, 11.38, 11, 14.36, 14, 25.74 /
+10032744, Luisa Vieira do Espirito Santo, 17.59, 17, 25.64, 25, 43.23 / 10016046, Luiz Augusto Oliveira, 9.31,
+9, 15.38, 15, 24.69 / 10027098, Luiz Gustavo de Carvalho Franzone, 15.52, 15, 23.59, 23, 39.11 / 10029511,
+Luiz Paulo Pereira Leal, 6.21, 6, 8.21, 8, 14.42 / 10009148, Luy Jose Antunes Souza Brandao, 16.55, 16, 13.33,
+13, 29.88 / 10030735, Manoel Luiz da Silva Neto, 14.48, 14, 11.28, 11, 25.76 / 10032759, Manuella Abrantes
+de Oliveira, 13.45, 13, 12.31, 12, 25.76 / 10036236, Marcelo Augusto Fries Goncalves, 9.31, 9, 16.41, 16, 25.72
+/ 10020438, Marcelo da Silva Nazario, 16.55, 16, 19.49, 19, 36.04 / 10030104, Marcelo Goncalves Dias Junior,
+5.17, 5, 15.38, 15, 20.55 / 10000136, Marcelo Henrique Araujo do Bomfim, 9.31, 9, 17.44, 17, 26.75 /
+10016732, Marcia Celuta da Silva Mendes do Rio, 15.52, 15, 15.38, 15, 30.90 / 10005054, Marcileide Cardoso
+de Souza, 16.55, 16, 18.46, 18, 35.01 / 10027614, Marcio de Souza Gomes, 5.17, 5, 11.28, 11, 16.45 /
+10008264, Marcio Veras Pinto, 19.66, 19, 22.56, 22, 42.22 / 10015231, Marcio Xavier do Nascimento, 11.38,
+11, 10.26, 10, 21.64 / 10000167, Marco Antonio Cabral, 10.34, 10, 11.28, 11, 21.62 / 10023618, Marco
+Antonio Lopes de Pinho, 9.31, 9, 7.18, 7, 16.49 / 10010648, Marcos Antonio Vieira Faria, 14.48, 14, 18.46, 18,
+32.94 / 10030554, Marcos Estevam de Sousa, 13.45, 13, 24.62, 24, 38.07 / 10028817, Marcos Santana de
+Lima, 11.38, 11, 13.33, 13, 24.71 / 10014398, Marcos Valerio de Almeida Nunes, 20.69, 20, 23.59, 23, 44.28
+/ 10005499, Marcos Vinicius de Oliveira Nunes, 17.59, 17, 14.36, 14, 31.95 / 10024734, Marcos Vitor Barros
+Batista, 10.34, 10, 13.33, 13, 23.67 / 10015325, Marcus Diogenes Moraes Menezes, 16.55, 16, 13.33, 13,
+29.88 / 10024989, Marcus Vinicius Lobo Olivieri, 13.45, 13, 14.36, 14, 27.81 / 10019350, Marcus Vinicius Paiva
+Martins, 16.55, 16, 23.59, 23, 40.14 / 10021644, Maria Eduarda Saraiva Mariano, 8.28, 8, 12.31, 12, 20.59 /
+10003948, Maria Vitoria Jesus do Nascimento, 10.34, 10, 14.36, 14, 24.70 / 10012918, Mariana Viana
+Ferreira, 9.31, 9, 14.36, 14, 23.67 / 10015186, Marlon Andrey da Cruz Junior, 16.55, 16, 16.41, 16, 32.96 /
+10009914, Mateus de Brito Bacelar, 5.17, 5, 4.10, 4, 9.27 / 10038713, Mateus Fonseca da Silva, 17.59, 17,
+14.36, 14, 31.95 / 10007328, Mateus Franco Farias, 15.52, 15, 18.46, 18, 33.98 / 10006941, Mateus Matias
+dos Santos, 10.34, 10, 12.31, 12, 22.65 / 10013774, Matheus Correa Amaldo da Silva Braganca, 16.55, 16,
+15.38, 15, 31.93 / 10026309, Matheus Felipe de Souza Carnauba, 14.48, 14, 15.38, 15, 29.86 / 10035944,
+Matheus Mourao Soares de Freitas, 18.62, 18, 17.44, 17, 36.06 / 10011002, Matheus Ribeiro Gomes
+Herculano, 15.52, 15, 26.67, 26, 42.19 / 10031664, Matheus Ribeiro Lira, 17.59, 17, 19.49, 19, 37.08 /
+10007075, Matheus Teixeira de Oliveira, 13.45, 13, 9.23, 9, 22.68 / 10004740, Mauri Gomes Ribeiro, 13.45,
+13, 14.36, 14, 27.81 / 10011469, Maykon Lacerda de Santana, 20.69, 20, 19.49, 19, 40.18 / 10024185, Mayra
+de Moraes Campos, 17.59, 17, 18.46, 18, 36.05 / 10030825, Mercia Cleire Neves Cruz, 19.66, 19, 19.49, 19,
+39.15 / 10018582, Michele Correia de Sousa, 6.21, 6, 9.23, 9, 15.44 / 10022467, Moises Cardozo de Paula,
+13.45, 13, 20.51, 20, 33.96 / 10020680, Nael Bernardo Siqueira, 15.52, 15, 20.51, 20, 36.03 / 10010069,
+Naionara Ramos de Maceda, 21.72, 21, 31.79, 31, 53.51 / 10004923, Naneto Almeida da Silva, 11.38, 11, 9.23,
+9, 20.61 / 10016292, Nasson Antonio de Oliveira Junior, 14.48, 14, 14.36, 14, 28.84 / 10026003, Natan
+Albuquerque de Sousa, 9.31, 9, 10.26, 10, 19.57 / 10020407, Nathan Antonio Brito Barbosa, 14.48, 14, 16.41,
+16, 30.89 / 10000998, Nattan Tolentino Coelho, 14.48, 14, 14.36, 14, 28.84 / 10027576, Naum Filipe da Cunha
+Costa, 12.41, 12, 25.64, 25, 38.05 / 10002806, Nicole Cele Silveira, 14.48, 14, 17.44, 17, 31.92 / 10021243,
+Nicolle Nathalia Gomes da Silva, 16.55, 16, 15.38, 15, 31.93 / 10029605, Nilo Rocha Ribeiro, 15.52, 15, 18.46,
+18, 33.98 / 10032141, Nivea Teles Abdala Gomes, 11.38, 11, 11.28, 11, 22.66 / 10014631, Nuveny Zeny de
+Oliveira Soares, 16.55, 16, 18.46, 18, 35.01 / 10000446, Oleanna Silva Goncalves, 14.48, 14, 11.28, 11, 25.76
+/ 10012883, Patrick Renilton Amorim dos Santos, 8.28, 8, 12.31, 12, 20.59 / 10030605, Paula de Araujo Ferraz,
+15.52, 15, 11.28, 11, 26.80 / 10031782, Paula Nobre Barbosa, 13.45, 13, 17.44, 17, 30.89 / 10032205, Paulo
+Augusto Gomes Mello, 13.45, 13, 16.41, 16, 29.86 / 10011840, Paulo Cesar Araujo Lopes Junior, 13.45, 13,
+23.59, 23, 37.04 / 10021145, Paulo Henrique de Assis, 12.41, 12, 11.28, 11, 23.69 / 10029512, Paulo Henrique
+de Jesus Machado, 8.28, 8, 7.18, 7, 15.46 / 10018463, Paulo Henrique Lima de Oliveira, 16.55, 16, 19.49, 19,
+36.04 / 10007572, Paulo Henrique Rocha dos Santos, 16.55, 16, 22.56, 22, 39.11 / 10002017, Paulo Maiano
+Cardoso, 15.52, 15, 10.26, 10, 25.78 / 10008957, Paulo Pereira da Silva, 18.62, 18, 17.44, 17, 36.06 /
+10008645, Paulo Victor Bidu Cardoso, 9.31, 9, 17.44, 17, 26.75 / 10013081, Pedro Araujo Rodrigues, 13.45,
+13, 16.41, 16, 29.86 / 10019281, Pedro Dias Pereira Neto, 4.14, 4, 7.18, 7, 11.32 / 10037501, Pedro Henrique
+Brito Liberal, 14.48, 14, 22.56, 22, 37.04 / 10026759, Pedro Henrique de Sousa Barbosa, 11.38, 11, 18.46, 18,
+29.84 / 10023322, Pedro Henrique Leal de Carvalho, 17.59, 17, 20.51, 20, 38.10 / 10026257, Pedro Henrique
+Nogueira Valverde, 8.28, 8, 5.13, 5, 13.41 / 10037559, Pedro Henrique Rodrigues Trindade, 7.24, 7, 15.38, 15,
+22.62 / 10014855, Pedro Henrique Silva Vasconcelos, 11.38, 11, 20.51, 20, 31.89 / 10023220, Pedro Lopes
+Soares, 18.62, 18, 22.56, 22, 41.18 / 10029339, Pedro Paulo Barbosa Marques dos Santos, 12.41, 12, 9.23, 9,
+21.64 / 10022120, Pedro Paulo Castro Silvestre, 4.14, 4, 3.08, 3, 7.22 / 10028952, Pedro Rafael de Oliveira
+Carvalho, 9.31, 9, 13.33, 13, 22.64 / 10006306, Pedro Victor Rodrigues de Carvalho, 15.52, 15, 20.51, 20,
+36.03 / 10026870, Peniel Henrique do Carmo Araujo, 10.34, 10, 10.26, 10, 20.60 / 10004970, Priscila Cardoso
+Goncalves Solon Ribeiro, 16.55, 16, 16.41, 16, 32.96 / 10002429, Rafael Brenner Gomes Silva, 17.59, 17,
+13.33, 13, 30.92 / 10007014, Rafael da Silva Souto, 22.76, 22, 27.69, 27, 50.45 / 10028393, Rafael Medeiros
+Vieira, 15.52, 15, 20.51, 20, 36.03 / 10039393, Rafael Nascimento da Silva, 5.17, 5, 10.26, 10, 15.43 /
+10030139, Rafael Paiva de Lucena Correia, 10.34, 10, 6.15, 6, 16.49 / 10020200, Rafael Silva da Costa
+Magalhaes, 11.38, 11, 14.36, 14, 25.74 / 10033564, Rafael Vieira da Silva Nascimento, 17.59, 17, 12.31, 12,
+29.90 / 10001935, Rafaela do Nascimento de Sousa, 15.52, 15, 23.59, 23, 39.11 / 10003335, Railan Silva
+Pereira, 11.38, 11, 18.46, 18, 29.84 / 10011045, Raimundo de Paula Costa Neto, 19.66, 19, 25.64, 25, 45.30 /
+10019345, Raimundo Martins dos Santos Junior, 12.41, 12, 16.41, 16, 28.82 / 10006397, Ramses Cunha de
+Aguiar, 9.31, 9, 19.49, 19, 28.80 / 10008296, Raoni Costa Oliveira, 18.62, 18, 22.56, 22, 41.18 / 10001373,
+Raphael Gregorio Maciel Vieira, 13.45, 13, 16.41, 16, 29.86 / 10034160, Reinaldo Cristofer Almeida Pedro,
+13.45, 13, 11.28, 11, 24.73 / 10034850, Renan Felix Fernandes, 12.41, 12, 16.41, 16, 28.82 / 10040840, Renata
+Cristian Celestino da Cruz, 13.45, 13, 10.26, 10, 23.71 / 10018704, Renata Shirlen Costa de Souza, 16.55, 16,
+18.46, 18, 35.01 / 10001871, Renato Lopes Seynaeve, 15.52, 15, 15.38, 15, 30.90 / 10008618, Renato
+Marques da Silva, 11.38, 11, 16.41, 16, 27.79 / 10011519, Reuben de Aquino Moraes, 11.38, 11, 15.38, 15,
+26.76 / 10033649, Ricardo Fonseca de Oliveira Filho, 12.41, 12, 8.21, 8, 20.62 / 10012094, Ricardo Rodrigues
+Lopes, 13.45, 13, 15.38, 15, 28.83 / 10007892, Rickson Queiroz Marques de Souza, 13.45, 13, 18.46, 18, 31.91
+/ 10017075, Roberto Pereira Campelo, 21.72, 21, 16.41, 16, 38.13 / 10012826, Roberto Pereira Matos, 15.52,
+15, 17.44, 17, 32.96 / 10003156, Robson Gualberto Osorio Junior, 16.55, 16, 16.41, 16, 32.96 / 10029236,
+Robson Lima dos Santos, 14.48, 14, 14.36, 14, 28.84 / 10005963, Robste Santos de Oliveira, 9.31, 9, 12.31,
+12, 21.62 / 10025428, Rodrigo Brito de Oliveira, 15.52, 15, 18.46, 18, 33.98 / 10011929, Rodrigo Cardoso dos
+Santos, 8.28, 8, 12.31, 12, 20.59 / 10002424, Rodrigo Hawerroth Lemos, 17.59, 17, 18.46, 18, 36.05 /
+10026310, Rodrigo Marques da Rocha Filho, 11.38, 11, 11.28, 11, 22.66 / 10002478, Rodrigo Pereira do
+Couto, 18.62, 18, 18.46, 18, 37.08 / 10001301, Rodrigo Souza Santos, 10.34, 10, 14.36, 14, 24.70 / 10029430,
+Rodrigo Torres Carrilho da Costa, 16.55, 16, 18.46, 18, 35.01 / 10014274, Rogerio Barbosa da Silva, 15.52, 15,
+19.49, 19, 35.01 / 10023099, Rogerio Fernandes dos Anjos, 7.24, 7, 9.23, 9, 16.47 / 10035757, Romerio de
+Oliveira Lima Junior, 13.45, 13, 17.44, 17, 30.89 / 10034620, Romulo de Jesus Fernandes, 10.34, 10, 12.31,
+12, 22.65 / 10031722, Ronaldo Tavares de Oliveira Junior, 17.59, 17, 24.62, 24, 42.21 / 10029160, Rosane
+Barbosa Coelho, 16.55, 16, 10.26, 10, 26.81 / 10010855, Rossany Xavier, 8.28, 8, 8.21, 8, 16.49 / 10025334,
+Ruan Alves de Oliveira, 8.28, 8, 9.23, 9, 17.51 / 10023949, Ruan Donato Reis Costa, 22.76, 22, 28.72, 28, 51.48
+/ 10009020, Ruan Gabriel Costa Maximo, 11.38, 11, 10.26, 10, 21.64 / 10031740, Samira dos Santos Lira de
+Araujo, 14.48, 14, 19.49, 19, 33.97 / 10023996, Samuel Alves Sato, 16.55, 16, 28.72, 28, 45.27 / 10021200,
+Samuel Wiclef dos Santos Monteiro, 14.48, 14, 16.41, 16, 30.89 / 10030568, Sandra Waleria dos Santos Silva,
+10.34, 10, 11.28, 11, 21.62 / 10005830, Saulo Cesar Silva Amaral, 13.45, 13, 17.44, 17, 30.89 / 10018217,
+Sebastiao Gomes Calacia Junior, 18.62, 18, 21.54, 21, 40.16 / 10012772, Sergio Adriano Marques Caetano,
+14.48, 14, 17.44, 17, 31.92 / 10017432, Sergio Alves Morais, 12.41, 12, 9.23, 9, 21.64 / 10035052, Sergio
+Campos Sant Ana, 17.59, 17, 22.56, 22, 40.15 / 10019972, Sergio Matos de Andrade, 19.66, 19, 23.59, 23,
+43.25 / 10017157, Sergio Santana de Lima, 13.45, 13, 17.44, 17, 30.89 / 10007386, Silvia Sayuri Uesu, 20.69,
+20, 24.62, 24, 45.31 / 10008056, Suliana Ferreira de Almeida, 19.66, 19, 21.54, 21, 41.20 / 10028761, Taiane
+Marinho Duarte, 13.45, 13, 13.33, 13, 26.78 / 10038652, Talles Rodrigues Pereira Duarte, 14.48, 14, 17.44,
+17, 31.92 / 10037746, Tassio Melo Linhares, 20.69, 20, 24.62, 24, 45.31 / 10012474, Thais Lopes Assuncao,
+16.55, 16, 12.31, 12, 28.86 / 10026456, Thales Almeida Ramos, 15.52, 15, 12.31, 12, 27.83 / 10032435, Thales
+dos Santos Farias de Araujo, 8.28, 8, 9.23, 9, 17.51 / 10025867, Thalison Alencar da Silva, 13.45, 13, 15.38,
+15, 28.83 / 10018533, Thallyston Mykelli Schappo, 11.38, 11, 18.46, 18, 29.84 / 10019087, Thaminy Gomes
+de Sousa, 18.62, 18, 24.62, 24, 43.24 / 10019487, Thayanna Mendes Pedroza, 18.62, 18, 16.41, 16, 35.03 /
+10010242, Thiago Albuquerque de Paula, 12.41, 12, 20.51, 20, 32.92 / 10011064, Thiago de Oliveira Luz
+Cunha, 9.31, 9, 14.36, 14, 23.67 / 10007285, Thiago Goncalves da Silva, 10.34, 10, 20.51, 20, 30.85 /
+10016296, Thiago Jose Brandao Dias, 16.55, 16, 21.54, 21, 38.09 / 10029937, Thiago Malta Gomes, 11.38, 11,
+15.38, 15, 26.76 / 10017352, Thiago Oliveira Santiago, 17.59, 17, 19.49, 19, 37.08 / 10025569, Thiago Toledo
+Fabricio da Silva, 9.31, 9, 14.36, 14, 23.67 / 10037756, Thiago Wyclef Torres Lisboa, 9.31, 9, 13.33, 13, 22.64
+/ 10040580, Tiago Amaro de Melo Medeiros de Souza, 18.62, 18, 23.59, 23, 42.21 / 10041098, Udo Yonezo
+Machado Ioneikawa, 11.38, 11, 17.44, 17, 28.82 / 10012778, Ulisses Souza Mesquita, 10.34, 10, 16.41, 16,
+26.75 / 10014718, Vanderli Alves dos Reis, 13.45, 13, 14.36, 14, 27.81 / 10021509, Victor Araujo da Silva,
+15.52, 15, 21.54, 21, 37.06 / 10028139, Victor Daniel Lima de Araujo, 11.38, 11, 11.28, 11, 22.66 / 10013708,
+Victor de Brito Marinho Correa, 10.34, 10, 20.51, 20, 30.85 / 10031400, Victor Ferreira, 19.66, 19, 13.33, 13,
+32.99 / 10039804, Victor Henrique Alves de Oliveira Lopes, 15.52, 15, 17.44, 17, 32.96 / 10021912, Victor
+Hugo Rafael de Souza, 11.38, 11, 12.31, 12, 23.69 / 10010835, Victor Jose de Souza Ledo, 11.38, 11, 8.21, 8,
+19.59 / 10013561, Victor Ramon Dourado Brandao, 14.48, 14, 19.49, 19, 33.97 / 10014067, Victor Ribeiro
+Ferreira, 16.55, 16, 26.67, 26, 43.22 / 10001170, Vinicius Augusto Evangelista Soares, 12.41, 12, 12.31, 12,
+24.72 / 10019319, Vinicius de Carvalho de Lyra, 18.62, 18, 18.46, 18, 37.08 / 10010529, Vinicius Ferreira
+Gomes, 7.24, 7, 14.36, 14, 21.60 / 10025228, Vinicius Gadelhos da Silva, 15.52, 15, 21.54, 21, 37.06 /
+10034927, Vinicius Gomes Marques, 18.62, 18, 19.49, 19, 38.11 / 10023390, Vinicius Marques Macedo, 8.28,
+8, 10.26, 10, 18.54 / 10028353, Vitor Chaves Araujo, 18.62, 18, 19.49, 19, 38.11 / 10008994, Vitor Gabriel
+Goncalves Dias, 8.28, 8, 16.41, 16, 24.69 / 10007770, Vitor Hugo Souza da Silva, 22.76, 22, 25.64, 25, 48.40 /
+10001550, Wagner Rodrigues de Oliveira Queiroz, 15.52, 15, 20.51, 20, 36.03 / 10021605, Waldemario Junior,
+16.55, 16, 18.46, 18, 35.01 / 10028715, Wallace Felipe Alves Barbosa, 7.24, 7, 14.36, 14, 21.60 / 10038762,
+Wanderley Morais de Oliveira, 14.48, 14, 21.54, 21, 36.02 / 10006734, Wecirley dos Santos Costa, 14.48, 14,
+12.31, 12, 26.79 / 10028444, Welder Silva Marques, 17.59, 17, 21.54, 21, 39.13 / 10019794, Welinton Mario
+Gomes Valadares Dias, 13.45, 13, 22.56, 22, 36.01 / 10002253, Welleson Moreira dos Santos, 12.41, 12, 14.36,
+14, 26.77 / 10028298, Wellington Fernandes Paniago, 14.48, 14, 10.26, 10, 24.74 / 10018844, Wellisson
+Mendes Pereira dos Santos, 12.41, 12, 22.56, 22, 34.97 / 10025060, Wendel Vilas Boas dos Santos, 12.41, 12,
+12.31, 12, 24.72 / 10015600, Weslei Lopes Valadares, 10.34, 10, 10.26, 10, 20.60 / 10035556, Wesley Everton
+de Jesus Neves, 19.66, 19, 22.56, 22, 42.22 / 10013226, Wesley Gabriel Muniz Pereira, 8.28, 8, 12.31, 12,
+20.59 / 10035416, Wesley Gomes Passos, 15.52, 15, 15.38, 15, 30.90 / 10028905, Wesley Rogerio Amorim
+dos Santos, 12.41, 12, 18.46, 18, 30.87 / 10020891, Weslley Cordeiro de Alencar, 17.59, 17, 12.31, 12, 29.90
+/ 10003874, Weverson Araujo de Santana, 20.69, 20, 16.41, 16, 37.10 / 10023118, Willian Barbosa Borges,
+9.31, 9, 16.41, 16, 25.72 / 10020713, Willian Verri Carneiro Magalhaes, 19.66, 19, 18.46, 18, 38.12 /
+10027135, Wilson Miranda Clementino, 13.45, 13, 13.33, 13, 26.78 / 10022534, Wilton Candido dos Santos,
+16.55, 16, 21.54, 21, 38.09 / 10038723, Yan Watanabe Martins, 21.72, 21, 28.72, 28, 50.44 / 10031363, Yuri
+Pereira da Silva, 16.55, 16, 21.54, 21, 38.09.

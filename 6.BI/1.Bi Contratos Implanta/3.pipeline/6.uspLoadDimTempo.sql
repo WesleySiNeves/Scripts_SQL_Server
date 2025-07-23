@@ -44,12 +44,12 @@ BEGIN
         -- Cria tabela temporária para armazenar os dados gerados pela CTE
         CREATE TABLE #TempDimTempo (
             Data DATE NOT NULL,
-            Ano INT NOT NULL,
-            Mes INT NOT NULL,
-            Trimestre INT NOT NULL,
-            Semestre INT NOT NULL,
+            Ano SMALLINT NOT NULL,
+            Mes TINYINT NOT NULL,
+            Trimestre TINYINT NOT NULL,
+            Semestre TINYINT NOT NULL,
             NomeMes VARCHAR(20) NOT NULL,
-            DiaSemana INT NOT NULL,
+            DiaSemana TINYINT NOT NULL,
             NomeDiaSemana VARCHAR(20) NOT NULL,
             PRIMARY KEY (Data)
         );

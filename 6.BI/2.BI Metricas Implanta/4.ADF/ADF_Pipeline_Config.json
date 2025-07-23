@@ -1,0 +1,93 @@
+{
+  "name": "Pipeline_CarregamentoBIMetricas",
+  "properties": {
+    "description": "Pipeline para carregamento completo do BI de Métricas - ForEach + Dimensões + Fatos",
+    "activities": [
+      {
+        "name": "ForEach_Servidores",
+        "type": "ForEach",
+        "dependsOn": [],
+        "userProperties": [],
+        "typeProperties": {
+          "items": {
+            "value": "@pipeline().parameters.ServidoresList",
+            "type": "Expression"
+          },
+          "isSequential": false,
+          "batchCount": 5,
+          "activities": [
+            {
+              "name": "Executar_Pipeline_Servidor",
+              "type": "ExecutePipeline",
+              "dependsOn": [],
+              "userProperties": [],
+              "typeProperties": {
+                "pipeline": {
+                  "referenceName": "Pipeline_ProcessarServidor",
+                  "type": "PipelineReference"
+                },
+                "parameters": {
+                  "ServidorAtual": "@item()"
+                },
+                "waitOnCompletion": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Executar_Carregamento_Dimensoes_Fatos",
+        "type": "SqlServerStoredProcedure",
+        "dependsOn": [
+          {
+            "activity": "ForEach_Servidores",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 2,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "userProperties": [],
+        "typeProperties": {
+          "storedProcedureName": "[dbo].[uspExecutarCarregamentoCompleto]",
+          "storedProcedureParameters": {}
+        },
+        "linkedServiceName": {
+          "referenceName": "LinkedService_SQLServer_BI",
+          "type": "LinkedServiceReference"
+        }
+      }
+    ],
+    "parameters": {
+      "ServidoresList": {
+        "type": "array",
+        "defaultValue": [
+          "Servidor1",
+          "Servidor2",
+          "Servidor3"
+        ]
+      }
+    },
+    "variables": {
+      "ErrorMessage": {
+        "type": "String"
+      },
+      "ProcessingStartTime": {
+        "type": "String"
+      }
+    },
+    "annotations": [
+      "BI",
+      "Metricas",
+      "ETL"
+    ],
+    "lastPublishTime": "2024-01-01T00:00:00Z"
+  },
+  "type": "Microsoft.DataFactory/factories/pipelines"
+}
