@@ -1,342 +1,279 @@
+-- =============================================
+-- SCRIPT: Carga de Produtos Implanta
+-- DESCRIÇÃO: Script para carregar dados de produtos/sistemas na tabela Implanta.Produtos
+-- AUTOR: Wesley
+-- DATA: [Data atual]
+-- =============================================
+
+CREATE OR ALTER PROCEDURE Shared.uspLoadDimProdutos
+AS
+BEGIN
+
+    BEGIN TRY
 
 
---CREATE OR ALTER PROCEDURE Shared.uspLoadDimProdutos
---AS
---BEGIN
+        -- Limpar tabelas temporárias se existirem
+        DROP TABLE IF EXISTS #DadosSigam;
 
---    BEGIN TRY
-
-        -- Tabela temporária para dados de produtos
-        DROP TABLE IF EXISTS #DadosProdutos;
-        CREATE TABLE #DadosProdutos
+        -- Criar tabela temporária com dados do SIGAM
+        CREATE TABLE #DadosSigam
         (
-            [IdProduto] UNIQUEIDENTIFIER,
-			[SkProduto] SMALLINT,
-            [DescricaoCigam] VARCHAR(250),
-            [DescricaoImplanta] VARCHAR(250),
-            [Area] VARCHAR(50),
-            [Ativo] BIT
+            [Modulo] VARCHAR(60),
+            [Codigo_Modulo] VARCHAR(20)
         );
 
-		INSERT INTO #DadosProdutos
-		    (
-		        IdProduto,
-		        SkProduto,
-		        DescricaoCigam,
-		        DescricaoImplanta,
-		        Area,
-		        Ativo
-		    )
-		
-		SELECT IdSistema,
-               NumeroSistema,
-               NULL,
-			   Descricao,
-               Area,
-			   Ativo FROM Implanta.Sistemas
-			   
-			   
-			   DROP TABLE IF EXISTS #DadosProdutosCigam;
-
-				  CREATE TABLE #DadosProdutosCigam
-				  (
-				  [DescricaoCigam] VARCHAR(100)
-				  )
-			
-
-        -- ETAPA 1: Carregar dados de produtos do staging
-        INSERT INTO #DadosProdutosCigam
+        -- Inserir dados do SIGAM
+        INSERT INTO #DadosSigam
         (
-            [DescricaoCigam]
+            [Modulo],
+            [Codigo_Modulo]
         )
         SELECT DISTINCT
-               Descricao
+               DescricaoProdutoSigam,
+               CodigoProdutoSigam
         FROM Staging.ClientesProdutosCIGAM;
 
-		
-		 UPDATE source SET source.DescricaoCigam =x.DescricaoCigam FROM #DadosProdutos source
-			OUTER APPLY
-			(
-			SELECT TOP 1 DescricaoCigam  FROM #DadosProdutosCigam
-			WHERE REPLACE(DescricaoCigam,'.NET','') LIKE '%'+ REPLACE(source.DescricaoImplanta,'.NET','')
-			) X
 
-		SELECT * FROM #DadosProdutos
-		WHERE DescricaoCigam IS NULL
-		SELECT * FROM #DadosProdutosCigam
-		
-        -- ETAPA 2: Mapear descrições CIGAM para descrições Implanta que ainda estão NULL
-        -- Estratégia 1: Busca por correspondência exata (case insensitive)
-        UPDATE source 
-        SET source.DescricaoCigam = cigam.DescricaoCigam 
-        FROM #DadosProdutos source
-        INNER JOIN #DadosProdutosCigam cigam 
-            ON UPPER(LTRIM(RTRIM(source.DescricaoImplanta))) = UPPER(LTRIM(RTRIM(cigam.DescricaoCigam)))
-        WHERE source.DescricaoCigam IS NULL
-          AND source.DescricaoImplanta IS NOT NULL;
 
-        -- Estratégia 2: Busca por correspondência parcial (contém a descrição)
-        UPDATE source 
-        SET source.DescricaoCigam = x.DescricaoCigam 
-        FROM #DadosProdutos source
-        OUTER APPLY (
-            SELECT TOP 1 cigam.DescricaoCigam
-            FROM #DadosProdutosCigam cigam
-            WHERE UPPER(REPLACE(cigam.DescricaoCigam, '.NET', '')) LIKE '%' + UPPER(REPLACE(source.DescricaoImplanta, '.NET', '')) + '%'
-               OR UPPER(REPLACE(source.DescricaoImplanta, '.NET', '')) LIKE '%' + UPPER(REPLACE(cigam.DescricaoCigam, '.NET', '')) + '%'
-            ORDER BY LEN(cigam.DescricaoCigam) -- Prioriza descrições mais curtas (mais específicas)
-        ) x
-        WHERE source.DescricaoCigam IS NULL
-          AND source.DescricaoImplanta IS NOT NULL
-          AND x.DescricaoCigam IS NOT NULL;
-
-        -- Estratégia 3: Busca por palavras-chave principais
-        UPDATE source 
-        SET source.DescricaoCigam = x.DescricaoCigam 
-        FROM #DadosProdutos source
-        OUTER APPLY (
-            SELECT TOP 1 cigam.DescricaoCigam
-            FROM #DadosProdutosCigam cigam
-            WHERE EXISTS (
-                -- Verifica se pelo menos uma palavra significativa coincide
-                SELECT 1 
-                FROM STRING_SPLIT(REPLACE(REPLACE(source.DescricaoImplanta, '.NET', ''), '.', ' '), ' ') palavra_implanta
-                INNER JOIN STRING_SPLIT(REPLACE(REPLACE(cigam.DescricaoCigam, '.NET', ''), '.', ' '), ' ') palavra_cigam
-                    ON UPPER(LTRIM(RTRIM(palavra_implanta.value))) = UPPER(LTRIM(RTRIM(palavra_cigam.value)))
-                WHERE LEN(LTRIM(RTRIM(palavra_implanta.value))) >= 3 -- Ignora palavras muito pequenas
-                  AND UPPER(LTRIM(RTRIM(palavra_implanta.value))) NOT IN ('NET', 'COM', 'APP', 'WEB', 'API')
-            )
-            ORDER BY LEN(cigam.DescricaoCigam)
-        ) x
-        WHERE source.DescricaoCigam IS NULL
-          AND source.DescricaoImplanta IS NOT NULL
-          AND x.DescricaoCigam IS NOT NULL;
-
-        -- Estratégia 4: Para registros ainda sem associação, usar a primeira disponível como fallback
-        UPDATE source 
-        SET source.DescricaoCigam = x.DescricaoCigam 
-        FROM #DadosProdutos source
-        OUTER APPLY (
-            SELECT TOP 1 cigam.DescricaoCigam
-            FROM #DadosProdutosCigam cigam
-            ORDER BY cigam.DescricaoCigam
-        ) x
-        WHERE source.DescricaoCigam IS NULL
-          AND source.DescricaoImplanta IS NOT NULL
-          AND x.DescricaoCigam IS NOT NULL;
-
-        -- Log dos resultados do mapeamento
-        DECLARE @TotalRegistros INT = (SELECT COUNT(*) FROM #DadosProdutos WHERE DescricaoImplanta IS NOT NULL);
-        DECLARE @RegistrosMapeados INT = (SELECT COUNT(*) FROM #DadosProdutos WHERE DescricaoCigam IS NOT NULL AND DescricaoImplanta IS NOT NULL);
-        DECLARE @RegistrosNaoMapeados INT = (SELECT COUNT(*) FROM #DadosProdutos WHERE DescricaoCigam IS NULL AND DescricaoImplanta IS NOT NULL);
-        
-        PRINT 'Resultado do mapeamento:';
-        PRINT '- Total de registros: ' + CAST(@TotalRegistros AS VARCHAR(10));
-        PRINT '- Registros mapeados: ' + CAST(@RegistrosMapeados AS VARCHAR(10));
-        PRINT '- Registros não mapeados: ' + CAST(@RegistrosNaoMapeados AS VARCHAR(10));
-        
-        -- Mostrar registros que ainda não foram mapeados para análise
-        IF @RegistrosNaoMapeados > 0
-        BEGIN
-            PRINT 'Registros não mapeados:';
-            SELECT DescricaoImplanta, Area 
-            FROM #DadosProdutos 
-            WHERE DescricaoCigam IS NULL AND DescricaoImplanta IS NOT NULL;
-        END
-        
-        -- Mostrar algumas descrições CIGAM disponíveis para referência
-        PRINT 'Descrições CIGAM disponíveis:';
-        SELECT TOP 10 DescricaoCigam FROM #DadosProdutosCigam ORDER BY DescricaoCigam;
-
-        -- ETAPA 3: Enriquecer dados com informações dos sistemas
-        UPDATE target
-        SET target.IdProduto = se.IdSistema,
-            target.Area = se.Area,
-            target.Ativo = se.Ativo
-        FROM #DadosProdutos target
-            JOIN Implanta.Sistemas se
-                ON target.DescricaoImplanta = se.Descricao COLLATE Latin1_General_CI_AI;
-
-UPDATE #DadosProdutos SET SkProduto =TRY_CAST(REPLACE(CAST(IdProduto AS VARCHAR(60)),'-','') AS INT )
-			
-		
-
-DECLARE @maxnumero INT =
+        -- MERGE usando dados da tabela Implanta.Sistemas (CORRIGIDO)
+        MERGE INTO Implanta.Produtos AS target
+        USING Implanta.Sistemas AS source
+        ON target.IdProduto = source.IdSistema
+        WHEN NOT MATCHED BY TARGET THEN
+            INSERT
             (
-                SELECT
-                    MAX(SkProduto)
-                FROM
-                    #DadosProdutos
-            );
+                IdProduto,
+                NumeroProduto,
+                DescricaoProduto,
+                Area,
+                Ativo,
+                DataCriacao,
+                DataAtualizacao
+            )
+            VALUES
+            (source.IdSistema, source.NumeroSistema, source.Descricao, source.Area, source.Ativo, GETDATE(), GETDATE())
+        WHEN MATCHED THEN
+            UPDATE SET NumeroProduto = source.NumeroSistema,
+                       DescricaoProduto = source.Descricao,
+                       Area = source.Area,
+                       Ativo = source.Ativo,
+                       DataAtualizacao = GETDATE();
 
+        -- Atualizar informações do SIGAM - Match exato
+        UPDATE target
+        SET target.DescricaoProdutoSigam = source.Modulo,
+            target.CodigoProdutoSigam = source.Codigo_Modulo,
+            target.DataAtualizacao = GETDATE()
+        FROM Implanta.Produtos AS target
+            JOIN #DadosSigam source
+                ON target.DescricaoProduto = source.Modulo
+        WHERE target.CodigoProdutoSigam IS NULL;
 
--- ETAPA 4: Tratar produtos não categorizados 
-; WITH DadosNaoCategorizados
-AS (   SELECT
-           SkProduto          = ROW_NUMBER() OVER (ORDER BY
-                                                       R.DescricaoCigam
-                                                  ) + @maxnumero,
-           R.DescricaoCigam,
-           'Não categorizado' AS Area,
-           1                  AS Ativo
-       FROM
-           #DadosProdutos R
-       WHERE
-           R.DescricaoImplanta IS NULL),
-		   GerarSequencial AS (
-		   
-SELECT
-    R.SkProduto,
-    IdProduto = CAST('00000000-0000-0000-0000-' + RIGHT('000000000000' + CAST(R.SkProduto AS VARCHAR(12)), 12) AS UNIQUEIDENTIFIER),
-    R.DescricaoCigam,
-    R.Area,
-    R.Ativo
-FROM
-    DadosNaoCategorizados R		   
-		   )
+        -- Atualizar informações do SIGAM - Match com normalização de texto
+        UPDATE target
+        SET target.DescricaoProdutoSigam = source.Modulo,
+            target.CodigoProdutoSigam = source.Codigo_Modulo,
+            target.DataAtualizacao = GETDATE()
+        FROM Implanta.Produtos AS target
+            JOIN #DadosSigam source
+                ON REPLACE(REPLACE(REPLACE(target.DescricaoProduto, '.NET', ''), 'ção', 'cao'), ' & ', ' E ') = REPLACE(
+                                                                                                                           source.Modulo,
+                                                                                                                           '.NET',
+                                                                                                                           ''
+                                                                                                                       )
+        WHERE target.CodigoProdutoSigam IS NULL;
 
-UPDATE source SET source.IdProduto =seq.IdProduto,
-  source.SkProduto =seq.SkProduto,
-  source.Area =seq.Area,
-  source.Ativo =seq.Ativo
-		FROM  #DadosProdutos source
-		JOIN GerarSequencial seq ON seq.DescricaoCigam = source.DescricaoCigam
+        -- Atualizar informações do SIGAM - Match com normalização alternativa
+        UPDATE target
+        SET target.DescricaoProdutoSigam = source.Modulo,
+            target.CodigoProdutoSigam = source.Codigo_Modulo,
+            target.DataAtualizacao = GETDATE()
+        FROM Implanta.Produtos AS target
+            JOIN #DadosSigam source
+                ON REPLACE(REPLACE(REPLACE(target.DescricaoProduto, '.NET', ''), 'ção', 'cao'), ' & ', '&') = REPLACE(
+                                                                                                                         source.Modulo,
+                                                                                                                         '.NET',
+                                                                                                                         ''
+                                                                                                                     )
+        WHERE target.CodigoProdutoSigam IS NULL;
 
+        -- Atualizar informações do SIGAM - Match parcial com LIKE
+        UPDATE target
+        SET target.DescricaoProdutoSigam = source.Modulo,
+            target.CodigoProdutoSigam = source.Codigo_Modulo,
+            target.DataAtualizacao = GETDATE()
+        FROM Implanta.Produtos AS target
+            JOIN #DadosSigam source
+                ON target.DescricaoProduto LIKE REPLACE(source.Modulo, '.NET', '') + '%'
+        WHERE target.CodigoProdutoSigam IS NULL;
 
-INSERT INTO  #DadosProdutos
-    (
-        IdProduto,
-        SkProduto,
-        DescricaoCigam,
-        DescricaoImplanta,
-        Area,
-        Ativo
-    )
-VALUES
-    (
-      
-        '00000000-0000-0000-0000-000000000000', -- IdProduto - uniqueidentifier 
-		  0, -- SkProduto - smallint
-        'Global', -- DescricaoCigam - varchar(250)
-        'Global', -- DescricaoImplanta - varchar(250)
-        'Não categorizado', -- Area - varchar(50)
-        1  -- Ativo - bit
-    )
+        -- Atualizar produtos sem correspondência no SIGAM
+        UPDATE target
+        SET target.DescricaoProdutoSigam = target.DescricaoProduto,
+            target.CodigoProdutoSigam = CAST(target.NumeroProduto AS VARCHAR(20)),
+            target.DataAtualizacao = GETDATE()
+        FROM Implanta.Produtos AS target
+        WHERE target.CodigoProdutoSigam IS NULL;
 
-
-     
-        -- ETAPA 5: Identificar registros que sofreram alterações (SCD Tipo 2)
-        DROP TABLE IF EXISTS #ProdutosAlterados;
-        CREATE TABLE #ProdutosAlterados
+        -- Inserir novos produtos do SIGAM que não existem na tabela Implanta.Produtos
+        IF EXISTS
         (
-            IdProduto UNIQUEIDENTIFIER,
-            SkProdutoAtual INT
-        );
-
-        INSERT INTO #ProdutosAlterados (IdProduto, SkProdutoAtual)
-        SELECT 
-            dp.IdProduto,
-            dim.SkProduto
-        FROM #DadosProdutos dp
-        INNER JOIN Shared.DimProdutos dim 
-            ON dp.IdProduto = dim.IdProduto 
-            AND dim.VersaoAtual = 1
-        WHERE 
-            -- Campos monitorados para mudanças
-            ISNULL(dp.DescricaoImplanta, '') <> ISNULL(dim.DescricaoImplanta, '')
-            OR ISNULL(dp.Area, '') <> ISNULL(dim.Area, '')
-            OR ISNULL(dp.Ativo, 0) <> ISNULL(dim.Ativo, 0);
-
-
-        -- ETAPA 6: Fechar versões antigas (definir DataFimVersao e VersaoAtual = 0)
-        UPDATE Shared.DimProdutos
-        SET 
-            DataFimVersao = GETDATE(),
-            VersaoAtual = 0
-        WHERE SkProduto IN (SELECT SkProdutoAtual FROM #ProdutosAlterados);
-
-
-
-
-        -- ETAPA 7: Inserir novas versões para registros alterados
-        INSERT INTO Shared.DimProdutos
-        (
-            IdProduto,
-            DescricaoImplanta,
-            DescricaoCigam,
-            Area,
-            Ativo,
-            DataInicioVersao,
-            DataFimVersao,
-            VersaoAtual,
-            DataCarga,
-            DataAtualizacao
+            SELECT *
+            FROM #DadosSigam
+            WHERE Codigo_Modulo NOT IN
+                  (
+                      SELECT CodigoProdutoSigam
+                      FROM Implanta.Produtos
+                      WHERE CodigoProdutoSigam IS NOT NULL
+                  )
         )
-        SELECT 
-            dp.IdProduto,
-            dp.DescricaoImplanta,
-            dp.DescricaoCigam,
-            dp.Area,
-            dp.Ativo,
-            GETDATE() AS DataInicioVersao,
-            NULL AS DataFimVersao,
-            1 AS VersaoAtual,
-            GETDATE() AS DataCarga,
-            GETDATE() AS DataAtualizacao
-        FROM #DadosProdutos dp
-        INNER JOIN #ProdutosAlterados pa ON dp.IdProduto = pa.IdProduto;
+        BEGIN
+            -- Declarar variável para o próximo ID sequencial
+            DECLARE @maxId INT =
+                    (
+                        SELECT ISNULL(MAX(NumeroProduto), 0)
+                        FROM Implanta.Produtos
+                        WHERE NumeroProduto < 99
+                    );
 
-        -- ETAPA 8: Inserir novos produtos
-        INSERT INTO Shared.DimProdutos
-        (
-            IdProduto,
-			SkProduto,
-            DescricaoImplanta,
-            DescricaoCigam,
-            Area,
-            Ativo,
-            DataInicioVersao,
-            DataFimVersao,
-            VersaoAtual,
-            DataCarga,
-            DataAtualizacao
-        )
-        SELECT 
-            dp.IdProduto,
-			dp.SkProduto,
-            ISNULL(dp.DescricaoImplanta,dp.DescricaoCigam) AS DescricaoImplanta,
-            dp.DescricaoCigam,
-            dp.Area,
-            dp.Ativo,
-            GETDATE() AS DataInicioVersao,
-            NULL AS DataFimVersao,
-            1 AS VersaoAtual,
-            GETDATE() AS DataCarga,
-            GETDATE() AS DataAtualizacao
-        FROM #DadosProdutos dp
-        WHERE NOT EXISTS (
-            SELECT 1 
-            FROM Shared.DimProdutos dim 
-            WHERE dim.IdProduto = dp.IdProduto
-        );
+            -- Inserir novos produtos do SIGAM
+            INSERT INTO Implanta.Produtos
+            (
+                IdProduto,
+                NumeroProduto,
+                DescricaoProduto,
+                Ativo,
+                Area,
+                DescricaoProdutoSigam,
+                CodigoProdutoSigam,
+                DataCriacao,
+                DataAtualizacao
+            )
+            SELECT CONVERT(
+                              UNIQUEIDENTIFIER,
+                              -- Primeira parte: converte o número sequencial para hexadecimal de 8 dígitos
+                              RIGHT('00000000'
+                                    + CONVERT(
+                                                 VARCHAR(8),
+                                                 CONVERT(
+                                                            VARBINARY(4),
+                                                            ROW_NUMBER() OVER (ORDER BY Codigo_Modulo) + @maxId
+                                                        ),
+                                                 2
+                                             ), 8) +
+                              -- Partes fixas do GUID
+                              '-0000-0000-0000-'
+                              +
+                              -- Última parte: número sequencial com zeros à esquerda (12 dígitos)
+                              RIGHT('000000000000'
+                                    + CAST(ROW_NUMBER() OVER (ORDER BY Codigo_Modulo) + @maxId AS VARCHAR(12)), 12)
+                          ) AS IdProduto,
+                   ROW_NUMBER() OVER (ORDER BY Codigo_Modulo) + @maxId AS NumeroProduto,
+                   Modulo AS DescricaoProduto,
+                   1 AS Ativo,
+                   'Não Categorizado' AS Area,
+                   Modulo AS DescricaoProdutoSigam,
+                   Codigo_Modulo AS CodigoProdutoSigam,
+                   GETDATE() AS DataCriacao,
+                   GETDATE() AS DataAtualizacao
+            FROM #DadosSigam
+            WHERE Codigo_Modulo NOT IN
+                  (
+                      SELECT CodigoProdutoSigam
+                      FROM Implanta.Produtos
+                      WHERE CodigoProdutoSigam IS NOT NULL
+                  );
 
-        -- ETAPA 9: Atualizar DataAtualizacao para registros inalterados
-        UPDATE Shared.DimProdutos
-        SET DataAtualizacao = GETDATE()
-        WHERE VersaoAtual = 1
-          AND IdProduto IN (SELECT IdProduto FROM #DadosProdutos)
-          AND IdProduto NOT IN (SELECT IdProduto FROM #ProdutosAlterados);
+            -- Sincronizar dados com a dimensão Shared.DimProdutos
+            MERGE INTO Shared.DimProdutos AS target
+            USING Implanta.Produtos AS source
+            ON source.CodigoProdutoSigam = target.CodigoProdutoCigam
+            WHEN NOT MATCHED BY TARGET THEN
+                INSERT
+                (
+                    SkProduto,
+                    IdProduto,
+                    DescricaoProdutoCigam,
+                    CodigoProdutoCigam,
+                    DescricaoProdutoImplanta,
+                    Area,
+                    Ativo,
+                    DataInicioVersao,
+                    DataFimVersao,
+                    VersaoAtual,
+                    DataCarga,
+                    DataAtualizacao
+                )
+                VALUES
+                (source.NumeroProduto, source.IdProduto, source.DescricaoProdutoSigam, source.CodigoProdutoSigam,
+                 source.DescricaoProduto, source.Area, source.Ativo, GETDATE(), NULL, 1, GETDATE(), NULL)
+            WHEN MATCHED AND (
+                                 source.DescricaoProduto <> target.DescricaoProdutoImplanta
+                                 OR source.CodigoProdutoSigam <> target.DescricaoProdutoCigam
+                                 OR source.Area <> target.Area
+                                 OR source.Ativo <> target.Ativo
+                             ) THEN
+                UPDATE SET DescricaoProdutoCigam = source.DescricaoProdutoSigam,
+                           CodigoProdutoCigam = source.CodigoProdutoSigam,
+                           DescricaoProdutoImplanta = source.DescricaoProduto,
+                           Area = source.Area,
+                           Ativo = source.Ativo,
+                           DataAtualizacao = GETDATE();
+        END;
 
-        PRINT 'Carga da DimProdutos (SCD Tipo 2) concluída em: ' + CONVERT(VARCHAR, GETDATE(), 120);
+        -- Relatório final de estatísticas
+        SELECT 'Produtos Implanta' AS Tabela,
+               COUNT(*) AS TotalRegistros,
+               SUM(   CASE
+                          WHEN CodigoProdutoSigam IS NOT NULL THEN
+                              1
+                          ELSE
+                              0
+                      END
+                  ) AS ComCodigoSigam,
+               SUM(   CASE
+                          WHEN CodigoProdutoSigam IS NULL THEN
+                              1
+                          ELSE
+                              0
+                      END
+                  ) AS SemCodigoSigam
+        FROM Implanta.Produtos
+        UNION ALL
+        SELECT 'DimProdutos' AS Tabela,
+               COUNT(*) AS TotalRegistros,
+               SUM(   CASE
+                          WHEN CodigoProdutoCigam IS NOT NULL THEN
+                              1
+                          ELSE
+                              0
+                      END
+                  ) AS ComCodigoSigam,
+               SUM(   CASE
+                          WHEN CodigoProdutoCigam IS NULL THEN
+                              1
+                          ELSE
+                              0
+                      END
+                  ) AS SemCodigoSigam
+        FROM Shared.DimProdutos;
+
+        -- Limpeza das tabelas temporárias
+        DROP TABLE IF EXISTS #DadosSigam;
+
 
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
-        
+
         PRINT 'Erro na carga da DimProdutos: ' + @ErrorMessage;
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-    END CATCH
+    END CATCH;
 
 END;
+
+
+--SELECT * FROM Implanta.Produtos
+--SELECT * FROM Shared.DimProdutos
